@@ -5,3 +5,5 @@ Módulo 5 de la [Diplomatura en Humanidades Digitales](https://www.uces.edu.ar/e
 Profa. Nidia Hernández y Profa. Romina De León (CONICET).
 
 [Comenzar con R](comenzar-con-R.html)
+
+[Unidad 1. Instalaciones](unidad1_instalaciones.html)
