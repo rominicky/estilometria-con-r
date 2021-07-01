@@ -2,18 +2,18 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <style type="text/css"> BODY{ font-family: verdana; size: 14px; } </style> 
+        <style type="text/css"> BODY{ font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;} </style> 
     <title> Módulo R </title>
     <meta name="description" content=">dictado por Romina De León y Nidia Hernández">
-        <h1>Unidad 1</h1>
+        <h1><span style="font-size: medium;">Unidad 1</span></h1>
     </head>
     <body>
         <div part="1">
-        <h1>¿Qué es R?</h1>
+        <h1><span style="font-size: large;">¿Qué es R?</span></h1>
         <p>Como ya habrás oido R es lenguaje de programación gratuito y amigable para instalar y trabajar, es muy utilizado para análisis estadístico, 
         </p></div>
-        <h1>Instalaciones previas</h1>
-            <h2>¿Cómo instalar R y R Studio?</h2> 
+        <h1><span style="font-size: large;">Instalaciones previas</span></h1>
+            <h2><span style="font-size: large;">¿Cómo instalar R y R Studio?</span></h2> 
                 <h3>Instalación de R</h3>
                 <div align="center">
                     <img src="https://cran.r-project.org/Rlogo.svg" alt="RStudio" width="20%" height="20%"></div>
@@ -27,25 +27,25 @@
                 <h4>Linux</h4>
         <p>Debes ingresar a <a href="https://cran.r-project.org/bin/linux/" target="_blank" >https://cran.r-project.org/bin/linux/</a> y seleccionar tu distribución, y dependiendo de ella podrás continuar los pasos que figuran para realizar la intalación.</p>
 
-            <h2>Instalación de R Studio</h2>
+            <h2><span style="font-size: medium;">Instalación de R Studio</span></h2>
             <div align="center">
-            <img src="https://www.rstudio.com/assets/img/og/rstudio-og-fb-1.jpg" alt="RStudio" width="50%"></div>
+            <img src="https://www.rstudio.com/assets/img/og/rstudio-og-fb-1.jpg" alt="RStudio" width="30%"></div>
         <p>
             Ahora instalaremos el siguiente programa, que utilizaremos para hacer más sencillas las tareas al trabajar con R, este es RStudio, un entorno de desarrollo integrado, o sea un escritorio más amigable. Puedes descargarlo desde <a href="https://www.rstudio.com/products/rstudio/download/#download" target="_blank">https://www.rstudio.com/products/rstudio/download/#download</a> para cualquier sistema operativo, deberás proceder como cualquier otro programa para tu computadora. 
             <div align="center">
-                <img src="https://moderndive.netlify.app/images/rstudio_screenshots/rstudio.png" width="50%" height="50%" alt="Entorno de RStudio" ><p>Vista del entorno de RStudio</p>
+                <img src="https://moderndive.netlify.app/images/rstudio_screenshots/rstudio.png" width="30%" alt="Entorno de RStudio" ><p>Vista del entorno de RStudio</p>
             </div>
         </p>                
-<h3>Atención: Es importante que primero se realice la instalación de R y luego de RStudio</h3>
+<h3><span style="font-size: medium;"></span>Atención: Es importante que primero se realice la instalación de R y luego de RStudio</span></h3>
     </br>
-    <h2 style="text-align: left;"><span style="font-size: x-large;">Instalación Opcional de R en Jupyter</span>
+    <h2 style="text-align: left;"><span style="font-size: medium;">Instalación Opcional de R en Jupyter</span>
     </h2>
 <p>Para poder utilizar R en <a href="https://jupyter.org/" target="_blank">Jupyter Notebook</a>, primero vamos a instalar el Kernel R para esta <span>Notebook</span>, ya que es útil para ejecutar códigos de determinados Lenguaje de Programación y devuelve la salida al usuario.</p> 
 <p>Para ello, deberás ir a la consola de <strong>R</strong> R o <strong>RStudio</strong> y tipear:
-    <blockquote><pre class="r">install.packages('IRkernel')</pre></blockquote> que será para realizar la instalación del paquete.
+    <blockquote>('IRkernel')</blockquote> que será para realizar la instalación del paquete.
     Luego deberás ingresar en la consola
-    <blockquote><pre class="r"><code></code>IRkernel::installspec()</code></pre></blockquote> que asociará R a Jupyter. También se puede agregar la extensión 
-    <blockquote><pre class="r">jupyter labextension install @techrah/text-shortcuts</pre></blockquote> 
+    <blockquote>IRkernel::installspec()</blockquote> que asociará R a Jupyter. También se puede agregar la extensión 
+    <blockquote>jupyter labextension install @techrah/text-shortcuts</blockquote> 
     es opcional, útil para hotkeys de RStudio si utilizas JupyterLab.
 </span>
 <p>Cualquier duda puedes consultar <a href="https://irkernel.github.io/installation/" target="_blank">https://irkernel.github.io/installation/</a></p>
