@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    <title> Módulo R </title>
+    <meta name="description" content=">dictado por Romina De León y Nidia Hernández">
+        <h1>Unidad 1</h1>
+    
+    </head>
+    <body>
+        <div part="1">
+        <h1>¿Qué es R?</h1>
+        <p>Como ya habrás oido R es lenguaje de programación gratuito y amigable para instalar y trabajar, es muy utilizado para análisis estadístico, 
+        </p></div>
+
+        <h1>Instalaciones previas</h1>
+            <h2>¿Cómo instalar R y R Studio?</h2> 
+                <h3>Instalación de R</h3>
+                <div align="center">
+                    <img src="https://cran.r-project.org/Rlogo.svg" alt="RStudio" width="20%" height="20%"></div>
+        <p>En este primer paso comenzaremos con la instalación del lenguaje R, vale aclarar que en cualquier sistema operativo es igual, aunque se trate de <span> Windows<span>, <span>macOS</span> e incluso <span>Linux</span>. R es un lenguaje de programación gratuito, fácil de descargar e instalar. Lo que necesitaremos en una conexión a internet y unos pocos minutos.
+        La mejor manera de instalar R es descargándolo de los servidores de <a href="https://cran.r-project.org/" target="_blank" >The Comprehensive R Archive Network (CRAN)</a> que almacenan y conservan todas las versiones de R, así como todas las librerías que se publican.</p>
+            
+            <h3>Sistemas Operativos:</h2>
+                <h4>Windows</h4>
+        <p>Debes ingresar a <a href="https://cran.r-project.org/bin/windows/base/" target="_blank">https://cran.r-project.org/bin/windows/base/</a> que te permitirá acceder al archivo <a href="https://cran.r-project.org/" target="_blank" >Download R 4.1.0 for Windows</a> (los números pueden variar según nuevas actualizaciones), una vez descargado, solo tienes que instalarlo como con cualquier otro programa de Windows.</p>
+                
+                <h4>Mac OS</h4>
+        <p>Debes ingresar a <a href="https://cran.rproject.org/bin/macosx/" target="_blank">https://cran.rproject.org/bin/macosx/</a>, deberás dirigirte hasta la parte inferior izquierda donde aparecerá un enlace que diga <strong>R‐4.0.0.pkg</strong> (los dos últimos números pueden cambiar ligeramente, pues la actualización es constante). Hacé clic en el enlace y se inicirá la descarga del instalador en tu computadora. Al finalizar procede como lo harías con otro programa para Mac.</p>
+                <h4>Linux</h4>
+        <p>Debes ingresar a <a href="https://cran.r-project.org/bin/linux/" target="_blank" >https://cran.r-project.org/bin/linux/</a> y seleccionar tu distribución, y dependiendo de ella podrás continuar los pasos que figuran para realizar la intalación.</p>
+
+            <h2>Instalación de R Studio</h2>
+            <div align="center">
+            <img src="https://www.rstudio.com/assets/img/og/rstudio-og-fb-1.jpg" alt="RStudio" width="50%"></div>
+        <p>
+            Ahora instalaremos el siguiente programa, que utilizaremos para hacer más sencillas las tareas al trabajar con R, este es RStudio, un entorno de desarrollo integrado, o sea un escritorio más amigable. Puedes descargarlo desde <a href="https://www.rstudio.com/products/rstudio/download/#download" target="_blank">https://www.rstudio.com/products/rstudio/download/#download</a> para cualquier sistema operativo, deberás proceder como cualquier otro programa para tu computadora. 
+            <div align="center">
+                <img src="https://moderndive.netlify.app/images/rstudio_screenshots/rstudio.png" width="50%" height="50%" alt="Entorno de RStudio" ><p>Vista del entorno de RStudio</p>
+            </div>
+        </p>                
+<h3>Atención: Es importante que primero se realice la instalación de R y luego de RStudio</h3>
+    </br>
+
+    <h2 style="text-align: left;"><span style="font-size: x-large;">Instalación Opcional de R en Jupyter</span></h2>
+    
+<p>Para poder utilizar R en <a href="https://jupyter.org/" target="_blank">Jupyter Notebook</a>, primero vamos a instalar el Kernel R para esta <span>Notebook</span>, ya que es útil para ejecutar códigos de determinados Lenguaje de Programación y devuelve la salida al usuario.</p> 
+<p>Para ello, deberás ir a la consola de <strong>R</strong> R o <strong>RStudio</strong> y tipear:
+    <blockquote><pre class="r">install.packages('IRkernel')</pre></blockquote> que será para realizar la instalación del paquete.
+    Luego deberás ingresar en la consola
+    <blockquote><pre class="r"><code></code>IRkernel::installspec()</code></pre></blockquote> que asociará R a Jupyter. También se puede agregar la extensión 
+    <blockquote><pre class="r">jupyter labextension install @techrah/text-shortcuts</pre></blockquote> que es opcional para utilizar hotkeys de RStudio si utilizas JupyterLab.
+</span>
+Igualmente puedes consultar <a href="https://irkernel.github.io/installation/" target="_blank">https://irkernel.github.io/installation/</a>
+    </body>
+
+</html>
