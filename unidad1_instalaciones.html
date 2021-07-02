@@ -2,18 +2,22 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <style type="text/css"> BODY{ font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; margin-top: 2cm; margin-left: 1cm; margin-right: 1cm; margin-bottom: 1cm; } </style> 
+        <style type="text/css">
+         BODY{font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1.42857143;color:#333;background-color:#fff; margin-top: 2cm; margin-left: 1cm; margin-right: 1cm; margin-bottom: 1cm;}
+         code{font-family:monospace,monospace;font-size:1em; padding:2px 4px;font-size:90%;color:#c7254e;background-color:#f9f2f4;border-radius:4px}
+         pre{display:block;padding:9.5px;margin:0 0 10px;font-size:13px;line-height:1.42857143;color:#333;word-break:break-all;word-wrap:break-word;background-color:#f5f5f5;border:1px solid #ccc;border-radius:4px}pre code{padding:0;font-size:inherit;color:inherit;white-space:pre-wrap;background-color:transparent;border-radius:0}.pre-scrollable{max-height:340px;overflow-y:scroll}
+        </style> 
     <title> Módulo R </title>
     <meta name="description" content=">dictado por Romina De León y Nidia Hernández">
         <h1><span style="font-size: medium;">Unidad 1: Instalaciones</span></h1>
     </head>
     <body>
         <div part="1">
-        <h1><span style="font-size: large;">¿Qué es R?</span></h1>
+        <h1><span style="font-size: xx-large;">¿Qué es R?</span></h1>
         <p>R es un entorno de software libre (licencia GNU GLP), como lenguaje de programación interpretado, ejecuta las instrucciones directamente; además es gratuito y amigable de instalar y para trabajar, es muy utilizado para análisis estadístico y gráfica computacional.</p>
     <p>Por su parte, R Studio es un entorno de desarrollo integrado para R, que cuenta con una consola, un editor de sintaxis para la ejecución de código, herramientas para el trazado, depuración y gestión del espacio de trabajo.</p>
     <p>Ahora que ya sabemos de que se trata, comencemos con las instalaciones.</p></div>
-        <h1><span style="font-size: large;">Instalaciones previas</span></h1>
+        <h1><span style="font-size: xx¡large;">Instalaciones previas</span></h1>
             <h2><span style="font-size: large;">¿Cómo instalar R y R Studio?</span></h2> 
                 <h3>Instalación de R</h3>
                 <div align="center">
@@ -27,8 +31,8 @@
         <p>Debes ingresar a <a href="https://cran.rproject.org/bin/macosx/" target="_blank">https://cran.rproject.org/bin/macosx/</a>, deberás dirigirte hasta la parte inferior izquierda donde aparecerá un enlace que diga <strong>R‐4.0.0.pkg</strong> (los dos últimos números pueden cambiar ligeramente, pues la actualización es constante). Hacé clic en el enlace y se inicirá la descarga del instalador en tu computadora. Al finalizar procede como lo harías con otro programa para Mac.</p>
                 <h4>Linux</h4>
         <p>Debes ingresar a <a href="https://cran.r-project.org/bin/linux/" target="_blank" >https://cran.r-project.org/bin/linux/</a> y seleccionar tu distribución, y dependiendo de ella podrás continuar los pasos que figuran para realizar la intalación.</p>
-        <h4>Atención: Es importante que primero se realice la instalación de R y luego de RStudio</h4>
-            <h2><span style="font-size: medium;">Instalación de R Studio</span></h2>
+        <p><mark>Atención: Es importante que primero se realice la instalación de R y luego de RStudio</mark></p>
+        <h3><span style="font-size: medium;">Instalación de R Studio</span></h3>
             <div align="center">
             <img src="https://www.rstudio.com/assets/img/og/rstudio-og-fb-1.jpg" alt="RStudio" width="40%"></div>
         <p>Ahora instalaremos R Studio, que puedes descargarlo desde <a href="https://www.rstudio.com/products/rstudio/download/#download" target="_blank">este enlace</a> para cualquier sistema operativo, deberás proceder como cualquier otro programa para tu computadora. 
@@ -44,10 +48,11 @@
 <li>Seleccionar desde <strong>Packages</strong>, donde podrás buscar, seleccionar e intalar las librerías necesarias,</li></br>
 <div align="center"><img src="img/rstudio_paquetes.png" align="center" width="50%" alt="Paquetes en RStudio"></div>
 <li>En la parte Consola, puedes escribir 
+   <pre class="r"><code class="hljs">install.packages(c("tidyverse","tidytext","ggraph","stylo","RCurl","ggplot"))</code></pre>
 <!-- Urvanov Syntax Highlighter v2.8.23 -->
-<div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
+<!--div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
 	<div class="urvanov-syntax-highlighter-plain-wrap"><textarea wrap="soft" class="urvanov-syntax-highlighter-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 25px !important;">
-        install.packages(c("tidyverse","tidytext","ggraph","stylo","RCurl","ggplot"))</textarea></div></div>
+        install.packages(c("tidyverse","tidytext","ggraph","stylo","RCurl","ggplot"))</textarea></div></div-->
 </li>
 <p>De esa manera podrás instalar las librerías que necesites. Cualquier duda puedes consultar en <a href="https://estadistica-dma.ulpgc.es/cursoR4ULPGC/5-librerias.html" title="Librerías en Rstudio" target="_blank">Librerías en R</a>.
 </p>
@@ -55,18 +60,22 @@
     </h2>
 <p>Para poder utilizar R en <a href="https://jupyter.org/" target="_blank">Jupyter Notebook</a>, primero vamos a instalar el Kernel R para esta <span>Notebook</span>, ya que es útil para ejecutar códigos de determinados Lenguaje de Programación y devuelve la salida al usuario.</p> 
 <p>Primero deberás ir a la consola de <strong>R</strong> o <strong>RStudio</strong> y tipear:</p>
-    <!-- Urvanov Syntax Highlighter v2.8.23 -->
-<div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
+    <pre class="r"><code class="hljs">install.packages('IRkernel')</code></pre>
+<!--div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
 	<div class="urvanov-syntax-highlighter-plain-wrap"><textarea wrap="soft" class="urvanov-syntax-highlighter-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 25px !important;">
-install.packages('IRkernel')</textarea></div></div> <p>que será para realizar la instalación del paquete.</p>
+install.packages('IRkernel')</textarea></div></div--> 
+    <p>que será el comando para realizar la instalación del paquete.</p>
     <p>Luego deberás ingresar en la consola</p>
+    <pre class="r"><code class="hljs">IRkernel::installspec()</code></pre>
     <!-- Urvanov Syntax Highlighter v2.8.23 -->
-<div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
-	<div class="urvanov-syntax-highlighter-plain-wrap"><textarea wrap="soft" class="urvanov-syntax-highlighter-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 25px !important;">IRkernel::installspec()</textarea></div></div> que asociará R a Jupyter. También se puede agregar la extensión 
+<!--div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
+	<div class="urvanov-syntax-highlighter-plain-wrap"><textarea wrap="soft" class="urvanov-syntax-highlighter-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 25px !important;">IRkernel::installspec()</textarea></div></div--> 
+<p>que asociará R a Jupyter. También se puede agregar la extensión </p>
+<pre class="r"><code class="hljs">jupyter labextension install @techrah/text-shortcuts</code></pre>
     <!-- Urvanov Syntax Highlighter v2.8.23 -->
-<div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
-	<div class="urvanov-syntax-highlighter-plain-wrap"><textarea wrap="soft" class="urvanov-syntax-highlighter-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 25px !important;">jupyter labextension install @techrah/text-shortcuts</textarea></div></div>
-    es opcional, útil para hotkeys de RStudio si utilizas JupyterLab.
+<!-- div id="urvanov-syntax-highlighter-60dde68ab42f7828063785" class="urvanov-syntax-highlighter-syntax crayon-theme-sublime-text urvanov-syntax-highlighter-font-sourcecodepro urvanov-syntax-highlighter-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; margin-left: 12px; font-size: 15px !important; line-height: 25px !important;">
+	<div class="urvanov-syntax-highlighter-plain-wrap"><textarea wrap="soft" class="urvanov-syntax-highlighter-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 15px !important; line-height: 25px !important;">jupyter labextension install @techrah/text-shortcuts</textarea></div></div-->
+    <p>es opcional, útil para hotkeys de RStudio si utilizas JupyterLab.</p>
 </span>
 <p>Cualquier duda puedes consultar <a href="https://irkernel.github.io/installation/" target="_blank">https://irkernel.github.io/installation/</a></p>
     </body>
