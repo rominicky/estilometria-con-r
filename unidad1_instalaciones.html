@@ -11,7 +11,7 @@
         </style> 
     <title> Módulo R </title>
     <meta name="description" content=">dictado por Romina De León y Nidia Hernández">
-        <h1><span style="font-size: medium;">Unidad 1: Instalaciones</span></h1>
+        <h1>Unidad 1: Instalaciones</h1>
     </head>
     <body>
         <div class="container-fluid main-container">
@@ -41,15 +41,28 @@
         <p>Ahora instalaremos R Studio, que puedes descargarlo desde <a href="https://www.rstudio.com/products/rstudio/download/#download" target="_blank">este enlace</a> para cualquier sistema operativo, deberás proceder como cualquier otro programa para tu computadora. 
             <p align=center>Vista del entorno de R Studio</p>
             <div align="center">
-                <img src="https://moderndive.netlify.app/images/rstudio_screenshots/rstudio.png" width="40%" alt="Entorno de RStudio" >
+                <img src="https://moderndive.netlify.app/images/rstudio_screenshots/rstudio.png" width="70%" alt="Entorno de RStudio" >
             </div>
-        </p>                
-    </br>
+        </p>
+<h2>Interfaz de usuario</h2>
+<p>        A continuación, puedes observar las partes en la que se encuentra dividida la interfaz de R Studio.</p>
+<div align="center"><img src="img/interfaz-usuario.png" align="center" width="80%" ></div></div></br>        
+<ol><li>Consola, puedes realizar diferentes cálculos y operaciones matemáticas, sería la ventana básica de R.</li>
+            <li>Entorno de variables, muestra el historial, conjunto de datos y objetos (resultados, variables, gráficos, etc.) almacenados durante la ejecución de diferentes análisis.</li>
+            <li>Editor de código, script, desde este panel puedes editar la sintaxis de un script para luego ejecutarla. Cuando realices cambios, no sucederá nada a menos que ejecutes los comandos, con la barra de herramientas que contiene el panel o al combinar las teclas <button>ctrl</button>+<button>enter</button>.</li>
+            <li>Utilidades, dentro de este panel se encuentran diversas subpestañas: 
+                <ol type="a"><li>files, verás el historial de archivos trabajados;</li>
+                <li>plots, podrás visualizar los gráficos que se generen;</li>
+                <li>packages, encuentras los paquetes, instalados, descargados y guardados en tu disco duro, puedes gestionar su instalación o actualización;</li>
+                <li>help, puedes ingresar a la página oficial donde podrás acceder a diferentes recursos para el programa, como manuales, cursos, información general, descarga de paquetes, información de los paquetes instalados, etc.;</li>
+                <li>viewer, muestra los resultados de reportes o análisis.</li></ol>
+            </ol>
+        </br>
     <h2>¿Cómo instalar librerías?</h2>
 <p>Las librerías o paquetes en R son una serie de funciones y conjunto de datos desarrollados por la comunidad; estos incrementan la capacidad de R mejorando sus funcionalidades básicas.</p>
 <p>Ahora veremos como instalarlas, primero vamos a ingresar en RStudio, allí tendrás dos opciones:</p>
 <li>Seleccionar desde <strong>Packages</strong>, donde podrás buscar, seleccionar e intalar las librerías necesarias,</li></br>
-<div align="center"><img src="img/rstudio_paquetes.png" align="center" width="50%" alt="Paquetes en RStudio"></div></div></br>
+<div align="center"><img src="img/rstudio_paquetes.png" align="center" width="80%" alt="Paquetes en RStudio"></div></div></br>
 <li>En la parte Consola, si deseas instalar varias librerías al mismo tiempo, puedes escribir
    <pre class="r"><code class="hljs">install.packages(c("tidyverse","tidytext","ggraph","stylo","RCurl","ggplot"))</code></pre>
 <!-- Urvanov Syntax Highlighter v2.8.23 -->
