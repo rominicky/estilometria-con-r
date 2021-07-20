@@ -176,16 +176,16 @@ pre code {
 <li>Matrices y Arrays (variables indexadas)</li>
 <li>Listas</li>
 <li>Factores</li>
-<li>Data Frame</li>
+<li>Data Frames</li>
 <li>Funciones</li>
 </ul>
 <p>No te preocupes si no estas familiarizadx con estas nociones, pues iremos brindando la información necesaria a medida que trabajemos con estos tipos de datos en el curso.</p>
 </div>
 <div id="vectores" class="section level3">
 <h3>Vectores</h3>
-<p>Se nombran mediante la función c() (c de concatenate)</p>
+<p>Se nombran mediante la función <code>c()</code> (c de concatenate)</p>
 <pre class="r"><code>x &lt;- c(1,2,3,4)</code></pre>
-<p>Así, x es un vector que tiene cuatro componentes.</p>
+<p>Así, <code>x</code> es un vector que tiene cuatro componentes.</p>
 <p>Para llamar/seleccionar elementos de un objeto se utilizan diferentes notaciones (<code>[], $, [[]]</code>). Por ejemplo, para seleccionar el segundo elemento del vector anterior, podemos hacer::</p>
 <pre class="r"><code>x[2]
 ## [1] 2</code></pre>
@@ -216,11 +216,10 @@ w&lt;- cbind(x,y)</code></pre>
 </div>
 </div>
 <div id="data-frame" class="section level3">
-<h3>Data Frame</h3>
-<p>Los dataframes son el punto fuerte de R. Se usan para almacenar datos en forma de tablas (filas / columnas), como archivos de Excel, CSV, etc. Pueden almacenar datos de diferente tipo, como ser datos numéricos, textuales, fechas, etc. Los dataframes pueden ser onsiderados como un tipo especial de lista donde cada uno de sus elementos debe tener la misma longitud.</p>
-<p>Generalmente, los dataframes se crean al cargar/leer una base de datos. Podemos ver un ejemplo de dataframe predefinido en R Studio, escribiendo ‘iris’ en la consola y luego presionando Enter. Este dataframe contiene información correspondiente a cinco tipos de flores, donde las columnas presentan los atributos: largo y ancho de sépalo, largo y ancho de pétalo, y especie. R Studio trae precargados diferentes data sets, podemos acceder a ellos escribiendo:</p>
-<pre class="r"><code>data()</code></pre>
-<p>Para crear un dataframe utilizaremos la función data.frame(). Una consideración importante: el número de vectores debe ser igual al número de columnas, y los vectores deben tener el mismo largo.</p>
+<h3>Data Frames</h3>
+<p>Los dataframes son el plato fuerte de R. Se usan para almacenar datos en forma de tablas (filas / columnas), como archivos de Excel, CSV, etc. Pueden almacenar datos de diferente tipo, como ser datos numéricos, textuales, fechas, etc. Los dataframes pueden ser onsiderados como un tipo especial de lista donde cada uno de sus elementos debe tener la misma longitud.</p>
+<p>Generalmente, los dataframes se crean al cargar/leer una base de datos. Podemos ver un ejemplo de dataframe predefinido en R Studio, escribiendo <code>iris</code> en la consola y luego presionando Enter. Este dataframe contiene información correspondiente a cinco tipos de flores, donde las columnas representan los atributos (largo y ancho de sépalo, largo y ancho de pétalo y especie). R Studio trae precargados diferentes data sets, podemos acceder a ellos escribiendo <code>data()</code>.
+<p>Para crear un dataframe utilizaremos la función <code>data.frame()</code>. Una consideración importante: el número de vectores debe ser igual al número de columnas y los todos vectores deben tener el mismo largo (para respetar la cantidad de líneas).</p>
 <pre class="r"><code># vectores sobre primeras seis películas de Harry Potter
 pelicula &lt;- c(&quot;HP1&quot;, &quot;HP2&quot;, &quot;HP3&quot;, &quot;HP4&quot;, &quot;HP5&quot;, &quot;HP6&quot;)
 puntuacion &lt;- c(7.6, 7.4, 7.9, 7.7, 7.5, 7.6)
@@ -236,12 +235,14 @@ head(peliculas_df)
 # Para acceder a la dimensión del dataframe
 dim(peliculas_df)</code></pre>
 
-
+<br/>
 <p>Para acceder a más ejemplos de operaciones básicas en R y R Studio, recomendamos consultar la documentación de R:</p>
 <p><a href="https://cran.r-project.org/manuals.html" class="uri">https://cran.r-project.org/manuals.html</a></p>
 <p><a href="https://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf" class="uri">https://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf</a></p>
 <p><a href="https://cran.r-project.org/doc/contrib/rdebuts_es.pdf" class="uri">https://cran.r-project.org/doc/contrib/rdebuts_es.pdf</a></p>
-<p>Ahora exportaremos el dataframe predefinidos iris a CSV para poder observar como trabajan algunas funciones. Primero cargaremos la librería ‘readr’, que es más completa y eficiente para leer datos que las funciones básicas de R.</p>
+
+<h3>Importar y exportar datos</h3>
+<p>Ahora exportaremos el dataframe predefinido iris a CSV para poder observar como trabajan algunas funciones. Primero cargaremos la librería �<code>readr</code>, que es más completa y eficiente para leer datos que las funciones básicas de R.</p>
 <pre class="r"><code>#Cargamos la librería readr
 
 library(&quot;readr&quot;)
@@ -255,11 +256,11 @@ write_csv(iris, path = &quot;C:/hdcaicyt/R/iris.csv&quot;)
 # Para leer el contenido de un &#39;csv&#39; usamos 'read_csv()'. Lo guardamos en la variable &#39;iris_importado_csv&#39;:
 
 iris_importado_csv &lt;- read_csv(&quot;./iris.csv&quot;)</code></pre>
-<p>Cuestiones importantes a tener en cuenta de read_csv():</p>
+<p>Cuestiones importantes a tener en cuenta de <code>read_csv()</code>:</p>
 <ul>
-<li><p>col_names permitirá cambiar que read_csv() asuma que la primera fila contiene los nombres de las variables. Agregando ‘col_names = FALSE’</p></li>
-<li><p>skip es útil para informarle a read_csv() que comience a importar de la fila que desees con ‘skip = n’</p></li>
-<li><p>NA (Not Available) son elementos no disponibles, algunos objetos los especifican con algún carácter, por lo cuál podemos especificar que se los leerá ‘na = “xxx”’</p></li>
+<li><p>el parámetro <code>col_names = FALSE<code> permite modificar el coportamiento de read_csv() para que no asuma que la primera fila contiene los nombres de las variables. </p></li>
+<li><p><code>skip</code> es útil para informarle a read_csv() que comience a importar a partir de determinada fila: <code>skip = n</code></p></li>
+<li><p>NA (Not Available) son elementos no disponibles. Es muy importante tener en cuenta la presencia de NA en un dataframe porque puede modificar el comportamiento de las funciones que queramos aplicar.</p></li>
 </ul>
 </div>
 <div id="descargar-datos-de-internet" class="section level3">
@@ -284,38 +285,40 @@ pers &lt;- read_csv(destino)
 </div>
 <div id="tidyverse-y-tidytext" class="section level3">
 <h3>Tidyverse y Tidytext</h3>
-<p>Estas librerías serán fundamentales para la parte más interesante de este módulo, donde aprenderemos a limpiar y transformar datos en R. Este trabajo es indispensable para el text mining, que realizado en R, contará con varias ventajas: no requiere muestreo para extraer información, permite aplicar varias metodologías de forma rápida, los procedimientos son auditables y reproducibles. Tidy convierte los datos en dataframes, donde en las columnas estarán las variable y los valores de cada línea, con su variable, será una observación. Por ello, utilizaremos tidyverse y tidytext para realizar análisis de texto.</p>
-<pre><code>   La librería Tidytext permite realizar mineo de texto con el uso de herramientas tidy, generando una forma de estructurar los datos.
+<p>Estas librerías serán fundamentales para la parte más interesante de este módulo, donde aprenderemos a limpiar y transformar datos en R. Este trabajo es indispensable para el text mining, que realizado en R, contará con varias ventajas: no requiere muestreo para extraer información, permite aplicar varias metodologías de forma rápida y genera procedimientos auditables y reproducibles. El principio básico de un dataframe 'tidy' es que cada columna representa una variable y cada línea, una observación. Para una explicación más detallada sobre el concepto de <i>tidy data</i>, consultar Wickham, H. (2014). Tidy Data. <i>Journal of Statistical Software</i>, 59(10), <a href="https://www.jstatsoft.org/article/view/v059i10">https://doi.org/10.18637/jss.v059.i10</a>.</p>
+<pre><code>La librería Tidytext permite realizar minería de texto con el uso de herramientas tidy, generando datos estructurados y tidy a partir de datos textuales.
    
-   A la librería tidytext la utilizaremos para &#39;tokenizar&#39;, es decir, sustituir algunos datos por sustitutos sin alterar el tipo o la longitud de los datos.</code></pre>
-<p>En primer lugar, deberás instalar; si no recuerdas como hacerlo, vuelve a Unidad 1: Instalaciones.</p>
+Nos serviremos de la librería tidytext para &#39;tokenizar&#39;, es decir, sustituir algunos datos por sustitutos sin alterar el tipo o la longitud de los datos.</code></pre>
+<p>En primer lugar, debemos instalar las librerías (si no recordás cómo hacerlo, visitá la sección Instalaciones de la Unidad 1).</p>
 <pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;tidytext&quot;))
 
-#Luego para llamar a las funciones 
-
+#Luego para cargar las librerías 
 library(&quot;tidyverse&quot;, &quot;tidytext&quot;)</code></pre>
-<p>Con tidyverse deberemos hacer que los scripts sean “fácilmente” legibles por otras personas; y resolveremos problemas complejos encadenando funciones más simples mediante el operador ‘%&gt;%’ (the pipe). Pipe, que lo podemos leer como “entonces”, hará más sencilla la concatenación de funciones permitiendo realizar de manera más sencilla la transformación de datos complejos.</p>
+
+<p>Gracias a tidyverse lograremos que los scripts sean más fácilmente legibles por otras personas y resolveremos problemas complejos encadenando funciones más simples mediante el operador <code>%&gt;%</code> (<i>pipe</i>, tubo en inglés). El pipe (que se puede leer como “entonces�), hará más sencilla la concatenación de funciones permitiendo agilizar el código.</p>
 <pre><code>Atajo en Windows para escribir el operador: Ctrl + Shift + M
 
 Atajo en Mac para escribir el operador: Cmd + Shift + M</code></pre>
-<pre class="r"><code>#Ejemplo, veremos los nombres del dataframe &#39;iris&#39; en mayúscula
 
+Por ejemplo, si queremos cambiar a mayúsculas los nombres del encabezado del dataframe iris, con las funciones básicas de R, la sintaxis es la siguiente:
+
+<pre class="r"><code>
 toupper(names(iris))
-
-#Se puede apreciar que al hacerlo de esa manera, el problema sería anidar funciones complejizando la lectura del código. </code></pre>
-<p>En cambio, si utilizamos %&gt;% lo haríamos, de izquierda a derecha, podemos encadenar funciones:</p>
+</code></pre>
+<p>Se puede apreciar que al hacerlo en Rbase, es necesario anidar funciones complejizando la lectura del código. En cambio, si utilizamos <code>%&gt;%</code> podemos encadenar funciones y el flujo de la informaci  n va de izquierda a derecha, simplificando la lectura:</p>
 <pre class="r"><code>iris %&gt;%
   names() %&gt;%
       toupper()
-
-#Lo podrías entender como una ejecución: primero llama a &#39;iris&#39;, luego obtén los nombres y luego ponlos en mayúscula.</code></pre>
-<p>También puedes consultar más información sobre estas librerías en:</p>
+</code></pre>
+<p>El código se entiende de la siguiente manera: primero llama a &#39;iris&#39;, luego obtenemos los nombres y luego los transformamos a mayúsculas.</code></pre>
+<p>Puedes consultar más información sobre estas librerías en:</p>
 <pre><code>https://www.tidyverse.org/ 
 
 https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html
 
 Text Mining with R! de Julia Silge and David Robinson, accesible desde: https://www.tidytextmining.com/index.html </code></pre>
-<p>A continuación, compartiremos una pequeña ejercitación, entonces manos a la obra!!</p>
+<p>También es muy recomendable la lectura de la guí de estilo de Tidyverse elaborada por Hadley Wickham <a href="https://style.tidyverse.org/"><i>The tidyverse style guide</i></a>.
+<p>A continuación, compartiremos una pequeña ejercitación, entonces ¡¡manos a la obra!!</p>
 </div>
 
 
