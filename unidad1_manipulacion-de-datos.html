@@ -242,7 +242,8 @@ dim(peliculas_df)</code></pre>
 <p><a href="https://cran.r-project.org/doc/contrib/rdebuts_es.pdf" class="uri">https://cran.r-project.org/doc/contrib/rdebuts_es.pdf</a></p>
 
 <h3>Importar y exportar datos</h3>
-<p>Ahora exportaremos el dataframe predefinido iris a CSV para poder observar como trabajan algunas funciones. Primero cargaremos la librería �<code>readr</code>, que es más completa y eficiente para leer datos que las funciones básicas de R.</p>
+<p>Ahora exportaremos el dataframe predefinido iris a CSV para poder observar como trabajan algunas funciones. Primero cargaremos la librería <code>readr</code>, que es más completa y eficiente para leer datos que las funciones básicas de R.</p>
+
 <pre class="r"><code>#Cargamos la librería readr
 
 library(&quot;readr&quot;)
@@ -258,7 +259,7 @@ write_csv(iris, path = &quot;C:/hdcaicyt/R/iris.csv&quot;)
 iris_importado_csv &lt;- read_csv(&quot;./iris.csv&quot;)</code></pre>
 <p>Cuestiones importantes a tener en cuenta de <code>read_csv()</code>:</p>
 <ul>
-<li><p>el parámetro <code>col_names = FALSE<code> permite modificar el coportamiento de read_csv() para que no asuma que la primera fila contiene los nombres de las variables. </p></li>
+<li><p>el parámetro <code>col_names = FALSE</code> permite modificar el coportamiento de read_csv() para que no asuma que la primera fila contiene los nombres de las variables. </p></li>
 <li><p><code>skip</code> es útil para informarle a read_csv() que comience a importar a partir de determinada fila: <code>skip = n</code></p></li>
 <li><p>NA (Not Available) son elementos no disponibles. Es muy importante tener en cuenta la presencia de NA en un dataframe porque puede modificar el comportamiento de las funciones que queramos aplicar.</p></li>
 </ul>
