@@ -179,31 +179,31 @@ pre code {
 <li>Data Frame</li>
 <li>Funciones</li>
 </ul>
-<p>No te preocupes si no estas familiarizado con estos, pues a medida que sean necesarios para el curso iremos brindando la información requerida.</p>
+<p>No te preocupes si no estas familiarizadx con estas nociones, pues iremos brindando la información necesaria a medida que trabajemos con estos tipos de datos en el curso.</p>
 </div>
 <div id="vectores" class="section level3">
 <h3>Vectores</h3>
 <p>Se nombran mediante la función c() (c de concatenate)</p>
 <pre class="r"><code>x &lt;- c(1,2,3,4)</code></pre>
-<p>x es un vector que tiene cuatro componentes.</p>
-<p>Podemos llamar/seleccionar elementos de un objeto se utilizan: [], $, [[]].:</p>
+<p>Así, x es un vector que tiene cuatro componentes.</p>
+<p>Para llamar/seleccionar elementos de un objeto se utilizan diferentes notaciones (<code>[], $, [[]]</code>). Por ejemplo, para seleccionar el segundo elemento del vector anterior, podemos hacer::</p>
 <pre class="r"><code>x[2]
 ## [1] 2</code></pre>
-<p>Por ejemplo:</p>
-<p>‘[]’ se utiliza para extraer uno o más elementos de la misma clase</p>
-<p>‘[[]]’ extraerá elemento de un dataframe o lista pudiendo ser de distinta clase</p>
-<p>‘$’ será para extraer elementos de una variable con un cierto nombre de un dataframe o una lista.</p>
+<p>Más detalladamente:</p>
+<p>‘[]’ se utiliza para extraer uno o más elementos de la misma clase.</p>
+<p>‘[[]]’ sirve para extraer elementos de distinta clase de un dataframe o de una lista.</p>
+<p>‘$’ permite extraer elementos invocándolos por su nombre, por ejemplo, las columnas de un dataframe.</p>
 </div>
 <div id="matrices" class="section level3">
 <h3>Matrices</h3>
-<p>La función matrix() permite organizar los datos en una matriz con tantas filas y columnas que se necesiten.</p>
+<p>La función matrix() permite organizar los datos en una matriz con tantas filas y columnas como se necesite (indicadas por <code>nrow</code> y <code>ncol</code> respectivamente). Por ejemplo:</p>
 <pre class="r"><code>x &lt;- matrix (data= c(1,2,3,4), nrow=2, ncol=2)</code></pre>
 <p>o</p>
 <pre class="r"><code>x &lt;- matrix (c(1,2,3,4), nrow=2, ncol=2)</code></pre>
-<p>De esta manera se creó una matrix de 2x2 (2 filas y 2 columnas),cuestión a destacar, es que se ha rellenado por columnas; si lo que deseas que se complete por filas, deberás incluir: ‘byrow’ en la función.</p>
+<p>Crea una matriz de 2x2 (2 filas y 2 columnas). Aquíse ha rellenado por columnas; si lo que deseas que se complete por filas, deberás incluir: ‘byrow’ en la función.</p>
 <div id="añadir-filascolumnas" class="section level4">
 <h4>Añadir filas/columnas</h4>
-<p>Al trabajar con matrices, vectores o dataframes, se utilizan dos funciones muy útiles: ‘rbind’ y ‘cbind’. La primera sirve para añadir filas y la segunda para añadir columnas.</p>
+<p>Al trabajar con matrices, vectores o dataframes, se utilizan dos funciones muy útiles: ‘rbind’ y ‘cbind’. La primera sirve para añadir filas (<i>row bind</i>) y la segunda para añadir columnas (<i>column bind</i>).</p>
 <pre class="r"><code>x &lt;- matrix(c(7,8,9,10),2,2) #creamos una matriz
 y &lt;- c(5,6) #creamos un vector
 
@@ -212,14 +212,15 @@ z &lt;- rbind(x,y)
 
 #Si queremos añadir los datos de &#39;y&#39; a los de &#39;x&#39; por columnas
 w&lt;- cbind(x,y)</code></pre>
-<p>IMPORTANTE: Si las filas (o columnas) del objeto que añadimos no es múltiplo de las filas (o columnas) del objeto al que se añaden, R dará un mensaje de aviso (Warning message). Siempre es fundamental considerar la dimensión de lo que agregamos quepa en la matriz.</p>
+<p><mark>IMPORTANTE: Si las filas (o columnas) del objeto que añadimos no son múltiplo de las filas (o columnas) del objeto al que se añaden, R emitirá un mensaje de aviso (Warning message). Siempre es fundamental considerar que la dimensión de lo que agregamos quepa en la matriz.</mark></p>
 </div>
 </div>
 <div id="data-frame" class="section level3">
 <h3>Data Frame</h3>
-<p>Estos se usan para almacenar datos en forma de tablas (filas / columnas), como archivos de Excel, CSV, etc. Pueden almacenar diferentes objetos y datos, como ser numéricos, carácter, etc.; se los puede considerar como un tipo especial de lista donde cada uno de sus elementos debe tener la misma longitud. Generalmente, los data frame se crean al cargar/leer una base de datos. Puedes ver un ejemplo precargado en R Studio, escribiendo en consola ‘iris’ y luego presionando Enter. Este objeto corresponde a cinco tipo de flores; donde las columnas presentan los rasgos: largo y ancho de sépalo, largo y ancho de pétalo, y especie. R Studio trae precargados diferentes data sets, puedes acceder a ellos:</p>
+<p>Los dataframes son el punto fuerte de R. Se usan para almacenar datos en forma de tablas (filas / columnas), como archivos de Excel, CSV, etc. Pueden almacenar datos de diferente tipo, como ser datos numéricos, textuales, fechas, etc. Los dataframes pueden ser onsiderados como un tipo especial de lista donde cada uno de sus elementos debe tener la misma longitud.</p>
+<p>Generalmente, los dataframes se crean al cargar/leer una base de datos. Podemos ver un ejemplo de dataframe predefinido en R Studio, escribiendo ‘iris’ en la consola y luego presionando Enter. Este dataframe contiene información correspondiente a cinco tipos de flores, donde las columnas presentan los atributos: largo y ancho de sépalo, largo y ancho de pétalo, y especie. R Studio trae precargados diferentes data sets, podemos acceder a ellos escribiendo:</p>
 <pre class="r"><code>data()</code></pre>
-<p>Ahora, si deseas crear un data frame utilizaremos la función data.frame(), consideración importante: el número de vectores debe ser igual al número de columnas, y los vectores deben tener el mismo largo.</p>
+<p>Para crear un dataframe utilizaremos la función data.frame(). Una consideración importante: el número de vectores debe ser igual al número de columnas, y los vectores deben tener el mismo largo.</p>
 <pre class="r"><code># vectores sobre primeras seis películas de Harry Potter
 pelicula &lt;- c(&quot;HP1&quot;, &quot;HP2&quot;, &quot;HP3&quot;, &quot;HP4&quot;, &quot;HP5&quot;, &quot;HP6&quot;)
 puntuacion &lt;- c(7.6, 7.4, 7.9, 7.7, 7.5, 7.6)
@@ -229,27 +230,29 @@ posterior_2004 &lt;- c(FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
 peliculas_df &lt;- data.frame(pelicula,
                            puntuacion,
                            posterior_2004)
-# Podrás ver el dataframe
+# Para ver las primeras líneas del dataframe
 head(peliculas_df)
 
 # Para acceder a la dimensión del dataframe
 dim(peliculas_df)</code></pre>
-<p>Podrás acceder a más ejemplos de operaciones básicas en R y R Studio:</p>
+
+
+<p>Para acceder a más ejemplos de operaciones básicas en R y R Studio, recomendamos consultar la documentación de R:</p>
 <p><a href="https://cran.r-project.org/manuals.html" class="uri">https://cran.r-project.org/manuals.html</a></p>
 <p><a href="https://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf" class="uri">https://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf</a></p>
 <p><a href="https://cran.r-project.org/doc/contrib/rdebuts_es.pdf" class="uri">https://cran.r-project.org/doc/contrib/rdebuts_es.pdf</a></p>
-<p>Ahora importaremos el dataframe precargado a CSV para poder observar como trabajan algunas funciones. Asimismo, primero instalaremos otra librería, ‘readr’, que es más completa y eficiente con determinadas funciones.</p>
-<pre class="r"><code>#Instala la librería readr
+<p>Ahora exportaremos el dataframe predefinidos iris a CSV para poder observar como trabajan algunas funciones. Primero cargaremos la librería ‘readr’, que es más completa y eficiente para leer datos que las funciones básicas de R.</p>
+<pre class="r"><code>#Cargamos la librería readr
 
 library(&quot;readr&quot;)
 
-# Luego, exporta en formato CSV el df iris al fichero &#39;iris.csv&#39;
+# Exportamos en formato CSV el df iris al archivo &#39;iris.csv&#39;
 
 write_csv(iris, path = &quot;C:/hdcaicyt/R/iris.csv&quot;) 
 
-# Importante! recuerda poner de forma correcta tu ruta de acceso, pero si has configurado con anterioridad no hará falta agregarlo: &#39;path = &quot;./iris.csv&quot;&#39;
+# ¡Importante! Escribir correctamente la ruta de acceso (si no fue configurada con anterioridad): &#39;path = &quot;./iris.csv&quot;&#39;
 
-# Ahora importaremos el &#39;csv&#39;,  lo vamos a guardar en &#39;iris_importado_csv&#39;
+# Para leer el contenido de un &#39;csv&#39; usamos 'read_csv()'. Lo guardamos en la variable &#39;iris_importado_csv&#39;:
 
 iris_importado_csv &lt;- read_csv(&quot;./iris.csv&quot;)</code></pre>
 <p>Cuestiones importantes a tener en cuenta de read_csv():</p>
@@ -276,12 +279,12 @@ pers &lt;- read_csv(destino)
 
 #Si no deseáramos guardarlo, solo realizaremos este último comando</code></pre>
 <div id="hasta-aquí-hemos-presentamos-diferentes-datos-y-objetos-en-r-studio-y-cómo-acceder-a-ellos-por-lo-cuál-a-continuación-introduciremos-dos-librería-que-nos-serán-útiles-en-la-próxima-unidad." class="section level4">
-<h4>Hasta aquí hemos presentamos diferentes datos y objetos en R Studio, y cómo acceder a ellos; por lo cuál, a continuación introduciremos dos librería que nos serán útiles en la próxima unidad.</h4>
+<h4>Hasta aquí hemos presentamos diferentes datos y objetos en R Studio y cómo acceder a ellos. A continuación introduciremos dos librería que nos serán útiles en las próximas unidades.</h4>
 </div>
 </div>
 <div id="tidyverse-y-tidytext" class="section level3">
 <h3>Tidyverse y Tidytext</h3>
-<p>A partir de ahora, comenzaremos con la parte más interesante de este módulo, donde aprenderemos a limpiar y transformar datos en R. Esto forma parte del text mining, que realizado en R, contará con varias ventajas, como ser: no requiere muestreo para extraer información; puede aplicarse varias metodologías de forma rápida; los procedimientos son auditables y reproducibles. Tidy convierte los datos en dataframes, donde en las columnas estarán las variable y los valores de cada línea, con su variable, será una observación. Por ello, utilizaremos tidyverse y tidytext para realizar análisis de texto.</p>
+<p>Estas librerías serán fundamentales para la parte más interesante de este módulo, donde aprenderemos a limpiar y transformar datos en R. Este trabajo es indispensable para el text mining, que realizado en R, contará con varias ventajas: no requiere muestreo para extraer información, permite aplicar varias metodologías de forma rápida, los procedimientos son auditables y reproducibles. Tidy convierte los datos en dataframes, donde en las columnas estarán las variable y los valores de cada línea, con su variable, será una observación. Por ello, utilizaremos tidyverse y tidytext para realizar análisis de texto.</p>
 <pre><code>   La librería Tidytext permite realizar mineo de texto con el uso de herramientas tidy, generando una forma de estructurar los datos.
    
    A la librería tidytext la utilizaremos para &#39;tokenizar&#39;, es decir, sustituir algunos datos por sustitutos sin alterar el tipo o la longitud de los datos.</code></pre>
