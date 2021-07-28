@@ -13,18 +13,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Ley de Zipf
 
-El análisis estadístico de textos es anterior a la invención de las computadoras. En 1949, el lingüista Georges Zipf (1902-1950) realizó un célebre estudio empírico de la repartición de palabras en el _Ulises_ de James Joyce en el que descubrió que la palabra más frecuente ocurría 8000 veces, la décima palabra más frecuente ocurría 800 veces, la centésima palabra más frecuente ocurría 80 veces y la milésima palabra más frecuente ocurría 8 veces^[Estos resultados son demasiado bellos para ser verdaderos; hoy en día es fácil realizar una prueba sobre cualquier corpus con una computadora personal y comprobar que los resultados son menos "redondos".]. Estos resultados pueden ser generalizados en lo que hoy conocemos como "ley de Zipf": si ordenamos las palabras de cualquier texto o corpus de textos de la más frecuente a la menos frecuente y representamos como _f(n)_ la cantidad de ocurrencias de una palabra de orden _n_, obtenemos la relación _f(n) * n = k_, o _f(n) = k/n_, donde _k_ es una constante^[En _Ulises_, _k_ tenía un valor 8000.]. Cabe destacar que _k_ es independiente de la lengua y del corpus analizado.
+El análisis estadístico de textos es anterior a la invención de las computadoras. En 1949, el lingüista Georges Zipf (1902-1950) realizó un célebre estudio empírico de la repartición de palabras en el *Ulises* de James Joyce en el que descubrió que la palabra más frecuente ocurría 8000 veces, la décima palabra más frecuente ocurría 800 veces, la centésima palabra más frecuente ocurría 80 veces y la milésima palabra más frecuente ocurría 8 veces[^1]. Estos resultados pueden ser generalizados en lo que hoy conocemos como "ley de Zipf": si ordenamos las palabras de cualquier texto o corpus de textos de la más frecuente a la menos frecuente y representamos como *f(n)* la cantidad de ocurrencias de una palabra de orden *n*, obtenemos la relación *f(n) \* n = k*, o *f(n) = k/n*, donde *k* es una constante[^2]. Cabe destacar que *k* es independiente de la lengua y del corpus analizado.
 
-Si graficamos el orden de las palabras (word rank) en el eje de abcisas _x_ y la cantidad de ocurrencias en el eje de ordenadas _y_, obtendremos una curva pronunciada similar a la de la Figura 1^[La Figura 1 en realidad representa esquemáticamente la frecuencia de las búsquedas de información en internet, pero el tipo de curva es el mismo para frecuencia de palabras en un texto.]. La curva de Zipf indica que un pequeño número de palabras son muy frecuentes mientras que la mayor parte de las palabras son muy poco frecuentes (por eso la curva se aproxima rápidamente al eje de abcisas en una larga prolongación conocida como "larga cola"). En otras palabras, palabras como "de", "por", "la" tienen una muy gran cantidad de ocurrencias en cualquier corpus textual; por el contrario, en cualquier corpus hay una gran cantidad de palabras que tienen muy baja frencuencia. 
+[^1]: Estos resultados son demasiado bellos para ser verdaderos; hoy en día es fácil realizar una prueba sobre cualquier corpus con una computadora personal y comprobar que los resultados son menos "redondos".
 
-Este tipo de repartición desigual de frecuencias en un conjunto de datos también es conocido en estadística como "ley potencia" o "Ley de Pareto". Esta distribución se encuentra en muchos otros ámbitos, por ejemplo, búsquedas de información (_queries_) en internet (pocas búsquedas son muy populares y muchas búsquedas son únicas), venta de productos (un número reducido de productos son los más vendidos y la mayor parte de los productos tienen poca salida) o etiquetas en un documento anotado (en un documento TEI, hay muchas ocurrencias de  `<p>` y `<l>` y pocas ocurrencias de toda variedad de etiquetas TEI).
+[^2]: En *Ulises*, *k* tenía un valor 8000.
+
+Si graficamos el orden de las palabras (word rank) en el eje de abscisas *x* y la cantidad de ocurrencias en el eje de ordenadas *y*, obtendremos una curva pronunciada similar a la de la Figura 1[^3]. La curva de Zipf indica que un pequeño número de palabras son muy frecuentes mientras que la mayor parte de las palabras son muy poco frecuentes (por eso la curva se aproxima rápidamente al eje de abscisas en una larga prolongación conocida como "larga cola"). En otras palabras, palabras como "de", "por", "la" tienen una muy gran cantidad de ocurrencias en cualquier corpus textual; por el contrario, en cualquier corpus hay una gran cantidad de palabras que tienen muy baja frencuencia.
+
+[^3]: La Figura 1 en realidad representa esquemáticamente la frecuencia de las búsquedas de información en internet, pero el tipo de curva es el mismo para frecuencia de palabras en un texto.
+
+Este tipo de repartición desigual de frecuencias en un conjunto de datos también es conocido en estadística como "ley potencia" o "Ley de Pareto". Esta distribución se encuentra en muchos otros ámbitos, por ejemplo, búsquedas de información (*queries*) en internet (pocas búsquedas son muy populares y muchas búsquedas son únicas), venta de productos (un número reducido de productos son los más vendidos y la mayor parte de los productos tienen poca salida) o etiquetas en un documento anotado (en un documento TEI, hay muchas ocurrencias de `<p>` y `<l>` y pocas ocurrencias de toda variedad de etiquetas TEI).
 
 ![curva de zipf ilustracion](https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/6151df52-6240-4093-b29c-2294fb61b008/monster-main.jpg)
 
-*Fig. 1. Esquema de curva de Zipf *
+*Fig. 1. Esquema de curva de Zipf*
 
-La curva de Zipf es muchas veces representada usando el logaritmo de las frecuencias y del ránking de los elementos, lo que permite apreciar mejor la parte central de los datos (las palabras de frecuencia media). Los elementos centrales de la curva son los que mejor representan un texto y que permiten caracterizarlo mejor y establecer comparaciones con otros textos, ya que típicamente las palabras de la cima de la curva se corresponden con las _stopwords_ o palabras vacías (i.e., son demasiado generales, aparecen en cualquier texto) y las palabras de la larga cola tienen una sola ocurrencia cada una (i.e., son demasiado particulares, ocurren únicamente en ese texto). 
-
+La curva de Zipf es muchas veces representada usando el logaritmo de las frecuencias y del ránking de los elementos, lo que permite apreciar mejor la parte central de los datos (las palabras de frecuencia media). Los elementos centrales de la curva son los que mejor representan un texto y que permiten caracterizarlo mejor y establecer comparaciones con otros textos, ya que típicamente las palabras de la cima de la curva se corresponden con las *stopwords* o palabras vacías (i. e., son demasiado generales, aparecen en cualquier texto) y las palabras de la larga cola tienen una sola ocurrencia cada una (i. e., son demasiado particulares, ocurren únicamente en ese texto).
 
 ![zipf wikipedias logaritmica](https://upload.wikimedia.org/wikipedia/commons/d/da/Zipf_30wiki_es_labels.png)
 
@@ -32,30 +37,30 @@ La curva de Zipf es muchas veces representada usando el logaritmo de las frecuen
 
 #### Referencias
 
-* Más sobre la ley de Zipf: Powers, D. M. W. (1998). Applications and Explanations of Zipf’s Law. _New Methods in Language Processing and Computational Natural Language Learning_. https://aclanthology.org/W98-1218
+-   Más sobre la ley de Zipf: Powers, D. M. W. (1998). Applications and Explanations of Zipf's Law. *New Methods in Language Processing and Computational Natural Language Learning*. <https://aclanthology.org/W98-1218>
 
-* El texto de Georges Zipf: Zipf, G. K. (1949). The question of vocabulary balance. En _Human Behavior And The Principle Of Least Effort_ (pp. 22–40). Addison-Wesley Press. http://archive.org/details/in.ernet.dli.2015.90211
-
+-   El texto de Georges Zipf: Zipf, G. K. (1949). The question of vocabulary balance. En *Human Behavior And The Principle Of Least Effort* (pp. 22--40). Addison-Wesley Press. <http://archive.org/details/in.ernet.dli.2015.90211>
 
 ### Ley de Heaps (o ley de Herdan)
 
-Otra ley estadística acerca de los corpus textuales, aunque mucho menos difundida que la ley de Zipf, es la llamada "ley de Heaps"^[La ley se conoce por el nombre de Harold Stanley Heaps pero fue formulada originalmente por Gustav Herdan en 1960 en el manual _Type-Token Mathematics: A Textbook of Mathematical Linguistics_.]. Esta ley caracteriza la variabilidad del vocabulario de un corpus, pues sostiene que el vocabulario de un texto --es decir, la cantidad de unidades distintas que contiene-- o de un corpus de textos crece exponencialmente en función de la longitud del texto (pero con un exponenete menor a 1). Así, si el vocabulario es _V_ y la cantidad de palabras del corpus o texto es _M_, según la ley de Heaps _V = K ∗ M^β^_, donde _K_^[Este coeficiente es diferente del k de la ley de Zipf.] y β son parámetros dependientes del texto o del corpus (en inglés, K ∈ [30, 100] y β ≈ 0, 5). 
+Otra ley estadística acerca de los corpus textuales, aunque mucho menos difundida que la ley de Zipf, es la llamada "ley de Heaps"[^4]. Esta ley caracteriza la variabilidad del vocabulario de un corpus, pues sostiene que el vocabulario de un texto --es decir, la cantidad de unidades distintas que contiene-- o de un corpus de textos crece exponencialmente en función de la longitud del texto (pero con un exponente menor a 1). Así, si el vocabulario es *V* y la cantidad de palabras del corpus o texto es *M*, según la ley de Heaps *V = K ∗ M^β^*, donde *K*[^5] y β son parámetros dependientes del texto o del corpus (en inglés, K ∈ [30, 100] y β ≈ 0, 5).
 
-La curva resultante es del tipo de la Figura 3, donde el eje _x_ representa la cantidad de elementos del texto y el eje _y_ la cantidad de palabras distintas (el vocabulario).
+[^4]: La ley se conoce por el nombre de Harold Stanley Heaps pero fue formulada originalmente por Gustav Herdan en 1960 en el manual *Type-Token Mathematics: A Textbook of Mathematical Linguistics*.
+
+[^5]: Este coeficiente es diferente del k de la ley de Zipf.
+
+La curva resultante es del tipo de la Figura 3, donde el eje *x* representa la cantidad de elementos del texto y el eje *y* la cantidad de palabras distintas (el vocabulario).
 
 ![curva Heaps](https://upload.wikimedia.org/wikipedia/commons/f/fc/Heaps_law_plot.png)
 
 *Fig. 3. Representación de la Ley de Heaps*
 
-
 En términos prácticos, la ley de Heaps representa que la incorporación de nuevos elementos a una colección, ya sean textos a un corpus o frases a un texto, conlleva a sumar nuevas unidades que no estaban presentes en la colección. En términos lingüísticos, esto significa que la descripción de una lengua no puede ser agotada.
 
 #### Referencias
 
-* Formulación de la ley por Harold Stanley Heaps: Heaps, H. S. (1978). _Information retrieval, computational and theoretical aspects_. New York: Academic Press. http://archive.org/details/informationretri0000heap
-
+-   Formulación de la ley por Harold Stanley Heaps: Heaps, H. S. (1978). *Information retrieval, computational and theoretical aspects*. New York: Academic Press. <http://archive.org/details/informationretri0000heap>
 
 ## Frecuencia absoluta, frecuencia relativa y tf.idf
 
 Pendiente
-
