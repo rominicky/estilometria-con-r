@@ -13,7 +13,8 @@ Profa. Nidia Hernández y Profa. Romina De León (CONICET).
 
 [Unidad 1. Manipulación de datos en R Studio](unidad1_manipulacion-de-datos.html)
 
-[Unidad 1. Ejercicio. Manipulaciónn de datos en R Studio](unidad1_ej-manipulacion-datos.html)
+[Unidad 1. Ejercicio. Manipulación de datos en R Studio](unidad1_ej-manipulacion-datos.html)
 
+[Unidad 2. Análisis textual](unidad2_analisis-textual.html)
 
 [Unidad 2. Ejercicio. Análisis textual](unidad2_ej-analisis_textual.html)
