@@ -1,8 +1,8 @@
 ---
 title: "Análisis textual en R"
-author: "Nidia"
-date: "7/22/2021"
-output: html_document
+output: 
+  html_document:
+    self_contained: no
 ---
 
 ```{r setup, include=FALSE}
@@ -13,54 +13,92 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Ley de Zipf
 
-El análisis estadístico de textos es anterior a la invención de las computadoras. En 1949, el lingüista Georges Zipf (1902-1950) realizó un célebre estudio empírico de la repartición de palabras en el *Ulises* de James Joyce en el que descubrió que la palabra más frecuente ocurría 8000 veces, la décima palabra más frecuente ocurría 800 veces, la centésima palabra más frecuente ocurría 80 veces y la milésima palabra más frecuente ocurría 8 veces[^1]. Estos resultados pueden ser generalizados en lo que hoy conocemos como "ley de Zipf": si ordenamos las palabras de cualquier texto o corpus de textos de la más frecuente a la menos frecuente y representamos como *f(n)* la cantidad de ocurrencias de una palabra de orden *n*, obtenemos la relación *f(n) \* n = k*, o *f(n) = k/n*, donde *k* es una constante[^2]. Cabe destacar que *k* es independiente de la lengua y del corpus analizado.
+El análisis estadístico de textos es anterior a la invención de las computadoras. En 1949, el lingüista Georges Zipf (1902-1950) realizó un célebre estudio empírico de la repartición de palabras en el _Ulises_ de James Joyce en el que descubrió que la palabra más frecuente ocurría 8000 veces, la décima palabra más frecuente ocurría 800 veces, la centésima palabra más frecuente ocurría 80 veces y la milésima palabra más frecuente ocurría 8 veces^[Estos resultados son demasiado bellos para ser verdaderos; hoy en día es fácil realizar una prueba sobre cualquier corpus con una computadora personal y comprobar que los resultados son menos "redondos".]. Estos resultados pueden ser generalizados en lo que hoy conocemos como "ley de Zipf": si ordenamos las palabras de cualquier texto o corpus de textos de la más frecuente a la menos frecuente y representamos como _f(n)_ la cantidad de ocurrencias de una palabra de orden _n_, obtenemos la relación _f(n) * n = k_, o _f(n) = k/n_, donde _k_ es una constante^[En _Ulises_, _k_ tenía un valor 8000.]. Cabe destacar que _k_ es independiente de la lengua y del corpus analizado.
 
-[^1]: Estos resultados son demasiado bellos para ser verdaderos; hoy en día es fácil realizar una prueba sobre cualquier corpus con una computadora personal y comprobar que los resultados son menos "redondos".
+Si graficamos el orden de las palabras (word rank) en el eje de abcisas _x_ y la cantidad de ocurrencias en el eje de ordenadas _y_, obtendremos una curva pronunciada similar a la de la Figura 1^[La Figura 1 en realidad representa esquemáticamente la frecuencia de las búsquedas de información en internet, pero el tipo de curva es el mismo para frecuencia de palabras en un texto.]. La curva de Zipf indica que un pequeño número de palabras son muy frecuentes mientras que la mayor parte de las palabras son muy poco frecuentes (por eso la curva se aproxima rápidamente al eje de abcisas en una larga prolongación conocida como "larga cola"). En otras palabras, palabras como "de", "por", "la" tienen una muy gran cantidad de ocurrencias en cualquier corpus textual; por el contrario, en cualquier corpus hay una gran cantidad de palabras que tienen muy baja frencuencia. 
 
-[^2]: En *Ulises*, *k* tenía un valor 8000.
+Este tipo de repartición desigual de frecuencias en un conjunto de datos también es conocido en estadística como "ley potencia" o "Ley de Pareto". Esta distribución se encuentra en muchos otros ámbitos, por ejemplo, búsquedas de información (_queries_) en internet (pocas búsquedas son muy populares y muchas búsquedas son únicas), venta de productos (un número reducido de productos son los más vendidos y la mayor parte de los productos tienen poca salida) o etiquetas en un documento anotado (en un documento TEI, hay muchas ocurrencias de  `<p>` y `<l>` y pocas ocurrencias de toda variedad de etiquetas TEI).
 
-Si graficamos el orden de las palabras (word rank) en el eje de abscisas *x* y la cantidad de ocurrencias en el eje de ordenadas *y*, obtendremos una curva pronunciada similar a la de la Figura 1[^3]. La curva de Zipf indica que un pequeño número de palabras son muy frecuentes mientras que la mayor parte de las palabras son muy poco frecuentes (por eso la curva se aproxima rápidamente al eje de abscisas en una larga prolongación conocida como "larga cola"). En otras palabras, palabras como "de", "por", "la" tienen una muy gran cantidad de ocurrencias en cualquier corpus textual; por el contrario, en cualquier corpus hay una gran cantidad de palabras que tienen muy baja frencuencia.
+![](https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/6151df52-6240-4093-b29c-2294fb61b008/monster-main.jpg)
 
-[^3]: La Figura 1 en realidad representa esquemáticamente la frecuencia de las búsquedas de información en internet, pero el tipo de curva es el mismo para frecuencia de palabras en un texto.
+*Fig. 1. Esquema de curva de Zipf *
 
-Este tipo de repartición desigual de frecuencias en un conjunto de datos también es conocido en estadística como "ley potencia" o "Ley de Pareto". Esta distribución se encuentra en muchos otros ámbitos, por ejemplo, búsquedas de información (*queries*) en internet (pocas búsquedas son muy populares y muchas búsquedas son únicas), venta de productos (un número reducido de productos son los más vendidos y la mayor parte de los productos tienen poca salida) o etiquetas en un documento anotado (en un documento TEI, hay muchas ocurrencias de `<p>` y `<l>` y pocas ocurrencias de toda variedad de etiquetas TEI).
+La curva de Zipf es muchas veces representada usando el logaritmo de las frecuencias y del ránking de los elementos, lo que permite apreciar mejor la parte central de los datos (las palabras de frecuencia media). Los elementos centrales de la curva son los que mejor representan un texto y que permiten caracterizarlo mejor y establecer comparaciones con otros textos, ya que típicamente las palabras de la cima de la curva se corresponden con las _stopwords_ o palabras vacías (i.e., son demasiado generales, aparecen en cualquier texto) y las palabras de la larga cola tienen una sola ocurrencia cada una (i.e., son demasiado particulares, ocurren únicamente en ese texto). 
 
-![curva de zipf ilustracion](https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/6151df52-6240-4093-b29c-2294fb61b008/monster-main.jpg)
-
-*Fig. 1. Esquema de curva de Zipf*
-
-La curva de Zipf es muchas veces representada usando el logaritmo de las frecuencias y del ránking de los elementos, lo que permite apreciar mejor la parte central de los datos (las palabras de frecuencia media). Los elementos centrales de la curva son los que mejor representan un texto y que permiten caracterizarlo mejor y establecer comparaciones con otros textos, ya que típicamente las palabras de la cima de la curva se corresponden con las *stopwords* o palabras vacías (i. e., son demasiado generales, aparecen en cualquier texto) y las palabras de la larga cola tienen una sola ocurrencia cada una (i. e., son demasiado particulares, ocurren únicamente en ese texto).
-
-![zipf wikipedias logaritmica](https://upload.wikimedia.org/wikipedia/commons/d/da/Zipf_30wiki_es_labels.png)
+<img src = "https://upload.wikimedia.org/wikipedia/commons/d/da/Zipf_30wiki_es_labels.png" width="500" heigth="400"/>
 
 *Fig. 2. Gráficas del ránking de palabras versus la frecuencia para las primeras 10 millones de palabras de Wikipedia en 30 idiomas diferentes (descargas de octubre del 2015) en una escala logarítmica en los dos ejes*
 
 #### Referencias
 
--   Más sobre la ley de Zipf: Powers, D. M. W. (1998). Applications and Explanations of Zipf's Law. *New Methods in Language Processing and Computational Natural Language Learning*. <https://aclanthology.org/W98-1218>
+* Más sobre la ley de Zipf: Powers, D. M. W. (1998). Applications and Explanations of Zipf’s Law. _New Methods in Language Processing and Computational Natural Language Learning_. https://aclanthology.org/W98-1218
 
--   El texto de Georges Zipf: Zipf, G. K. (1949). The question of vocabulary balance. En *Human Behavior And The Principle Of Least Effort* (pp. 22--40). Addison-Wesley Press. <http://archive.org/details/in.ernet.dli.2015.90211>
+* El texto de Georges Zipf: Zipf, G. K. (1949). The question of vocabulary balance. En _Human Behavior And The Principle Of Least Effort_ (pp. 22–40). Addison-Wesley Press. http://archive.org/details/in.ernet.dli.2015.90211
+
 
 ### Ley de Heaps (o ley de Herdan)
 
-Otra ley estadística acerca de los corpus textuales, aunque mucho menos difundida que la ley de Zipf, es la llamada "ley de Heaps"[^4]. Esta ley caracteriza la variabilidad del vocabulario de un corpus, pues sostiene que el vocabulario de un texto --es decir, la cantidad de unidades distintas que contiene-- o de un corpus de textos crece exponencialmente en función de la longitud del texto (pero con un exponente menor a 1). Así, si el vocabulario es *V* y la cantidad de palabras del corpus o texto es *M*, según la ley de Heaps *V = K ∗ M^β^*, donde *K*[^5] y β son parámetros dependientes del texto o del corpus (en inglés, K ∈ [30, 100] y β ≈ 0, 5).
+Otra ley estadística acerca de los corpus textuales, aunque mucho menos difundida que la ley de Zipf, es la llamada "ley de Heaps"^[La ley se conoce por el nombre de Harold Stanley Heaps pero fue formulada originalmente por Gustav Herdan en 1960 en el manual _Type-Token Mathematics: A Textbook of Mathematical Linguistics_.]. Esta ley caracteriza la variabilidad del vocabulario de un corpus, pues sostiene que el vocabulario de un texto --es decir, la cantidad de unidades distintas que contiene-- o de un corpus de textos crece exponencialmente en función de la longitud del texto (pero con un exponente menor a 1). Así, si el vocabulario es _V_ y la cantidad de palabras del corpus o texto es _M_, según la ley de Heaps _V = K ∗ M^β^_, donde _K_^[Este coeficiente es diferente del k de la ley de Zipf.] y β son parámetros dependientes del texto o del corpus (en inglés, K ∈ [30, 100] y β ≈ 0, 5). 
 
-[^4]: La ley se conoce por el nombre de Harold Stanley Heaps pero fue formulada originalmente por Gustav Herdan en 1960 en el manual *Type-Token Mathematics: A Textbook of Mathematical Linguistics*.
+La curva resultante es del tipo de la Figura 3, donde el eje _x_ representa la cantidad de elementos del texto y el eje _y_ la cantidad de palabras distintas (el vocabulario).
 
-[^5]: Este coeficiente es diferente del k de la ley de Zipf.
-
-La curva resultante es del tipo de la Figura 3, donde el eje *x* representa la cantidad de elementos del texto y el eje *y* la cantidad de palabras distintas (el vocabulario).
-
-![curva Heaps](https://upload.wikimedia.org/wikipedia/commons/f/fc/Heaps_law_plot.png)
+![](https://upload.wikimedia.org/wikipedia/commons/f/fc/Heaps_law_plot.png)
 
 *Fig. 3. Representación de la Ley de Heaps*
 
-En términos prácticos, la ley de Heaps representa que la incorporación de nuevos elementos a una colección, ya sean textos a un corpus o frases a un texto, conlleva a sumar nuevas unidades que no estaban presentes en la colección. En términos lingüísticos, esto significa que la descripción de una lengua no puede ser agotada.
+
+En términos prácticos, la ley de Heaps representa el hecho de que la incorporación de nuevos elementos a una colección, ya sean textos a un corpus o frases a un texto, conlleva a sumar nuevas unidades que no estaban presentes en la colección. En términos lingüísticos, esto significa que la descripción de una lengua no puede ser agotada.
 
 #### Referencias
 
--   Formulación de la ley por Harold Stanley Heaps: Heaps, H. S. (1978). *Information retrieval, computational and theoretical aspects*. New York: Academic Press. <http://archive.org/details/informationretri0000heap>
+* Formulación de la ley por Harold Stanley Heaps: Heaps, H. S. (1978). _Information retrieval, computational and theoretical aspects_. New York: Academic Press. http://archive.org/details/informationretri0000heap
+
 
 ## Frecuencia absoluta, frecuencia relativa y tf.idf
 
-Pendiente
+Las leyes presentadas en la sección anterior involucran frecuencias de unidades textuales. Es pertinente introducir en este punto ciertas aclaraciones sobre la noción de frecuencia. Tenemos que diferenciar frecuencia absoluta y frecuencia relativa. 
+
+La frecuencia absoluta es entendida como cantidad de ocurrencias de un elemento, es decir el número de apariciones del elemento en determinada colección, por ejemplo, la cantidad de veces que una palabra aparece en un texto. Con la ayuda de las herramientas de procesamiento de texto actuales, esto es muy fácil de calcular. Sin embargo, la observación de la frecuencia absoluta de una palabra puede llevar a conclusiones erróneas si, por ejemplo, estamos comparando textos de talla desigual: 2 ocurrencias en un texto de 15000 palabras es muy poco representativo mientras que 2 ocurrencias en un texto de 15 palabras es muy relevante.
+
+Aquí resulta indispensable presentar la noción de token. En el ámbito del procesamiento textual es más habitual usar el token como unidad de análisis en vez de la palabra, unidad de difícil definición. Un token es una unidad puramente formal definida como una secuencia de caracteres entre dos separadores. Los separadores son espacios en blanco, signos de puntuación y algunos otros caracteres como comillas o paréntesis (estos caracteres especiales, excepto el blanco, son en sí mismos tokens independientes). Los conteos de frecuencias en lingüística computacional y PLN habitualmente se basan en la medición de ocurrencias de cada token.
+
+
+|       | token 1	| token 2	| token 3	| token 4
+|--------|---------|---------|---------|----------
+|texto 1	|   1     |  0	    |  	0	    | 2
+|texto 2	|   0	    | 	3	    | 	1	    | 1
+|texto 3	|	  0	    | 	0	    | 	0	    | 2
+
+
+*Tabla 1. Ocurrencias de tokens en un corpus de textos*
+
+Para evitar el desbalance en la comparación de textos de diferente longitud, es posible medir la frecuencia relativa de los tokens. La frecuencia relativa representa la proporción de un elemento con respecto a la totalidad de los elementos de la colección y se obtiene dividiendo la cantidad de ocurrencias del elemento en particular por el total de elementos de la colección. Así, podemos medir la frecuencia relativa de un token en un texto dividiendo las ocurrencias de dicho token por la cantidad total de tokens del texto. Muchas veces, se multiplica este índice por cien para obtener un porcentaje.
+
+|       | token 1	| token 2	| token 3	| token 4
+|--------|---------|---------|---------|----------
+|texto 1	|   1/3   |  0	    |  	0	    | 2/3
+|texto 2	|   0	    | 	3/5	  | 	1/5   | 1/5
+|texto 3	|	  0	    | 	0	    | 	0	    | 1
+
+
+*Tabla 2. Frecuencias relativas de tokens en un corpus de textos*
+
+Así, si en la Tabla 1 el token 4 tenía la misma frecuencia absoluta en el texto 1 y en el texto 3 (2 ocurrencias en ambos), en la Tabla 2 podemos observar que el token 4 es mucho más relevante para el texto 3 porque representa el 100% de los tokens, mientras que en el texto 1 representa el 66%.
+
+Otra medida de uso muy extendido y que da una mejor idea del peso de un token dentro de una colección es _TF.IDF_. _TF.IDF_ son las siglas de _term frequency, inverse term frecuency_ y como su nombre lo indica, consiste en dividir la frecuencia absoluta de un token por la frecuencia inversa de dicho token. La frecuencia inversa indica la rareza del token en la colección y se obtiene calculando el logaritmo de la división del número total de textos por el número de textos que contienen el token (la rareza de un token se calcula a través de un logaritmo para que no incremente demasiado rápido, así para ganar un punto de rareza, el token debe estar presente en muchos textos).
+
+|         | token 1  	| token 2	| token 3	| token 4
+|---------|-----------|---------|---------|----------
+|texto 1	|   ln2/3   |  0	    |  	0	    | 0
+|texto 2	|   0	      | 3ln4/5	| 	ln2/5 | 0
+|texto 3  |	  0	      | 	0	    | 	0   	| 0
+
+
+*Tabla 3. TF.IDF de tokens en un corpus de textos*
+
+En la Tabla 3 podemos observar que el token 2 es improtante en el texto 2 pero raro en los otros textos. El token 4, que en las tablas anteriores podía parecer importante, tiene un valor de 0 de TDF.IDF porque está presente en todos los textos y, por ende, no es un elementos distintivo. Este ejemplo nos permite ver, entonces, que para tener un valor alto de TF.IDF, un elemento debe estar muy presente en un texto pero ser poco frecuente en los demás. Por eso, TF.IDF es un índice muy usado en tareas como la indexación de textos (para los resultados de búsqueda de información, como las respuestas de los motores de búsqueda) y la generación automática de resúmenes ya que representa las palabras clave de un texto.
+
+Estas son algunas medidas básicas sobre la presencia y la distribución de tokens en colecciones textuales, existen muchas más. 
+
+Para poner en práctica los conceptos desarrollados aquí, les compartiremos una ejercitación de análisis textual básico en R. 
+
