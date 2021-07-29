@@ -1,19 +1,25 @@
 ---
-title: "Análisis textual en R"
+title: "Análisis textual estadístico"
+author:
+date:
 output: 
-  html_document:
-    self_contained: no
+  html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+El análisis estadístico de textos es anterior a la invención de R e inclusive de las computadoras. Antes de abordar las últimas tendencias en estilometría como la elaboración de topografías textuales, detección de plagio o identificación de autoría es necesario recordar algunas nociones básicas de estadística aplicada a datos textuales.
+
+La estadística es a la vez una ciencia, un método y una técnica que involucra tanto la recolección de datos como el procesamiento y análisis y ulterior visualización e interpretación de los mismos. El principio básico de la estadística es contabilizar elementos, calcular su probabilidad y proponer descripciones de la distribución de dichas probabilidades. En el caso de la textometría o estadística textual, los elementos a contabilizar pueden ser caracteres, tokens, palabras, clases de palabras, ngrams o coocurrencias y las descripciones pueden involcrar una gran variedad de temas: el crecimiento del vocabulario, el establecimiento de series textuales cronológicas, el cálculo de segmentos repetidos (para detectar énfasis del autor o autora), la identificación de fijaciones léxicas, o su contrapartida, las alteraciones discursivas, etc.
+
 ## Algunas particularidades estadísticas de los datos textuales
 
 ### Ley de Zipf
 
-El análisis estadístico de textos es anterior a la invención de las computadoras. En 1949, el lingüista Georges Zipf (1902-1950) realizó un célebre estudio empírico de la repartición de palabras en el _Ulises_ de James Joyce en el que descubrió que la palabra más frecuente ocurría 8000 veces, la décima palabra más frecuente ocurría 800 veces, la centésima palabra más frecuente ocurría 80 veces y la milésima palabra más frecuente ocurría 8 veces^[Estos resultados son demasiado bellos para ser verdaderos; hoy en día es fácil realizar una prueba sobre cualquier corpus con una computadora personal y comprobar que los resultados son menos "redondos".]. Estos resultados pueden ser generalizados en lo que hoy conocemos como "ley de Zipf": si ordenamos las palabras de cualquier texto o corpus de textos de la más frecuente a la menos frecuente y representamos como _f(n)_ la cantidad de ocurrencias de una palabra de orden _n_, obtenemos la relación _f(n) * n = k_, o _f(n) = k/n_, donde _k_ es una constante^[En _Ulises_, _k_ tenía un valor 8000.]. Cabe destacar que _k_ es independiente de la lengua y del corpus analizado.
+En 1949, el lingüista Georges Zipf (1902-1950) realizó un célebre estudio empírico de la repartición de palabras en el _Ulises_ de James Joyce en el que descubrió que la palabra más frecuente ocurría 8000 veces, la décima palabra más frecuente ocurría 800 veces, la centésima palabra más frecuente ocurría 80 veces y la milésima palabra más frecuente ocurría 8 veces^[Estos resultados son demasiado bellos para ser verdaderos; hoy en día es fácil realizar una prueba sobre cualquier corpus con una computadora personal y comprobar que los resultados son menos "redondos".]. Estos resultados pueden ser generalizados en lo que hoy conocemos como "ley de Zipf": si ordenamos las palabras de cualquier texto o corpus de textos de la más frecuente a la menos frecuente y representamos como _f(n)_ la cantidad de ocurrencias de una palabra de orden _n_, obtenemos la relación _f(n) * n = k_, o _f(n) = k/n_, donde _k_ es una constante^[En _Ulises_, _k_ tenía un valor 8000.]. Cabe destacar que _k_ es independiente de la lengua y del corpus analizado.
 
 Si graficamos el orden de las palabras (word rank) en el eje de abcisas _x_ y la cantidad de ocurrencias en el eje de ordenadas _y_, obtendremos una curva pronunciada similar a la de la Figura 1^[La Figura 1 en realidad representa esquemáticamente la frecuencia de las búsquedas de información en internet, pero el tipo de curva es el mismo para frecuencia de palabras en un texto.]. La curva de Zipf indica que un pequeño número de palabras son muy frecuentes mientras que la mayor parte de las palabras son muy poco frecuentes (por eso la curva se aproxima rápidamente al eje de abcisas en una larga prolongación conocida como "larga cola"). En otras palabras, palabras como "de", "por", "la" tienen una muy gran cantidad de ocurrencias en cualquier corpus textual; por el contrario, en cualquier corpus hay una gran cantidad de palabras que tienen muy baja frencuencia. 
 
@@ -63,11 +69,12 @@ La frecuencia absoluta es entendida como cantidad de ocurrencias de un elemento,
 Aquí resulta indispensable presentar la noción de token. En el ámbito del procesamiento textual es más habitual usar el token como unidad de análisis en vez de la palabra, unidad de difícil definición. Un token es una unidad puramente formal definida como una secuencia de caracteres entre dos separadores. Los separadores son espacios en blanco, signos de puntuación y algunos otros caracteres como comillas o paréntesis (estos caracteres especiales, excepto el blanco, son en sí mismos tokens independientes). Los conteos de frecuencias en lingüística computacional y PLN habitualmente se basan en la medición de ocurrencias de cada token.
 
 
-|       | token 1	| token 2	| token 3	| token 4
-|--------|---------|---------|---------|----------
-|texto 1	|   1     |  0	    |  	0	    | 2
+|         | token 1	| token 2	| token 3	| token 4
+|--------|:---------:|:---------:|:---------:|:----------:
+|texto 1	|   1     |   0	    |  	0	    | 2
 |texto 2	|   0	    | 	3	    | 	1	    | 1
 |texto 3	|	  0	    | 	0	    | 	0	    | 2
+|texto 4	|	  1	    | 	0	    | 	1	    | 1
 
 
 *Tabla 1. Ocurrencias de tokens en un corpus de textos*
@@ -75,30 +82,45 @@ Aquí resulta indispensable presentar la noción de token. En el ámbito del pro
 Para evitar el desbalance en la comparación de textos de diferente longitud, es posible medir la frecuencia relativa de los tokens. La frecuencia relativa representa la proporción de un elemento con respecto a la totalidad de los elementos de la colección y se obtiene dividiendo la cantidad de ocurrencias del elemento en particular por el total de elementos de la colección. Así, podemos medir la frecuencia relativa de un token en un texto dividiendo las ocurrencias de dicho token por la cantidad total de tokens del texto. Muchas veces, se multiplica este índice por cien para obtener un porcentaje.
 
 |       | token 1	| token 2	| token 3	| token 4
-|--------|---------|---------|---------|----------
+|--------|:---------:|:---------:|:---------:|:----------:
 |texto 1	|   1/3   |  0	    |  	0	    | 2/3
 |texto 2	|   0	    | 	3/5	  | 	1/5   | 1/5
 |texto 3	|	  0	    | 	0	    | 	0	    | 1
-
+|texto 4	|	  1/3   | 	0	    | 	1/3   | 1/3
 
 *Tabla 2. Frecuencias relativas de tokens en un corpus de textos*
 
 Así, si en la Tabla 1 el token 4 tenía la misma frecuencia absoluta en el texto 1 y en el texto 3 (2 ocurrencias en ambos), en la Tabla 2 podemos observar que el token 4 es mucho más relevante para el texto 3 porque representa el 100% de los tokens, mientras que en el texto 1 representa el 66%.
 
-Otra medida de uso muy extendido y que da una mejor idea del peso de un token dentro de una colección es _TF.IDF_. _TF.IDF_ son las siglas de _term frequency, inverse term frecuency_ y como su nombre lo indica, consiste en dividir la frecuencia absoluta de un token por la frecuencia inversa de dicho token. La frecuencia inversa indica la rareza del token en la colección y se obtiene calculando el logaritmo de la división del número total de textos por el número de textos que contienen el token (la rareza de un token se calcula a través de un logaritmo para que no incremente demasiado rápido, así para ganar un punto de rareza, el token debe estar presente en muchos textos).
+Otra medida de uso muy extendido y que da una mejor idea del peso de un token dentro de una colección es _TF.IDF_, un índice basado en el concepto de _inverse document frecuency_ (frecuencia inversa de documento) propuesto en 1972 por [Karen Spärck Jones](https://es.wikipedia.org/wiki/Karen_Sp%C3%A4rck_Jones) (1935–2007). _TF.IDF_ son las siglas de dos índices _term frequency_ (frecuencia de término) y el ya mencionado _IDF_ y como su nombre lo indica, consiste en dividir la frecuencia absoluta de un token por la frecuencia inversa de dicho token en una colección de documentos. La frecuencia inversa indica la rareza del token en la colección y se obtiene calculando el logaritmo del número total de textos dividido por el número de textos que contienen el token. La rareza de un token se calcula a través de un logaritmo para que no incremente demasiado rápido y, al mismo tiempo, si el token está presente en todos los documentos, el valor de IDF sea igual a cero (log(1)=0).
 
 |         | token 1  	| token 2	| token 3	| token 4
-|---------|-----------|---------|---------|----------
-|texto 1	|   ln2/3   |  0	    |  	0	    | 0
-|texto 2	|   0	      | 3ln4/5	| 	ln2/5 | 0
+|---------|:---------:|:-------:|:-------:|:----------:
+|texto 1	|log(4/2)   |  0	    |  	0	    | log(4/4)
+|texto 2	|   0	      | log(4/1)| log(4/2)| log(4/4)
+|texto 3  |	  0	      | 	0	    | 	0   	| log(4/4)
+|texto 4	| log(4/2)  | 	0	    | log(4/2)| log(4/4)
+
+*Tabla 3. Frecuencia inversa de documento de tokens en un corpus de textos*
+
+En la Tabla 3 podemos constatar que para calcular el _IDF_ es necesario comparar los valores por columna (cantidad total de textos/cantidad de textos en los que el token está presente). Así, el token 4, por ejemplo, tiene el mismo valor de _IDF_ para todos los documentos.
+
+|         | token 1  	| token 2	| token 3	| token 4
+|---------|:---------:|:-------:|:-------:|:----------:
+|texto 1	|   0,3     |  0	    |  	0	    | 0
+|texto 2	|   0	      | 1,8   	| 	0,3   | 0
 |texto 3  |	  0	      | 	0	    | 	0   	| 0
+|texto 4	|	  0,3     | 	0	    | 	0,3   | 0 
 
+*Tabla 4. TF.IDF de tokens en un corpus de textos*
 
-*Tabla 3. TF.IDF de tokens en un corpus de textos*
+En la Tabla 4 podemos observar que el token 2 es importante en el texto 2 pero raro en los otros textos. El token 4, que en las tablas anteriores podía parecer importante, tiene un valor de 0 de TDF.IDF porque está presente en todos los textos y, por ende, no es un elementos distintivo. Este ejemplo nos permite ver, entonces, que para tener un valor alto de TF.IDF, un elemento debe estar muy presente en un texto pero ser poco frecuente en los demás. Por eso, TF.IDF es un índice muy usado en tareas como la indexación de textos (para los resultados de búsqueda de información, como las respuestas de los motores de búsqueda) y la generación automática de resúmenes ya que representa las palabras clave de un texto.
 
-En la Tabla 3 podemos observar que el token 2 es improtante en el texto 2 pero raro en los otros textos. El token 4, que en las tablas anteriores podía parecer importante, tiene un valor de 0 de TDF.IDF porque está presente en todos los textos y, por ende, no es un elementos distintivo. Este ejemplo nos permite ver, entonces, que para tener un valor alto de TF.IDF, un elemento debe estar muy presente en un texto pero ser poco frecuente en los demás. Por eso, TF.IDF es un índice muy usado en tareas como la indexación de textos (para los resultados de búsqueda de información, como las respuestas de los motores de búsqueda) y la generación automática de resúmenes ya que representa las palabras clave de un texto.
+#### Referencias
 
-Estas son algunas medidas básicas sobre la presencia y la distribución de tokens en colecciones textuales, existen muchas más. 
+* Primera propuesta de IDF por Spark Jones: Spärck Jones, K. (1972). "A Statistical Interpretation of Term Specificity and Its Application in Retrieval". _Journal of Documentation_. 28: 11–21. CiteSeerX 10.1.1.115.8343. [doi:10.1108/eb026526](https://www.emerald.com/insight/content/doi/10.1108/eb026526/full/html)
 
-Para poner en práctica los conceptos desarrollados aquí, les compartiremos una ejercitación de análisis textual básico en R. 
+* Más sobre ponderación de términos para la recuperación de información: Spärck Jones, K. (1973). "Index term weighting". _Information Storage and Retrieval_. 9 (11): 619–633. [doi:10.1016/0020-0271(73)90043-0](https://www.sciencedirect.com/science/article/abs/pii/0020027173900430?via%3Dihub)
+
+Estas son algunas propiedades y medidas básicas sobre la presencia y la distribución de tokens en colecciones textuales, en las próximas semanas iremos desarrollando otras. Para poner en práctica los conceptos desarrollados aquí, les compartiremos una ejercitación de análisis textual básico en R. 
 
