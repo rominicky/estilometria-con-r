@@ -47,14 +47,14 @@ Una vez instalados estos requerimientos, llamarás a la función <code>list.file
 
 ```{r eval=FALSE, message=FALSE}
 
-list.files('discurso')
+list.files('corpus-dnu-disc')
 ```
 
 En un segundo paso, conformarás una nueva **lista**, a la que puedes llamar `archivos`, cuyos elementos serán los textos planos dentro de la carpeta **discurso**, para ello, utilizarás, nuevamente, la función `list.files`, y le indicarás que tipo de archivo debe contener, **txt**, con la declaración `pattern`. Recuerda estar trabajando en la carpeta donde se encuentran tus archivos, sino deberás incorporar un declaración que indique la ubicación, `path =`, por ejemplo: `list.files(path = "discurso", pattern = "\\.txt$")`.
 
 ```{r eval=TRUE}
 
-archivos <- list.files(pattern = "\\.txt$")
+archivos <- list.files("corpus-dnu-disc", pattern = "\\.txt$")
 
 archivos #corroborá que la lista está correcta
 
@@ -84,7 +84,7 @@ Cuarto paso, con la lista de textos acorde para continuar el ejercicio, procede 
 Armarás el tibble con tres columnas, la primera y última tendrán caracteres dentro de sus variables, y `parrafo` será numérica, como se muestra a continuación:
 
 ```{r eval=TRUE}
-
+library(tidyverse)
 mensajes <- tibble(textos_archivo = character(),
                    parrafo = numeric(),
                    texto = character())
@@ -106,7 +106,7 @@ Paso siguiente, convertir lo que acaba de leer en una nueva tabla, otra tibble l
 #Iteración 
 
 for (i in 1:length(archivos)){
-  discurso <- read_lines(paste('discurso',
+  discurso <- read_lines(paste('corpus-dnu-disc',
                                archivos[i],
                                sep = "/"))
   temporal <- tibble(textos_archivo = textos_archivo[i],
