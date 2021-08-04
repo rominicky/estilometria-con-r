@@ -1,0 +1,224 @@
+---
+title: "Unidad 2 - Ejercitación "
+author: "Nidia"
+date:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+En esta ejercitación vamos a:
+* poner en práctica herramientas de etiquetado morfosintáctico de textos
+* graficar las frecuencias absolutas de las partes del discurso de un texto
+* compararlas con las de otro texto
+* graficar los resultados 
+
+## Etiquetado morfosintáctico o POS tagging
+
+### Instalación y uso básico de `udpipe`
+
+*desarrollar udpipe* http://lindat.mff.cuni.cz/services/udpipe/
+
+Prepararmos el entorno
+
+```{r  message=FALSE, warning=FALSE}
+rm(list = ls())
+setwd('/home/yoki/Caicyt/Estilometria-con-R')
+```
+
+Instalamos `udpipe`.  Lleva varios minutos. 
+
+```{r  message=FALSE, warning=FALSE}
+install.packages("udpipe")
+```
+
+Cargamos los paquetes que vamos a necesitar
+
+```{r  message=FALSE, warning=FALSE}
+library(udpipe)
+library(tidyverse)
+library(tidytext)
+```
+
+Descargamos de modelos de lengua. *desarrollar*
+
+```{r  message=FALSE, warning=FALSE}
+udpipe_download_model(language = "spanish-gsd")
+udpipe_download_model(language = "spanish-ancora")
+
+```
+
+
+Cargamos los modelos de lengua:
+
+```{r  message=FALSE, warning=FALSE}
+modelo_ancora <- udpipe_load_model(file = 'spanish-ancora-ud-2.5-191206.udpipe')
+modelo_gsd <- udpipe_load_model(file = 'spanish-gsd-ud-2.5-191206.udpipe')
+```
+
+
+
+Probamos el etiquetado en la primera frase de _Relación de un viaje al Río de la Plata_ de Acarette du Biscay.
+
+```{r  message=FALSE, warning=FALSE}
+frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre, y puedo asegurar que no me impulsaba tanto a ello la mera curiosidad de ver países extraños, cuanto la esperanza que abrigaba de adquirir conocimientos y desarrollar mi inteligencia, cosa que en el futuro podría serme provechoso no sólo en mis negocios particulares, sino también haciéndome más útil a mi Rey y a mi patria, el cual declaro fue el principal móvil de mi viaje."
+
+frase_pos <- udpipe_annotate(modelo_ancora, frase)
+frase_pos <- as_tibble(frase_pos)
+```
+
+En la última línea, transformamos el resultado de `udpipe` en tibble, tipo de objeto ya visto en la ejercitación anterior, que nos permite manipular los resultados del etiquetado más fácilmente que en el formato original devuelto por `udpipe`. Veamos el resultado de la anotación:
+
+```{r  message=FALSE, warning=FALSE}
+frase_pos
+```
+
+*explicar columnas del resultado de udpipe*
+
+
+### Visualizar resultados de udpipe
+
+```{r  message=FALSE, warning=FALSE}
+frase_pos %>%
+  count(upos, sort = TRUE)
+```
+
+
+```{r  message=FALSE, warning=FALSE}
+frase_pos %>%
+  count(upos, sort = T) %>%
+  mutate(upos = reorder(upos, n)) %>%
+  ggplot(aes(upos, n)) +
+  geom_col(fill = "sienna1")
+
+```
+
+Más sobre colores en ggplot: https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html. Ver lista de colores disponibles con `grDevices::colors()`. 
+
+
+
+```{r message=FALSE, warning=FALSE}
+frase_pos %>%
+  filter(upos == "NOUN") %>%
+  count(token, sort = TRUE)
+```
+
+
+## Etiquetado de un texto
+
+```{r  message=FALSE, warning=FALSE}
+dubiscay <- read_lines("corpus/DuBiscay_RelDeUnViaje.txt")
+```
+
+Este etiquetado puede llevar un par de minutos:
+```{r  message=FALSE, warning=FALSE}
+dubiscay_clean <- 
+  str_replace(dubiscay, "[-–—]", " — ") %>% 
+  str_replace(" ([\\.,;:])", "\\1") %>% 
+  str_replace(" {2,10}", " ") %>% 
+  str_replace("^ ", "")
+```
+
+
+```{r  message=FALSE, warning=FALSE}
+dubiscay_pos <- udpipe_annotate(modelo_ancora, dubiscay_clean)
+dubiscay_pos <- as_tibble(dubiscay_pos)
+```
+
+
+```{r  message=FALSE, warning=FALSE}
+dubiscay_pos %>%
+  drop_na(upos) %>% # elimina los tokens que udpipe no ha podido etiquetar
+  count(upos, sort = T) %>%
+  mutate(upos = reorder(upos, n)) %>%
+  ggplot(aes(upos, n)) +
+  geom_col(fill = "rosybrown4")
+```
+
+comentar los NA
+
+### Frecuencias de tokens por categoría
+
+```{r  message=FALSE, warning=FALSE}
+dubiscay_pos %>%
+  filter(upos == "NOUN") %>%
+  count(token, sort = T) %>%
+  mutate(token = reorder(token, n)) %>%
+  top_n(30) %>%
+  ggplot(aes(token, n)) +
+  geom_col(fill = "rosybrown4") +
+  coord_flip() # volteamos los ejes de variable dependiente y variable independiente
+```
+
+*variable dependiente e independiente*
+
+### Frecuencias de lemas por categoría
+
+```{r  message=FALSE, warning=FALSE}
+dubiscay_pos %>%
+  filter(upos == "VERB") %>%
+  count(lemma, sort = T) %>% # En el paso anterior decía token, ahora lemma
+  mutate(lemma = reorder(lemma, n)) %>%
+  top_n(30) %>%
+  ggplot(aes(lemma, n)) +
+  geom_col(fill = "yellowgreen") +
+  coord_flip()
+```
+
+
+## Comparar clases de palabras entre textos
+
+```{r  message=FALSE, warning=FALSE}
+
+```
+
+## Ngrams de lemmas
+
+```{r  message=FALSE, warning=FALSE}
+
+```
+
+https://bnosac.github.io/udpipe/docs/doc7.html
+
+----
+
+## Práctica
+
+
+
+
+```{r eval=FALSE, include=FALSE}
+## Teoría 
+- Concepto de POS tagging
+- Significado de etiquetas UPOS
+- lematización vs stemming
+- variable dependiente e independiente
+- construcción de gráficos con criterio significativo
+```
+
+
+
+*tree viz opcional*
+https://www.r-bloggers.com/2019/07/dependency-parsing-with-udpipe/
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+install.packages("ggraph")
+install.packages("igraph")
+install.packages("textplot")
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(textplot)
+frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre."
+
+frase_pos <- udpipe_annotate(modelo_ancora, frase)
+frase_pos <- as_tibble(frase_pos)
+textplot_dependencyparser(frase_pos, title = "Dependencias", edge_color = "blue", size = 3)
+```
+
+
+
