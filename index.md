@@ -18,3 +18,6 @@ Profa. Nidia Hernández y Profa. Romina De León (CONICET).
 [Unidad 2. Análisis textual](unidad2_analisis-textual.html)
 
 [Unidad 2. Ejercicio. Análisis textual](unidad2_ej_analisis_textual.html)
+
+[Unidad 2. Ejercicio. Etiquetado morfosintáctico y coocurrencias[(unidad2_ej-etiquetado-pos.html)]
+
