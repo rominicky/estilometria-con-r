@@ -100,45 +100,88 @@ frase_pos
 
 Las primeras tres columnas corresponden a identificadores para el documento, el párrafo y la oración (en nuestro ejemplo, al tratarse de una sola oración, los valores no varían). Más adelante se encuentran **token** y **upos**, donde podemos ver cada uno de los tokens de la oración y las etiquetas de catagorías gramaticales correspondientes (NOUN, ADV, VERB, etc.). En ciertos casos, la columna **feats** da información gramatical más detallada (género y número para los sustantivos; tiempo, modo, aspecto, persona y número para los verbos, etc.). Las últimas columnas dan información sobre dependencias sintácticas: **dep_rel** indica el tipo de dependencia y **head_token_id** el identificador del token que rige la dependencia (por ejemplo, el token "La" está regido por el token nro 2, "inclinación" y la relación de dependencia es de determinante).
 
-A continuación veremos cómo realizar conteos y visualizaciones a partir de esta información.
+A continuación veremos cómo realizar conteos y gráficos a partir de esta información.
 
 
-### Visualizar resultados de udpipe
+### Visualizar resultados de `udpipe`
+
+Como vimos en la [práctica de la Unidad 1](http://hdlab.space/Estilometria-con-R/unidad1_ej-manipulacion-datos.html), podemos usar `groupyby()` y `summarise()` para contar la cantidad de tokens por categoría gramatical. En la última línea indicamos con `arrange()` que queremos ordenar la tabla según la cantidad de tokens en orden decreciente (si no hacemos esto, la tabla será ordenada por orden alfabético de *upos*):
 
 ```{r  message=FALSE, warning=FALSE}
 frase_pos %>%
-  count(upos, sort = TRUE)
+  group_by(upos) %>%
+  summarise(nro_tokens = n()) %>% 
+  arrange(desc(nro_tokens))
+```
+Los valores más altos se corresponden con el grupo nominal (NOUN y DET) y los verbos, las categorías fundamentales de la oración. En el último lugar de la columna **upos** se encuentra "NA". ¿Esto quiere decir que hay palabras para las que `udpipe` no encontró la categoría gramatical? Si volvés a mirar en detalle la tabla de resultados almacenados en `frase_pos`, y buscás el token número 69, vas a ver que se trata de una forma verbal con pronombre pospuesto que `udpipe` luego descompone en forma verbal + pronombre. Las categorías son asignadas a cada uno de los elementos por separado y la forma compuesta queda sin categoría asignada, es decir sin valor disponible (o el equivalente en la jerga de los dataframes, "NA"). Podemos eliminar esta fila usando `drop_na()` y guardando todo en la variable `conteo_pos`:
+
+```{r  message=FALSE, warning=FALSE}
+conteo_pos <-
+  frase_pos %>%
+    group_by(upos) %>%
+    summarise(nro_tokens = n()) %>% 
+    arrange(desc(nro_tokens)) %>% 
+    drop_na(upos)
 ```
 
+Visualizamos este conteo de frecuencias absolutas de cada categoría en un gráfico de barras de la siguiente manera:
 
-```{r  message=FALSE, warning=FALSE}
-frase_pos %>%
-  count(upos, sort = T) %>%
-  mutate(upos = reorder(upos, n)) %>%
-  ggplot(aes(upos, n)) +
+```{r message=FALSE, warning=FALSE}
+conteo_pos %>% 
+  mutate(upos = reorder(upos, -nro_tokens)) %>%
+  ggplot(
+    aes(upos, nro_tokens)) +
   geom_col(fill = "sienna1")
-
 ```
 
-Más sobre colores en ggplot: https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html. Ver lista de colores disponibles con `grDevices::colors()`. 
-
-
+Para poder mostrar las categorías en orden decreciente, primero hacemos `reorder(upos, -nro_tokens)` (si no, `ggplot` las ordena alfabéticamente) y luego pasamos los datos a `ggplot`. Dentro de `aes` definimos primero la variable independiente (la que corresponde al eje x) y luego la variable dependiente (la que corresponde al eje y). Luego, usamos `geom_col()` para generar un gráfico de barras y en `fill` definimos el color de las barras. Es posible ver la lista de colores disponibles en R con `grDevices::colors()`. Más información sobre colores en `ggplot`: https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html.  
+Si quisiéramos usar esta información morfosintáctica para un análisis de estilo como la correlación uso de adverbios y calidad de escritura presentada al inicio de la guía, basta con filtrar por **upos**:
 
 ```{r message=FALSE, warning=FALSE}
 frase_pos %>%
-  filter(upos == "NOUN") %>%
+  filter(upos == "ADV") %>%
   count(token, sort = TRUE)
 ```
+
+La muestra es muy reducida, una sola oración, por lo que los resultados tienen una frecuencia muy baja. 
+
+### Extra: visualización de dependencias (opcional)
+
+En esta guía nos concentramos en el análisis de categorías morfológicas, pero vimos que `udpipe` nos da mucha más información. Para generar visualizaciones de dependencias sintácticas, podemos usar el paquete `textplot`, una librería de visualización de datos textuales. Antes de instalarlo, debemos asegurarnos de tener todas las dependencias necesarias:
+
+```{r eval=FALSE}
+install.packages("ggraph")
+install.packages("igraph")
+install.packages("textplot")
+```
+
+Para generar el gráfico de dependencias, usamos la función `textplot_dependencyparser` en una frase anotada por `udpipe`. Como los gráficos de dependencias pueden volverse ilegibles en frases complejas, aplicamos el análisis sólo al inicio de la oración:
+
+```{r include=TRUE}
+library(textplot)
+frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre."
+
+frase_pos <- udpipe_annotate(modelo_es, frase)
+frase_pos <- as_tibble(frase_pos)
+textplot_dependencyparser(frase_pos, 
+                          title = "Dependencias sintácticas", 
+                          subtitle = "Tokenización, categorías gramaticales y relaciones de dependencia",
+                          edge_color = "blue", 
+                          size = 3)
+```
+
+
+
 
 
 ## Etiquetado de un texto
 
-```{r  message=FALSE, warning=FALSE}
+```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay <- read_lines("corpus/DuBiscay_RelDeUnViaje.txt")
 ```
 
 Este etiquetado puede llevar un par de minutos:
-```{r  message=FALSE, warning=FALSE}
+```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay_clean <- 
   str_replace(dubiscay, "[-–—]", " — ") %>% 
   str_replace(" ([\\.,;:])", "\\1") %>% 
@@ -147,13 +190,13 @@ dubiscay_clean <-
 ```
 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay_pos <- udpipe_annotate(modelo_es, dubiscay_clean)
 dubiscay_pos <- as_tibble(dubiscay_pos)
 ```
 
 
-```{r  message=FALSE, warning=FALSE}
+```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay_pos %>%
   drop_na(upos) %>% # elimina los tokens que udpipe no ha podido etiquetar
   count(upos, sort = T) %>%
@@ -166,7 +209,7 @@ comentar los NA
 
 ### Frecuencias de tokens por categoría
 
-```{r  message=FALSE, warning=FALSE}
+```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay_pos %>%
   filter(upos == "NOUN") %>%
   count(token, sort = T) %>%
@@ -181,7 +224,7 @@ dubiscay_pos %>%
 
 ### Frecuencias de lemas por categoría
 
-```{r  message=FALSE, warning=FALSE}
+```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay_pos %>%
   filter(upos == "VERB") %>%
   count(lemma, sort = T) %>% # En el paso anterior decía token, ahora lemma
@@ -225,24 +268,6 @@ https://bnosac.github.io/udpipe/docs/doc7.html
 
 
 
-*tree viz opcional*
-https://www.r-bloggers.com/2019/07/dependency-parsing-with-udpipe/
-
-```{r eval=FALSE, include=FALSE}
-install.packages("ggraph")
-install.packages("igraph")
-install.packages("textplot")
-```
-
-
-```{r eval=FALSE, include=TRUE}
-library(textplot)
-frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre."
-
-frase_pos <- udpipe_annotate(modelo_ancora, frase)
-frase_pos <- as_tibble(frase_pos)
-textplot_dependencyparser(frase_pos, title = "Dependencias", edge_color = "blue", size = 3)
-```
 
 
 
