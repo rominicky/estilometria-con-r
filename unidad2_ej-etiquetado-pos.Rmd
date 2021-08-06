@@ -1,7 +1,8 @@
 ---
-title: "Unidad 2 - Ejercitación "
-author: "Nidia"
+title: "Unidad 2 - Ejercicio - "
+author: "Nidia Hernández"
 date:
+output:
   html_document:
     df_print: paged
 ---
@@ -11,31 +12,40 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 En esta ejercitación vamos a:
+
 * poner en práctica herramientas de etiquetado morfosintáctico de textos
-* graficar las frecuencias absolutas de las partes del discurso de un texto
+* graficar las frecuencias absolutas de las clases de palabras de un texto
 * compararlas con las de otro texto
 * graficar los resultados 
 
-## Etiquetado morfosintáctico o POS tagging
+## Etiquetado morfosintáctico o _POS tagging_
+
+El etiquetado morfosintáctico es un procedimiento de anotación automática en el que se le asigna una etiqueta de categoría gramatical (o parte del discurso, _part-of-speech_) a cada token de un texto. En el ámbito de la estilometría, permite, por ejemplo, insvestigar la correlación entre el uso de adverbios y calidad de escritura:
+
+<img src = "img/blatt-adv-quality.jpg" width="500" heigth="400"/>
+
+*Fig. 1. Promedio de uso de adverbios en obras galardonadas, best-sellers y fan fiction calculado por Ben Blatt en _Nabokov's favourite word is mauve_ (2017)*
+
+En esta práctica, veremos paso a paso cómo realizar el etiquetado morfosintáctico, cómo acceder a los resultados y cómo graficarlos, usando nuestro ya conocido _Relación de un viaje al Río de la Plata_ de Acarette du Biscay y el texto _Relación de las cosas sucedidas en el Río de la Plata_ de Pero Hernández. Ambos textos se encuentran disponibles en edición digital en línea en http://hdlab.space/biblioteca-digital/.
 
 ### Instalación y uso básico de `udpipe`
 
-*desarrollar udpipe* http://lindat.mff.cuni.cz/services/udpipe/
+Como de costumbre, antes de emprender la lectura de datos y los procesamientos, comenzamos con las instalaciones y la carga de paquetes. En esta ejercitación vamos a servirnos de `udpipe`, una cadena de tratamiento (_pipeline_) para realizar tareas de procesamiento del lenguage natural desarrollada en 2017 por el Instituto de Lingüística Aplicada y Formal de Charles University de la República Checa. Es una herramienta muy potente que permite realizar tokenización, etiquetado morfosintáctico (_POS tagging_), lematización y análisis de dependencias (_dependency parsing_) para más de 100 lenguas diferentes. Para obtener más información sobre `udpipe` y consultar la demo en línea, visitar http://lindat.mff.cuni.cz/services/udpipe/.
 
-Prepararmos el entorno
+Comenzamos repitiendo las líneas habituales:
 
-```{r  message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 rm(list = ls())
-setwd('/home/yoki/Caicyt/Estilometria-con-R')
+setwd('/home/username/dir/subdir/') # Completamos con el path hacia nuestro repertorio de trabajo
 ```
 
-Instalamos `udpipe`.  Lleva varios minutos. 
+Y proseguimos con la instalación de `udpipe`. Esta operación llevar un tiempo y va a emitir varios mensajes en la consola.
 
-```{r  message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 install.packages("udpipe")
 ```
 
-Cargamos los paquetes que vamos a necesitar
+Luego, cargamos los paquetes que vamos a necesitar para el procesamiento:
 
 ```{r  message=FALSE, warning=FALSE}
 library(udpipe)
@@ -43,40 +53,54 @@ library(tidyverse)
 library(tidytext)
 ```
 
-Descargamos de modelos de lengua. *desarrollar*
+Las herramientas de procesamiento del lenguaje natural se basan en modelos de lengua específicos para cada idioma que son construidos a partir de grandes corpus anotados por expertxs (también conocidos como _treebanks_ porque poseen indicaciones sobre las dependencias sintácticas, habitualmente representadas en lingüística computacional según la tradición chomskyana de estructuras de árboles). Para utilizar `upipe` necesitamos entonces descargar un modelo de lengua para el español con el comando `udpipe_download_model()` [^1]. Esta operación va a tardar varios minutos y emitirá muchos mensajes en consola.
 
-```{r  message=FALSE, warning=FALSE}
-udpipe_download_model(language = "spanish-gsd")
-udpipe_download_model(language = "spanish-ancora")
+[^1]: Aquí proveemos un comando general pero es posible indicar un modelo de lengua específico, por ejemplo `udpipe_download_model(language = "spanish-gsd")` para el modelo construido en base al corpus GSD o `udpipe_download_model(language = "spanish-ancora")` para el modelo construido en base al corpus Ancora. Ver más información sobre estos treebanks en https://universaldependencies.org/treebanks/es_gsd/index.html y http://clic.ub.edu/corpus/
 
+```{r eval=FALSE}
+udpipe_download_model(language = "spanish")
 ```
 
+Ejemplo de los mensajes emitidos por la consola al instalar `udpipe`:
 
-Cargamos los modelos de lengua:
+    Downloading udpipe model from https://raw.githubusercontent.com/jwijffels/udpipe.models.ud.2.5/master/inst/udpipe-ud-2.5-191206/spanish-gsd-ud-2.5-191206.udpipe to /home/username/dir/subdir/spanish-gsd-ud-2.5-191206.udpipe
+     - This model has been trained on version 2.5 of data from https://universaldependencies.org
+     - The model is distributed under the CC-BY-SA-NC license: https://creativecommons.org/licenses/by-nc-sa/4.0
+     - Visit https://github.com/jwijffels/udpipe.models.ud.2.5 for model license details.
+     - For a list of all models and their licenses (most models you can download with this package have either a CC-BY-SA or a CC-BY-SA-NC license) read the documentation at ?udpipe_download_model. For building your own models: visit the documentation by typing vignette('udpipe-train', package = 'udpipe')
+    trying URL 'https://raw.githubusercontent.com/jwijffels/udpipe.models.ud.2.5/master/inst/udpipe-ud-2.5-191206/spanish-gsd-ud-2.5-191206.udpipe'
+    Content type 'application/octet-stream' length 29122974 bytes (27.8 MB)
+    ==================================================
+    downloaded 27.8 MB
+    
+    Downloading finished, model stored at '/home/username/dir/subdir/spanish-gsd-ud-2.5-191206.udpipe'
+
+En la última línea podemos ver el path hacia el modelo de lengua (`/home/username/dir/subdir/`) y el nombre del archivo (`spanish-gsd-ud-2.5-191206.udpipe`). Esto significa que el modelo ha quedado guardado con ese nombre en esa ubicación, por lo que no será necesario repetir este paso en futuros scripts. Para cargar el modelo de lengua usamos la función `udpipe_load_model()` de la siguiente manera:
 
 ```{r  message=FALSE, warning=FALSE}
-modelo_ancora <- udpipe_load_model(file = 'spanish-ancora-ud-2.5-191206.udpipe')
-modelo_gsd <- udpipe_load_model(file = 'spanish-gsd-ud-2.5-191206.udpipe')
+modelo_es <- udpipe_load_model(file = 'spanish-gsd-ud-2.5-191206.udpipe')
 ```
 
-
-
-Probamos el etiquetado en la primera frase de _Relación de un viaje al Río de la Plata_ de Acarette du Biscay.
+Una vez cargado el modelo para el español, podemos hacer una primera prueba de etiquetado morfosintáctico. Aplicamos la función `udpipe_annotate()` en la primera frase de _Relación de un viaje al Río de la Plata_ de Acarette du Biscay.
 
 ```{r  message=FALSE, warning=FALSE}
 frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre, y puedo asegurar que no me impulsaba tanto a ello la mera curiosidad de ver países extraños, cuanto la esperanza que abrigaba de adquirir conocimientos y desarrollar mi inteligencia, cosa que en el futuro podría serme provechoso no sólo en mis negocios particulares, sino también haciéndome más útil a mi Rey y a mi patria, el cual declaro fue el principal móvil de mi viaje."
 
-frase_pos <- udpipe_annotate(modelo_ancora, frase)
+frase_pos <- udpipe_annotate(modelo_es, frase)
 frase_pos <- as_tibble(frase_pos)
 ```
 
-En la última línea, transformamos el resultado de `udpipe` en tibble, tipo de objeto ya visto en la ejercitación anterior, que nos permite manipular los resultados del etiquetado más fácilmente que en el formato original devuelto por `udpipe`. Veamos el resultado de la anotación:
+En la última línea, transformamos el resultado de `udpipe` en tibble, tipo de objeto ya visto en la ejercitación anterior, que nos permite manipular los resultados del etiquetado más fácilmente que en el formato original devuelto por `udpipe`. 
+
+Veamos el resultado de la anotación invocando la variable `frase_pos`. Usá la flecha ➤ para navegar en la tabla y ver el tipo de información que contiene cada columna:
 
 ```{r  message=FALSE, warning=FALSE}
 frase_pos
 ```
 
-*explicar columnas del resultado de udpipe*
+Las primeras tres columnas corresponden a identificadores para el documento, el párrafo y la oración (en nuestro ejemplo, al tratarse de una sola oración, los valores no varían). Más adelante se encuentran **token** y **upos**, donde podemos ver cada uno de los tokens de la oración y las etiquetas de catagorías gramaticales correspondientes (NOUN, ADV, VERB, etc.). En ciertos casos, la columna **feats** da información gramatical más detallada (género y número para los sustantivos; tiempo, modo, aspecto, persona y número para los verbos, etc.). Las últimas columnas dan información sobre dependencias sintácticas: **dep_rel** indica el tipo de dependencia y **head_token_id** el identificador del token que rige la dependencia (por ejemplo, el token "La" está regido por el token nro 2, "inclinación" y la relación de dependencia es de determinante).
+
+A continuación veremos cómo realizar conteos y visualizaciones a partir de esta información.
 
 
 ### Visualizar resultados de udpipe
@@ -123,8 +147,8 @@ dubiscay_clean <-
 ```
 
 
-```{r  message=FALSE, warning=FALSE}
-dubiscay_pos <- udpipe_annotate(modelo_ancora, dubiscay_clean)
+```{r message=FALSE, warning=FALSE}
+dubiscay_pos <- udpipe_annotate(modelo_es, dubiscay_clean)
 dubiscay_pos <- as_tibble(dubiscay_pos)
 ```
 
@@ -204,14 +228,14 @@ https://bnosac.github.io/udpipe/docs/doc7.html
 *tree viz opcional*
 https://www.r-bloggers.com/2019/07/dependency-parsing-with-udpipe/
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r eval=FALSE, include=FALSE}
 install.packages("ggraph")
 install.packages("igraph")
 install.packages("textplot")
 ```
 
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r eval=FALSE, include=TRUE}
 library(textplot)
 frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre."
 
