@@ -1,5 +1,5 @@
 ---
-title: "Unidad 2 - Ejercicio - "
+title: "Unidad 2 - Ejercicio - Análisis morfosintáctico y coocurrencias"
 author: "Nidia Hernández"
 date:
 output:
@@ -14,8 +14,8 @@ knitr::opts_chunk$set(echo = TRUE)
 En esta ejercitación vamos a:
 
 * poner en práctica herramientas de etiquetado morfosintáctico de textos
-* graficar las frecuencias absolutas de las clases de palabras de un texto
-* compararlas con las de otro texto
+* identificar los sustantivos más frecuentes de un texto y los lemas de los verbos más frecuentes
+* identificar las coocurrencias más frecuentes
 * graficar los resultados 
 
 ## Etiquetado morfosintáctico o _POS tagging_
@@ -157,7 +157,7 @@ install.packages("textplot")
 
 Para generar el gráfico de dependencias, usamos la función `textplot_dependencyparser` en una frase anotada por `udpipe`. Como los gráficos de dependencias pueden volverse ilegibles en frases complejas, aplicamos el análisis sólo al inicio de la oración:
 
-```{r include=TRUE}
+```{r message=FALSE, warning=FALSE, fig.width=15, fig.height=8}
 library(textplot)
 frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre."
 
@@ -171,99 +171,155 @@ textplot_dependencyparser(frase_pos,
 ```
 
 
-
-
-
 ## Etiquetado de un texto
+
+En la sección anterior experimentamos con `udpipe` para familiarizarnos con las funciones y la estructura de los resultados del análisis morfosintáctico. Ahora vamos a aplicar todo lo visto a un texto más complejo y de longitud mayor, _Relación de un viaje al Río de la Plata_.
+
+Leemos el archivo 'DuBiscay_RelDeUnViaje.txt'. **Atención**: si alojaste los materiales de esta ejercitación en otra ubicación, vas a tener que modificar el path que le pasamos a `read_lines()`. 
 
 ```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay <- read_lines("corpus/DuBiscay_RelDeUnViaje.txt")
 ```
 
-Este etiquetado puede llevar un par de minutos:
-```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
-dubiscay_clean <- 
-  str_replace(dubiscay, "[-–—]", " — ") %>% 
-  str_replace(" ([\\.,;:])", "\\1") %>% 
-  str_replace(" {2,10}", " ") %>% 
-  str_replace("^ ", "")
-```
-
+A continuación, realizamos el etiquetado llamando a `udpipe_annotate()`. **Este etiquetado puede llevar un par de minutos**:
 
 ```{r message=FALSE, warning=FALSE, evaluate=FALSE}
-dubiscay_pos <- udpipe_annotate(modelo_es, dubiscay_clean)
+dubiscay_pos <- udpipe_annotate(modelo_es, dubiscay, parser = "none")
 dubiscay_pos <- as_tibble(dubiscay_pos)
 ```
 
+La línea en la que invocamos `udpipe_annotate()` es ligeramente diferente que en el primer ejemplo: incluimos el parámetro `parser = "none"` porque no vamos a trabajar con las dependencias sintácticas en el texto de du Biscay y el cálculo de las dependencias demora bastante el procesamiento.
 
-```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
+```{r  message=FALSE, warning=FALSE, evaluate=FALSE, include=FALSE}
+# Calcula frecuencia de cada POS y genera gráfico de barras de freq descendiente
+# Al final no va en la nb
 dubiscay_pos %>%
-  drop_na(upos) %>% # elimina los tokens que udpipe no ha podido etiquetar
-  count(upos, sort = T) %>%
-  mutate(upos = reorder(upos, n)) %>%
-  ggplot(aes(upos, n)) +
+  drop_na(upos) %>%
+  #count(upos, sort = T) %>%
+  group_by(upos) %>%
+    summarise(nro_tokens = n()) %>% 
+    arrange(desc(nro_tokens)) %>% 
+  mutate(upos = reorder(upos, -nro_tokens)) %>%
+  ggplot(
+    aes(upos, nro_tokens)) +
   geom_col(fill = "rosybrown4")
 ```
 
-comentar los NA
-
 ### Frecuencias de tokens por categoría
+
+Ahora que hemos etiquetado un texto más extenso, filtrar y contar por clase de palabra arrojará resultados más interesantes. Podemos, por ejemplo, filtrar por los 30 sustantivos más frecuentes para tener cierta aproximación a los temas clave del texto:
 
 ```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay_pos %>%
-  filter(upos == "NOUN") %>%
-  count(token, sort = T) %>%
-  mutate(token = reorder(token, n)) %>%
+  filter(upos == "NOUN") %>% 
+  group_by(token) %>%
+    summarise(ocurrencias = n()) %>% 
+  mutate(token = reorder(token, ocurrencias)) %>%
   top_n(30) %>%
-  ggplot(aes(token, n)) +
+  ggplot(aes(token, ocurrencias)) +
   geom_col(fill = "rosybrown4") +
   coord_flip() # volteamos los ejes de variable dependiente y variable independiente
 ```
 
-*variable dependiente e independiente*
+Usamos la función `top_n()`, que devuelve los primeros n resultados que se indican como parámetro y modificamos la disposición habitual del gráfico con `coord_flip()`. Normalmente, los gráficos muestran la variable independiente en el eje x (en nuestro caso los NOUN) y la dependiente en el eje y (la ocurrencias de cada NOUN). Si vamos a alterar esta tan establecida convención de lectura de gráficos debemos tener un buen motivo para hacerlo. En nuestro caso se justifica para facilitar la lectura de las palabras. Para una justificación más detallada de la semántica de las  representaciones gráficas, consultar Tufte, E. R. (2001). The visual display of quantitative information (2nd ed). Graphics Press.
+
+Gracias a este sencillo gráfico de barras, comprendemos fácilmente la relevancia de la dimensión comercial ('mercaderías', 'plata', 'minas') y de la descripción del territorio ('río', 'leguas', 'tierra', 'habitantes') en el texto de Acarette du Biscay.
 
 ### Frecuencias de lemas por categoría
 
-```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
+Si nos interesamos por las acciones llevadas a cabo en el viaje de du Biscay, podemos filtar por `upos == "VERB"`. Pero en el caso de los tokens verbales, en español tenemos una enorme dispersión debido a la gran cantidad de flexiones verbales ('llevo', 'llevé', 'llevábamos', 'llevarían'). En ese caso, conviene usar el lema de la palabra, información proporcionada por `udpipe` en la columna **lemma**. Repetimos el código reemplazando los llamados a la columna **token** por la columna **lemma**:
+
+
+```{r message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay_pos %>%
   filter(upos == "VERB") %>%
-  count(lemma, sort = T) %>% # En el paso anterior decía token, ahora lemma
-  mutate(lemma = reorder(lemma, n)) %>%
+  group_by(lemma) %>%
+    summarise(ocurrencias = n()) %>% 
+  mutate(lemma = reorder(lemma, ocurrencias)) %>%
   top_n(30) %>%
-  ggplot(aes(lemma, n)) +
+  ggplot(aes(lemma, ocurrencias)) +
   geom_col(fill = "yellowgreen") +
   coord_flip()
 ```
 
+Vemos que (luego de los auxiliares) encontramos acciones relacionadas con el desplazamiento propio del viaje ('llegar', 'ir', 'pasar', 'venir', 'desembarcar') y con las actividades de intercambio comercial ('enviar', 'recibir', 'comerciar', 'obtener', 'vender').
 
-## Comparar clases de palabras entre textos
+Si bien este gráfico y el anterior nos dan ciertos indicios acerca del contenido del texto, debemos ser muy cuidadosxs al sacar conclusiones sólo a partir de una lista de palabras frecuentes. Nuestras interpretaciones fueron muy escuetas y principalmente ayudadas por nuestro conocimiento previo del texto. Para obtener una representación un poco más adecuada de las palabras clave del texto, es necesario ampliar la unidad de análisis como veremos a continuación.
+
+## Coocurrencias
+
+Una unidad muy utilizada en el ámbito del procesamiento del lenguaje natural son las secuencias de palabras de aparición frecuente, conocidas como coocurrencias. Podemos usar la función `cooccurrence` de `udpipe` para encontrar, por ejemplo, las coocurrencias de sustantivo-adjetivo en el texto de Acarette du Biscay:
 
 ```{r  message=FALSE, warning=FALSE}
+cooc_sust_adj <- cooccurrence(
+  dubiscay_pos$lemma, 
+  relevant = dubiscay_pos$upos %in% c("NOUN", "ADJ")
+)
+```
+
+En el primer parámetro indicamos la columna del dataframe etiquetado con la que queremos trabajar. La sintaxis `dataframe$nombre_columna` nos devuelve un vector con los valores de la columna especificada. En este caso, elegimos trabajar con coocurrencias de lemas (`dubiscay_pos$lemma`) pero podríamos trabajar con coocurrencias de tokens (aunque obtendríamos menos resultados). El parámetro `relevant` nos permite indicar restricciones para las coocurrencias que queremos hallar. Probá ejecutar `cooccurrence(dubiscay_pos$lemma)` en la consola, vas a ver que los resultados que devuelve son en su mayoría bigramas no muy informativos ya que incluyen muchos signos de puntuación y stopwords.
+
+Ahora bien, limitarnos sólo a la secuencia sustantivo-adjetivo es muy reductor, quizás haya secuencias verbo-sustantivo que sean interesantes, o verbo-adverbio. Probar todas las combinaciones una por una es poco eficiente, proceder por exclusión usando lógica booleana parece una mejor idea. Podemos buscar las coocurrencias de todos los lemas que no hayan sido etiquetados como signos de puntuación (etiqueta "PUNCT") y que no sean stopwords de la siguiente manera:
+
+```{r message=FALSE, warning=FALSE}
+stopwords_es <- 
+  get_stopwords("es")
+
+cooc_general <- cooccurrence(
+  dubiscay_pos$lemma, 
+  relevant = !(dubiscay_pos$upos %in% "PUNCT") & !(dubiscay_pos$lemma %in% stopwords_es$word)
+)
 
 ```
 
-## Ngrams de lemmas
+La expresión dentro del parámetro `relevant` puede verse un poco rebuscada pero expresa exactamente lo que habíamos planteado más arriba: `!(dubiscay_pos$upos %in% "PUNCT")` indica que la etiqueta gramatical **upos** del elemento no debe ser "PUNCT" (la negación está expresada con el `!` inicial) y `!(dubiscay_pos$lemma %in% stopwords_es$word)` indica que el elemento no debe encontrarse en el vector de stopwords (recordá que en la ejercitación de la semana pasada vimos que `get_stopwords()` devuelve un dataframe de dos columnas y que las stopwords se encuentra en la columna llamada **word**).
 
-```{r  message=FALSE, warning=FALSE}
+### Visualizar coocurrencias como un grafo
+
+Para variar un poco el tipo de visualizaciones que generamos, vamos a usar un tipo de gráfico usado frecuentemente para la representación de coocurrencias. Para esto será necesario instalar las librerías `igraph` y `ggraph` y cargarlas. Luego, generamos el grafo pasádole los primeros 30 valores de nuestra tabla de coocurrencias a `graph_from_data_frame` y usamos `ggraph` para generar la representación gráfica del grafo:
+
+```{r message=FALSE, warning=FALSE}
+library(igraph)
+library(ggraph)
+library(ggplot2)
+
+red_cooc <- head(cooc_general, 30)
+red_cooc <- graph_from_data_frame(red_cooc)
+ggraph(red_cooc, layout = "fr") +
+  geom_edge_link(aes(width = cooc, edge_alpha = cooc), edge_colour = "red") +
+  geom_node_text(aes(label = name), col = "darkgoldenrod4", size = 4) +
+  theme_graph(base_family = "Arial Narrow") +
+  theme(legend.position = "none") +
+  labs(title = "Coocurrencias Relación de un viaje", subtitle = "Lemas consecutivos de mayor frecuencia")
 
 ```
 
-https://bnosac.github.io/udpipe/docs/doc7.html
+Vemos que las coocurrencias con mayor frecuencia (por ejemplo, "buenos aires" que tiene una frecuencia absoluta de 60), tienen un arco de color más intens, mientras que las coocurrencias menos frecuentes tienen un arco más transparente ("mantener correspondencia", 4 ocurrencias).
+
+La función `cooccurrence` también puede usarse para hallar palabras que coocurren en una misma oración pero que no son consecutivas. PENDIENTE
+
+
+
+El paquete `udpipe` cuenta con una gran variedad de funciones de extracción de palabras clave, vale la pena consultar <https://bnosac.github.io/udpipe/en/index.html> para conocerlas. 
+
+
 
 ----
 
 ## Práctica
 
-
-
+* PENDIENTE
+* 
+* 
 
 ```{r eval=FALSE, include=FALSE}
 ## Teoría 
-- Concepto de POS tagging
-- Significado de etiquetas UPOS
-- lematización vs stemming
-- variable dependiente e independiente
-- construcción de gráficos con criterio significativo
+
+cooc_verb_sust <- cooccurrence(
+  x = dubiscay_pos$lemma, 
+  relevant = dubiscay_pos$upos %in% c("VERB", "NOUN")
+)
+
 ```
 
 
