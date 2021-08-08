@@ -15,7 +15,7 @@ En esta ejercitación vamos a:
 
 * poner en práctica herramientas de etiquetado morfosintáctico de textos
 * identificar los sustantivos más frecuentes de un texto y los lemas de los verbos más frecuentes
-* identificar las coocurrencias más frecuentes
+* detectar las coocurrencias más frecuentes
 * graficar los resultados 
 
 ## Etiquetado morfosintáctico o _POS tagging_
@@ -26,7 +26,7 @@ El etiquetado morfosintáctico es un procedimiento de anotación automática en 
 
 *Fig. 1. Promedio de uso de adverbios en obras galardonadas, best-sellers y fan fiction calculado por Ben Blatt en _Nabokov's favourite word is mauve_ (2017)*
 
-En esta práctica, veremos paso a paso cómo realizar el etiquetado morfosintáctico, cómo acceder a los resultados y cómo graficarlos, usando nuestro ya conocido _Relación de un viaje al Río de la Plata_ de Acarette du Biscay y el texto _Relación de las cosas sucedidas en el Río de la Plata_ de Pero Hernández. Ambos textos se encuentran disponibles en edición digital en línea en http://hdlab.space/biblioteca-digital/.
+En esta práctica, veremos paso a paso cómo realizar el etiquetado morfosintáctico, cómo acceder a los resultados y cómo graficarlos, usando nuestro ya conocido _Relación de un viaje al Río de la Plata_ de Acarette du Biscay. Usaremos el txt disponible [online](https://raw.githubusercontent.com/hdcaicyt/Estilometria-con-R/gh-pages/corpus/DuBiscay_RelDeUnViaje.txt). Para más información sobre el texto, es posible consultar la edición digital en línea en <http://hdlab.space/Relacion-de-un-viaje/>.
 
 ### Instalación y uso básico de `udpipe`
 
@@ -55,7 +55,7 @@ library(tidytext)
 
 Las herramientas de procesamiento del lenguaje natural se basan en modelos de lengua específicos para cada idioma que son construidos a partir de grandes corpus anotados por expertxs (también conocidos como _treebanks_ porque poseen indicaciones sobre las dependencias sintácticas, habitualmente representadas en lingüística computacional según la tradición chomskyana de estructuras de árboles). Para utilizar `upipe` necesitamos entonces descargar un modelo de lengua para el español con el comando `udpipe_download_model()` [^1]. Esta operación va a tardar varios minutos y emitirá muchos mensajes en consola.
 
-[^1]: Aquí proveemos un comando general pero es posible indicar un modelo de lengua específico, por ejemplo `udpipe_download_model(language = "spanish-gsd")` para el modelo construido en base al corpus GSD o `udpipe_download_model(language = "spanish-ancora")` para el modelo construido en base al corpus Ancora. Ver más información sobre estos treebanks en https://universaldependencies.org/treebanks/es_gsd/index.html y http://clic.ub.edu/corpus/
+[^1]: Aquí proveemos un comando general pero es posible indicar un modelo de lengua específico, por ejemplo `udpipe_download_model(language = "spanish-gsd")` para el modelo construido en base al corpus GSD o `udpipe_download_model(language = "spanish-ancora")` para el modelo construido en base al corpus Ancora. Ver más información sobre estos treebanks en <https://universaldependencies.org/treebanks/es_gsd/index.html> y <http://clic.ub.edu/corpus/>
 
 ```{r eval=FALSE}
 udpipe_download_model(language = "spanish")
@@ -105,7 +105,7 @@ A continuación veremos cómo realizar conteos y gráficos a partir de esta info
 
 ### Visualizar resultados de `udpipe`
 
-Como vimos en la [práctica de la Unidad 1](http://hdlab.space/Estilometria-con-R/unidad1_ej-manipulacion-datos.html), podemos usar `groupyby()` y `summarise()` para contar la cantidad de tokens por categoría gramatical. En la última línea indicamos con `arrange()` que queremos ordenar la tabla según la cantidad de tokens en orden decreciente (si no hacemos esto, la tabla será ordenada por orden alfabético de *upos*):
+Como vimos en la [práctica de la Unidad 1](http://hdlab.space/Estilometria-con-R/unidad1_ej-manipulacion-datos.html), podemos usar `groupyby()` y `summarise()` para contar la cantidad de tokens por categoría gramatical. En la última línea indicamos con `arrange()` que queremos ordenar la tabla según la cantidad de tokens en orden decreciente (si no hacemos esto, la tabla será ordenada por orden alfabético de **upos**):
 
 ```{r  message=FALSE, warning=FALSE}
 frase_pos %>%
@@ -113,7 +113,7 @@ frase_pos %>%
   summarise(nro_tokens = n()) %>% 
   arrange(desc(nro_tokens))
 ```
-Los valores más altos se corresponden con el grupo nominal (NOUN y DET) y los verbos, las categorías fundamentales de la oración. En el último lugar de la columna **upos** se encuentra "NA". ¿Esto quiere decir que hay palabras para las que `udpipe` no encontró la categoría gramatical? Si volvés a mirar en detalle la tabla de resultados almacenados en `frase_pos`, y buscás el token número 69, vas a ver que se trata de una forma verbal con pronombre pospuesto que `udpipe` luego descompone en forma verbal + pronombre. Las categorías son asignadas a cada uno de los elementos por separado y la forma compuesta queda sin categoría asignada, es decir sin valor disponible (o el equivalente en la jerga de los dataframes, "NA"). Podemos eliminar esta fila usando `drop_na()` y guardando todo en la variable `conteo_pos`:
+Los valores más altos se corresponden con el grupo nominal (NOUN y DET) y los verbos, las categorías fundamentales de la oración. En el último lugar de la columna **upos** se encuentra "NA". ¿Esto quiere decir que hay palabras para las que `udpipe` no encontró la categoría gramatical? Si volvés a mirar en detalle la tabla de resultados almacenados en `frase_pos` y buscás el token número 69, vas a ver que se trata de una forma verbal con pronombre pospuesto que `udpipe` luego descompone en forma verbal + pronombre. Las categorías son asignadas a cada uno de los elementos por separado y la forma compuesta queda sin categoría asignada, es decir sin valor disponible (o el equivalente en la jerga de los dataframes, "NA"). Podemos eliminar esta fila usando `drop_na()` y guardando todo en la variable `conteo_pos`:
 
 ```{r  message=FALSE, warning=FALSE}
 conteo_pos <-
@@ -131,16 +131,18 @@ conteo_pos %>%
   mutate(upos = reorder(upos, -nro_tokens)) %>%
   ggplot(
     aes(upos, nro_tokens)) +
-  geom_col(fill = "sienna1")
+    geom_col(fill = "sienna1")
 ```
 
-Para poder mostrar las categorías en orden decreciente, primero hacemos `reorder(upos, -nro_tokens)` (si no, `ggplot` las ordena alfabéticamente) y luego pasamos los datos a `ggplot`. Dentro de `aes` definimos primero la variable independiente (la que corresponde al eje x) y luego la variable dependiente (la que corresponde al eje y). Luego, usamos `geom_col()` para generar un gráfico de barras y en `fill` definimos el color de las barras. Es posible ver la lista de colores disponibles en R con `grDevices::colors()`. Más información sobre colores en `ggplot`: https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html.  
-Si quisiéramos usar esta información morfosintáctica para un análisis de estilo como la correlación uso de adverbios y calidad de escritura presentada al inicio de la guía, basta con filtrar por **upos**:
+Para poder mostrar las categorías en orden decreciente, primero hacemos `reorder(upos, -nro_tokens)` (si no, `ggplot` las ordena alfabéticamente) y luego pasamos los datos a `ggplot`. Dentro de `aes` definimos primero la variable independiente (la que corresponde al eje x) y luego la variable dependiente (la que corresponde al eje y). Luego, usamos `geom_col()` para generar un gráfico de barras y en `fill` definimos el color de las barras. Es posible ver la lista de colores disponibles en R con `grDevices::colors()`. Más información sobre colores en `ggplot`: <https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html>. 
+
+Si quisiéramos usar esta información morfosintáctica para un análisis de estilo (como la correlación uso de adverbios y calidad de escritura presentada al inicio de la guía), podemos con filtrar por **upos** usando `filter()`:
 
 ```{r message=FALSE, warning=FALSE}
 frase_pos %>%
   filter(upos == "ADV") %>%
-  count(token, sort = TRUE)
+  group_by(token) %>% 
+  summarise(nro_tokens = n())
 ```
 
 La muestra es muy reducida, una sola oración, por lo que los resultados tienen una frecuencia muy baja. 
@@ -175,7 +177,7 @@ textplot_dependencyparser(frase_pos,
 
 En la sección anterior experimentamos con `udpipe` para familiarizarnos con las funciones y la estructura de los resultados del análisis morfosintáctico. Ahora vamos a aplicar todo lo visto a un texto más complejo y de longitud mayor, _Relación de un viaje al Río de la Plata_.
 
-Leemos el archivo 'DuBiscay_RelDeUnViaje.txt'. **Atención**: si alojaste los materiales de esta ejercitación en otra ubicación, vas a tener que modificar el path que le pasamos a `read_lines()`. 
+Leemos el archivo 'DuBiscay_RelDeUnViaje.txt' (disponible [online](https://raw.githubusercontent.com/hdcaicyt/Estilometria-con-R/gh-pages/corpus/DuBiscay_RelDeUnViaje.txt)). **Atención**: si alojaste el texto en otra ubicación, vas a tener que modificar el path que le pasamos a `read_lines()`. Recordá que también podés pasarle una url a `read_lines()`.
 
 ```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay <- read_lines("corpus/DuBiscay_RelDeUnViaje.txt")
@@ -221,7 +223,7 @@ dubiscay_pos %>%
   coord_flip() # volteamos los ejes de variable dependiente y variable independiente
 ```
 
-Usamos la función `top_n()`, que devuelve los primeros n resultados que se indican como parámetro y modificamos la disposición habitual del gráfico con `coord_flip()`. Normalmente, los gráficos muestran la variable independiente en el eje x (en nuestro caso los NOUN) y la dependiente en el eje y (la ocurrencias de cada NOUN). Si vamos a alterar esta tan establecida convención de lectura de gráficos debemos tener un buen motivo para hacerlo. En nuestro caso se justifica para facilitar la lectura de las palabras. Para una justificación más detallada de la semántica de las  representaciones gráficas, consultar Tufte, E. R. (2001). The visual display of quantitative information (2nd ed). Graphics Press.
+Usamos la función `top_n()`, que devuelve los primeros n resultados que se indican como parámetro y modificamos la disposición habitual del gráfico con `coord_flip()`. Normalmente, los gráficos muestran la variable independiente en el eje x (en nuestro caso los NOUN) y la dependiente en el eje y (la ocurrencias de cada NOUN). Si vamos a alterar esta tan establecida convención de lectura de gráficos debemos tener un buen motivo para hacerlo. En nuestro caso se justifica para facilitar la lectura de las palabras. Para una explicación más detallada de la semántica de las  representaciones gráficas, consultar Tufte, E. R. (2001). _The visual display of quantitative information_ (2nd ed). Graphics Press.
 
 Gracias a este sencillo gráfico de barras, comprendemos fácilmente la relevancia de la dimensión comercial ('mercaderías', 'plata', 'minas') y de la descripción del territorio ('río', 'leguas', 'tierra', 'habitantes') en el texto de Acarette du Biscay.
 
@@ -246,7 +248,7 @@ Vemos que (luego de los auxiliares) encontramos acciones relacionadas con el des
 
 Si bien este gráfico y el anterior nos dan ciertos indicios acerca del contenido del texto, debemos ser muy cuidadosxs al sacar conclusiones sólo a partir de una lista de palabras frecuentes. Nuestras interpretaciones fueron muy escuetas y principalmente ayudadas por nuestro conocimiento previo del texto. Para obtener una representación un poco más adecuada de las palabras clave del texto, es necesario ampliar la unidad de análisis como veremos a continuación.
 
-## Coocurrencias
+## Detectar coocurrencias
 
 Una unidad muy utilizada en el ámbito del procesamiento del lenguaje natural son las secuencias de palabras de aparición frecuente, conocidas como coocurrencias. Podemos usar la función `cooccurrence` de `udpipe` para encontrar, por ejemplo, las coocurrencias de sustantivo-adjetivo en el texto de Acarette du Biscay:
 
@@ -257,9 +259,26 @@ cooc_sust_adj <- cooccurrence(
 )
 ```
 
-En el primer parámetro indicamos la columna del dataframe etiquetado con la que queremos trabajar. La sintaxis `dataframe$nombre_columna` nos devuelve un vector con los valores de la columna especificada. En este caso, elegimos trabajar con coocurrencias de lemas (`dubiscay_pos$lemma`) pero podríamos trabajar con coocurrencias de tokens (aunque obtendríamos menos resultados). El parámetro `relevant` nos permite indicar restricciones para las coocurrencias que queremos hallar. Probá ejecutar `cooccurrence(dubiscay_pos$lemma)` en la consola, vas a ver que los resultados que devuelve son en su mayoría bigramas no muy informativos ya que incluyen muchos signos de puntuación y stopwords.
+En el primer parámetro de la función `cooccurrence()` indicamos la columna del dataframe etiquetado con la que queremos trabajar. La sintaxis `dataframe$nombre_columna` nos devuelve un vector con los valores de la columna especificada. En este caso, elegimos trabajar con coocurrencias de lemas (`dubiscay_pos$lemma`) pero podríamos trabajar con coocurrencias de tokens (aunque obtendríamos menos resultados). El parámetro `relevant` nos permite indicar restricciones para las coocurrencias que queremos hallar. 
 
-Ahora bien, limitarnos sólo a la secuencia sustantivo-adjetivo es muy reductor, quizás haya secuencias verbo-sustantivo que sean interesantes, o verbo-adverbio. Probar todas las combinaciones una por una es poco eficiente, proceder por exclusión usando lógica booleana parece una mejor idea. Podemos buscar las coocurrencias de todos los lemas que no hayan sido etiquetados como signos de puntuación (etiqueta "PUNCT") y que no sean stopwords de la siguiente manera:
+Para ver las coocurrencias, transformamos `cooc_sust_adj` en tibble para evitar recibir errores: 
+
+```{r}
+cooc_sust_adj <- as_tibble(cooc_sust_adj)
+cooc_sust_adj
+```
+
+Es muy importante determinar alguna restricción en `relevant`, de lo contrario, `cooccurrence()` nos devolverá todos los bigramas del texto:
+
+```{r}
+cooc <- cooccurrence(dubiscay_pos$lemma)
+cooc <- as_tibble(cooc)
+cooc
+```
+
+En su mayoría, estos bigramas no son muy informativos ya que incluyen muchos signos de puntuación y stopwords.
+
+Ahora bien, limitarnos sólo a la secuencia sustantivo-adjetivo es muy reductor, quizás haya secuencias verbo-sustantivo o verbo-adverbio que sean interesantes. Probar todas las combinaciones una por una es poco eficiente, parece una mejor idea proceder por exclusión usando lógica booleana. Podemos buscar las coocurrencias de todos los lemas que no hayan sido etiquetados como signos de puntuación (etiqueta "PUNCT") y que no sean stopwords de la siguiente manera:
 
 ```{r message=FALSE, warning=FALSE}
 stopwords_es <- 
@@ -269,10 +288,19 @@ cooc_general <- cooccurrence(
   dubiscay_pos$lemma, 
   relevant = !(dubiscay_pos$upos %in% "PUNCT") & !(dubiscay_pos$lemma %in% stopwords_es$word)
 )
-
 ```
 
 La expresión dentro del parámetro `relevant` puede verse un poco rebuscada pero expresa exactamente lo que habíamos planteado más arriba: `!(dubiscay_pos$upos %in% "PUNCT")` indica que la etiqueta gramatical **upos** del elemento no debe ser "PUNCT" (la negación está expresada con el `!` inicial) y `!(dubiscay_pos$lemma %in% stopwords_es$word)` indica que el elemento no debe encontrarse en el vector de stopwords (recordá que en la ejercitación de la semana pasada vimos que `get_stopwords()` devuelve un dataframe de dos columnas y que las stopwords se encuentra en la columna llamada **word**).
+
+Veamos el resultado:
+
+```{r}
+cooc_general <- as_tibble(cooc_general)
+cooc_general
+```
+
+El nombre de la ciudad en la que empieza y termina el viaje de Acaratte es la colocación más frecuente del texto. Debemos recordar que usamos los lemas para generar las coocurrencias, por eso aparecen secuencias agramaticales ('haber llegar', 'aquel región').
+
 
 ### Visualizar coocurrencias como un grafo
 
@@ -283,8 +311,9 @@ library(igraph)
 library(ggraph)
 library(ggplot2)
 
-red_cooc <- head(cooc_general, 30)
-red_cooc <- graph_from_data_frame(red_cooc)
+top_30_cooc <- head(cooc_general, 30)
+red_cooc <- graph_from_data_frame(top_30_cooc)
+
 ggraph(red_cooc, layout = "fr") +
   geom_edge_link(aes(width = cooc, edge_alpha = cooc), edge_colour = "red") +
   geom_node_text(aes(label = name), col = "darkgoldenrod4", size = 4) +
@@ -294,32 +323,53 @@ ggraph(red_cooc, layout = "fr") +
 
 ```
 
-Vemos que las coocurrencias con mayor frecuencia (por ejemplo, "buenos aires" que tiene una frecuencia absoluta de 60), tienen un arco de color más intens, mientras que las coocurrencias menos frecuentes tienen un arco más transparente ("mantener correspondencia", 4 ocurrencias).
+Vemos que las coocurrencias con mayor frecuencia (por ejemplo, "buenos aires" que tiene una frecuencia absoluta de 60), tienen un arco de color más intenso, mientras que las coocurrencias menos frecuentes tienen un arco más transparente ("mantener correspondencia", 4 ocurrencias).
 
-La función `cooccurrence` también puede usarse para hallar palabras que coocurren en una misma oración pero que no son consecutivas. PENDIENTE
+La función `cooccurrence` también puede usarse para hallar palabras que coocurren en una misma oración pero que no son necesariamente consecutivas. Detectamos los sustantivos que suelen aparecer en la misma oración de la siguiente manera:
 
+```{r message=FALSE, warning=FALSE}
+cooc_sust_sust <- cooccurrence(
+  subset(dubiscay_pos, upos %in% c("NOUN", "NOUN")), 
+  term = "lemma", 
+  group = c("doc_id", "paragraph_id", "sentence_id"))
+```
 
+En primer lugar, indicamos el dataframe etiquetado con el que queremos trabajar y las **UPOS** que nos interesan. En `term` definimos la columna del dataframe que queremos usar para calcular las coocurrencias (puede ser **token** o **lemma**). En `group` indicamos las columnas dentro de las cuales queremos encontrar las coocurrencias; especificamos `c("doc_id", "paragraph_id", "sentence_id")` para buscar dentro de una misma oración y no mezclar lemas de párrafos o documentos diferentes. 
+
+Veamos los resultados en una red:
+
+```{r message=FALSE, warning=FALSE}
+top_30_sust_sust <- head(cooc_sust_sust, 30)
+red_sust_sust <- graph_from_data_frame(top_30_sust_sust)
+
+ggraph(red_sust_sust, layout = "fr") +
+  geom_edge_link(aes(width = cooc, edge_alpha = cooc), edge_colour = "red") +
+  geom_node_text(aes(label = name), col = "darkgoldenrod4", size = 4) +
+  theme_graph(base_family = "Arial Narrow") +
+  theme(legend.position = "none") +
+  labs(title = "Coocurrencias Relación de un viaje", subtitle = "Sustantivos misma oración")
+```
+
+Obtenemos más relaciones entre los nodos de la red y vemos cómo los términos de nuestro primer gráfico de ocurrencias de sustantivos ('mercadería', 'plata', 'mina', 'río') se encuentra conectados. 
+
+Recordá que podés guardar los gráficos con `ggsave()`.
 
 El paquete `udpipe` cuenta con una gran variedad de funciones de extracción de palabras clave, vale la pena consultar <https://bnosac.github.io/udpipe/en/index.html> para conocerlas. 
-
 
 
 ----
 
 ## Práctica
 
-* PENDIENTE
-* 
-* 
+* Leer los txt de los discursos utilizados la semana pasada
+* Etiquetarlos morfosintácticamente con `udpipe_annotate`
+* Identificar los sustantivos más frecuentes y mostrarlos en un gráfico de barras
+* Buscar las coocurrencias consecutivas de verbo-sustantivo y mostrarlas en un grafo
+* Buscar las coocurrencias no consecutivas de adjetivo-sustantivo y mostrarlas en un grafo
+
 
 ```{r eval=FALSE, include=FALSE}
-## Teoría 
-
-cooc_verb_sust <- cooccurrence(
-  x = dubiscay_pos$lemma, 
-  relevant = dubiscay_pos$upos %in% c("VERB", "NOUN")
-)
-
+ggsave('cooc_sust_sust_dubiscay.png')
 ```
 
 
