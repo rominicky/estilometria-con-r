@@ -1,7 +1,6 @@
 ---
-title: "unidad 2 Etiquetado POS"
+title: "Unidad 2: Etiquetado morfosintáctico y coocurrencias"
 author: "Romina De León"
-date: "4/8/2021"
 output: 
     html_document:
         df_print: paged
@@ -19,17 +18,20 @@ Asimismo, se puede considerar que en gramática tradicional, como palabra se con
 
 ### Morfología:
 
-Es la rama de la lingüística que se encarga del estudio de la composición y estructura interna de las palabras. La morfología lingüística es un campo polémico que ha tenido un camino de difícil definición en teoría lingüística moderna; esta área asociado a la **Lingüística Computacional** o **Procesamiento del Lenguaje Natural** (PLN o sus siglas en inglés NLP, Natural Language Processing), ha tenido el gran reto de desarrollar sistemas que permitiesen procesar y entender expresiones textuales en cualquier lengua, por ello, se han realizado subdivisiones para hacer menos complejos los niveles de procesamiento. Estos necesidades generaron diferentes metodologías y aplicaciones informáticas que permiten avanzar hacia la imitación de la capacidad de habla y entendimiento humano, evadiendo la ambigüedad e imprecisión inherente a los lenguajes naturales. El PLN posee diferentes niveles según el estudio del lenguaje: fonológico, morfológico, sintáctico, semántico y pragmático.
+Es la rama de la lingüística que se encarga del estudio de la composición y estructura interna de las palabras. La morfología lingüística es un campo polémico que ha tenido un camino de difícil definición en teoría lingüística moderna; esta área asociado a la **Lingüística Computacional** o **Procesamiento del Lenguaje Natural** (PLN o sus siglas en inglés NLP, _Natural Language Processing_), ha tenido el gran reto de desarrollar sistemas que permitiesen procesar y entender expresiones textuales en cualquier lengua, por ello, se han realizado subdivisiones para hacer menos complejos los niveles de procesamiento. Estas necesidades generaron diferentes metodologías y aplicaciones informáticas que permiten avanzar hacia la imitación de la capacidad de habla y entendimiento humano, evadiendo la ambigüedad e imprecisión inherente a los lenguajes naturales. El PLN posee diferentes niveles según el estudio del lenguaje: fonológico, morfológico, sintáctico, semántico y pragmático.
 
-Como señalamos anteriormente, el acercamiento en esta unidad será al morfológico, para realizar algunos análisis en la estructura interna de las palabras, y nos permita delimitar, definir y clasificar sus unidades. Por ello, referimos que la morfología computacional trata de reconocer automáticamente los morfemas contenidos en una palabra, por ejemplo para asociar palabras como *iluminar* y *iluminación* como una sola, además reconocerá el género, número de un nombre para adjudicarlo con su adjetivo correcto. Este análisis permite separar el lema de la palabra o raíz, de la información aportada por los demás morfemas. La dificultad de esta metodología radica en su variación idiomática.
+Como señalamos anteriormente, el acercamiento en esta unidad será al nivel morfológico, para realizar algunos análisis en la estructura interna de las palabras que nos permitan delimitar, definir y clasificar sus unidades. Por ello, referimos que la morfología computacional trata de reconocer automáticamente los morfemas contenidos en una palabra, por ejemplo para asociar palabras como *iluminar* e *iluminación* como una sola. Además, reconocerá el género y número de un sustantivo para adjudicarlo con su adjetivo correcto. Este análisis permite separar el lema de la palabra o raíz, de la información aportada por los demás morfemas. La dificultad de esta metodología radica en su variación idiomática.
 
-[![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Flexi%25C3%25B3nGato-svg.svg/320px-Flexi%25C3%25B3nGato-svg.svg.png "Construcción de palabras con dos tipos de monemas, el lexema "gat-" y sus morfemas flexivos"){width="200"}](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Flexi%C3%B3nGato-svg.svg/320px-Flexi%C3%B3nGato-svg.svg.png)
+<img src ="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Flexi%C3%B3nGato-svg.svg/320px-Flexi%C3%B3nGato-svg.svg.png" width="200"/>
+
+*Construcción de palabras con dos tipos de monemas, el lexema "gat-" y sus morfemas flexivos"*
+
 
 ### Análisis morfológico
 
 Para realizar este tipo de análisis se requieren construir métodos con los siguientes elementos:
 
-    Lexicón, catálogo de palabras de una lengua, al ser tan complejo esto se crea una base de datos con información de morfemas con sus correspondientes referencias que faciliten la concatenación de morfemas para formar una palabra.
+    Lexicón, catálogo de palabras de una lengua; al ser tan complejo, se crea una base de datos con información de morfemas con sus correspondientes referencias que faciliten la concatenación de morfemas para formar una palabra.
 
     Conjunto de hechos morfotácticos, para referenciar el modelo que describe el orden de los morfemas para generar palabras.
 
@@ -63,7 +65,9 @@ Estas categorías serán necesarias para la identificación de diferentes partes
 
 Mediante este proceso se identifican diversas partes de la oración y se le asigna una etiqueta (tag) a cada categoría gramatical de un texto. Es llamado, **PoS Tagging**, por sus siglas en inglés *Part-Of-Speech Tagging*. Para realizar estas asignaciones inicialmente se procederá con el preprocesamiento de una oración, por lo cual primero se deberá tokenizar a la misma. Recuerden la tokenización es la normalización o segmentación de un texto.
 
-Las partes fundamental a considerar para el etiquetado son:
+<img src = "img/dependencias-dubiscay.png" width="900" heigth="800"/>
+
+Las partes fundamentales a considerar para el etiquetado son:
 
     Identificación de las palabras o unidades léxicas.
 
@@ -79,11 +83,11 @@ El PoS tagging tiene un sistema universal de etiquetas, *Universal POS Tag* (**U
 
 ### Lematización
 
-Por otro lado, también se puede realizar un proceso similar al de identificación de las partes de la oración, por medio de la reducción de las palabras de un corpus, a las que constituyen su propio lexema; es decir a su forma canónica o a la que forma que figura en un diccionario. Por ejemplo, *ser* es la forma canónica de; *soy*, *eres*, *fuiste*, *serás*; mientras que la forma canónica oveja es: *ovejas* y *ovejitas*. Como se puede observar la lematización permite hacer un análisis morfológico de las palabras, al considerar a los diccionarios enlaza cada palabra a su lemma, por lo cual, este proceso se encuentra ligado a la lingüística.
+Por otro lado, también se puede realizar un proceso similar al de identificación de las partes de la oración, por medio de la reducción de las palabras de un corpus, a las que constituyen su propio lexema; es decir a su forma canónica o a la que forma que figura en un diccionario. Por ejemplo, *ser* es la forma canónica de; *soy*, *eres*, *fuiste*, *serás*; mientras que la forma canónica *oveja* puede variar en *ovejas*, *ovejitas*, etc. Como se puede observar, la lematización requiere hacer un análisis morfológico de las palabras, al considerar a los diccionarios enlaza cada palabra a su lemma, por lo cual, este proceso se encuentra ligado a la lingüística.
 
-### Stemming
+### Stemming o racinización
 
-Por otro lado, esta metodología similar a la anterior, consiste en quitar y reemplazar sufijos de la raíz de una palabra, la diferencia con la lematización, es que esta es más compleja pues implica realizar un análisis del vocabulario y su morfología para devolver la forma básica o canónica de la palabra, como se mencionó previamente. El principal objetivo del **stemming** es analizar variaciones de una palabra como una sola[^3].
+Por otro lado, esta metodología similar a la anterior, consiste en quitar y reemplazar sufijos de la raíz de una palabra, la diferencia con la lematización, es que esta es más compleja pues implica realizar un análisis del vocabulario y su morfología para devolver la forma básica o canónica de la palabra, como se mencionó previamente. El principal objetivo del **stemming** es analizar variaciones de una palabra como una sola[^3]. Así, en un proceso de racinización, *ovejas* y *ovejitas* darían como resultado *ovej*.
 
 [^3]: Para más información sobre PoS tagging, lematización, tokenización, se puede consultar: Straka, M. & Straková, J. (2017), «Tokenizing, POS tagging, lemmatizing and parsing UD 2.0 with UDPipe», CoNLL 2017 - SIGNLL Conference on Computational Natural Language Learning, Proceedings of the CoNLL 2017 Shared Task: Multilingual Parsing from Raw Text to Universal Dependencies, vol. 2. <https://aclanthology.org/K17-3009.pdf>
 
@@ -119,12 +123,20 @@ Son palabras que coaparecen a una cierta distancia de otras, es decir que es un 
 
 Estas definiciones son de gran utilidad para poder observar con cuanta frecuencia la palabra **X** sigue a la palabra **Y**, o si **A** y **B** coocurren en un texto y qué tipo de redes de palabras forman. Este tipo de análisis serán utilizados para analizar las preferencias o tipos de escritura de una obra, autor o corpus.
 
-![Red de coocurrencia (rango de 3 palabras) para la siguiente oración: "The dawn is the appearance of light - usually golden, pink or purple - before sunrise"](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Word_co-occurrence_network_%2528range_3_words%2529_-_ENG.jpg/800px-Word_co-occurrence_network_%2528range_3_words%2529_-_ENG.jpg){width="400"}
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Word_co-occurrence_network_%28range_3_words%29_-_ENG.jpg" width="500" heigth="400"/>
+
+*Red de coocurrencia (rango de 3 palabras) para la siguiente oración: "The dawn is the appearance of light - usually golden, pink or purple - before sunrise"*
 
 Todas estas combinaciones y conjuntos de palabras serán representados en `n-grams`, o sea, en combinaciones de **n** cantidad de palabras.
 
-#### N-grama
+#### N-gramas
 
-El modelo de **n-grama** es un modelo de probabilidad que permite realizar predicciones estadísticas sobre el próximo elemento de una secuencia. Este modelo está basado en la **cadena de Márkov**, que señala que la probabilidad que ocurra un evento depende *unicamente* del evento inmediatamente anterior.
+En NLP y en lingüística computacional, los **n-grams** se utilizan, por ejemplo en resultados de investigación, para presentar previsualizaciones de palabras clave en un documento, así como el contexto que la rodea. Los **n-grams** pueden contener cualquier tipo de unidad lingüística (fonemas, sílabas, etc) o unidades textuales (ngram de caracteres, de palabras, etc.) pero los más frecuentes son los ngrams de palabras. Existen los 2gram o bigramas, 3gram o trigramas y así. 
 
-En las estadísticas de lenguajes, los **n-grams** se utilizan, por ejemplo en resultados de investigación, para presentar previsualizaciones de palabras clave en un documento, así como el contexto que la rodea. Esto es conocido como palabras clave en contexto o *KWIC*, por sus siglas en inglés (Key Word in Context). Los **n-grams** pueden contener cualquier tipo de unidad lingüística, fonemas, sílabas , etc.
+En la secuencia "La inclinación que siempre tuve a viajar", por ejemplo, tenemos:
+
+* 6 bigramas: "La inclinación", "inclinación que", "que siempre", "siempre tuve", "tuve a", "a viajar"
+* 5 trigramas: "La inclinación que", "inclinación que siempre", "que siempre tuve", "siempre tuve a", "tuve a viajar"
+* 4 4gramas: "La inclinación que siempre", "inclinación que siempre tuve", "que siempre tuve a", "siempre tuve a viajar"
+
+Ahora vamos a poner todas estas nociones en práctica [en la siguiente ejercitación](http://hdlab.space/Estilometria-con-R/unidad2_ej-etiquetado-pos.html).
