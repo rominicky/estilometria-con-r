@@ -1,0 +1,130 @@
+---
+title: "unidad 2 Etiquetado POS"
+author: "Romina De León"
+date: "4/8/2021"
+output: 
+    html_document:
+        df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Unidad 2 - Análisis textual: etiquetado gramatical
+
+La palabra se define como conjunto o secuencia de sonidos articulados, que pueden ser representados gráficamente con letras y tienen asociado un significado. La palabra como unidad mínima del lenguaje posee significado semántico o gramatical y puede descomponerse en unidades menores, monemas. Estos se encuentran clasificados en: Lexemas, que aportan significado conceptual. Morfemas: aportan otro tipo de significado. Se encuentran divididos en independientes o dependientes, y a su vez, estos pueden ser gramaticales o derivativos.
+
+Asimismo, se puede considerar que en gramática tradicional, como palabra se considera a los segmentos limitados por pausas, espacios y signos de puntuación, que contiene una función determinada. Mientras que, lingüísticamente, el concepto de palabra no es tan sencillo de definir.
+
+### Morfología:
+
+Es la rama de la lingüística que se encarga del estudio de la composición y estructura interna de las palabras. La morfología lingüística es un campo polémico que ha tenido un camino de difícil definición en teoría lingüística moderna; esta área asociado a la **Lingüística Computacional** o **Procesamiento del Lenguaje Natural** (PLN o sus siglas en inglés NLP, Natural Language Processing), ha tenido el gran reto de desarrollar sistemas que permitiesen procesar y entender expresiones textuales en cualquier lengua, por ello, se han realizado subdivisiones para hacer menos complejos los niveles de procesamiento. Estos necesidades generaron diferentes metodologías y aplicaciones informáticas que permiten avanzar hacia la imitación de la capacidad de habla y entendimiento humano, evadiendo la ambigüedad e imprecisión inherente a los lenguajes naturales. El PLN posee diferentes niveles según el estudio del lenguaje: fonológico, morfológico, sintáctico, semántico y pragmático.
+
+Como señalamos anteriormente, el acercamiento en esta unidad será al morfológico, para realizar algunos análisis en la estructura interna de las palabras, y nos permita delimitar, definir y clasificar sus unidades. Por ello, referimos que la morfología computacional trata de reconocer automáticamente los morfemas contenidos en una palabra, por ejemplo para asociar palabras como *iluminar* y *iluminación* como una sola, además reconocerá el género, número de un nombre para adjudicarlo con su adjetivo correcto. Este análisis permite separar el lema de la palabra o raíz, de la información aportada por los demás morfemas. La dificultad de esta metodología radica en su variación idiomática.
+
+[![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Flexi%25C3%25B3nGato-svg.svg/320px-Flexi%25C3%25B3nGato-svg.svg.png "Construcción de palabras con dos tipos de monemas, el lexema "gat-" y sus morfemas flexivos"){width="200"}](https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Flexi%C3%B3nGato-svg.svg/320px-Flexi%C3%B3nGato-svg.svg.png)
+
+### Análisis morfológico
+
+Para realizar este tipo de análisis se requieren construir métodos con los siguientes elementos:
+
+    Lexicón, catálogo de palabras de una lengua, al ser tan complejo esto se crea una base de datos con información de morfemas con sus correspondientes referencias que faciliten la concatenación de morfemas para formar una palabra.
+
+    Conjunto de hechos morfotácticos, para referenciar el modelo que describe el orden de los morfemas para generar palabras.
+
+    Conjunto de reglas ortográficas, para modelar cambios de la ortografía al concatenar morfemas.
+
+Por ello, para poder comprender como llegar a esos niveles de análisis debemos considerar que las categorías morfosintácticas del lenguaje, o categorías gramaticales, proporcionan clasificación de las diferentes partes de la oración según su tipo de palabra. La **morfosintaxis** pertenece a la gramática, e integra la morfología y la sintaxis para determinar diferentes partes de la oración, llamadas **part-of-speech (POS)**.
+
+### Categorías morfosintácticas:
+
+    Sustantivo, palabras cuyos elementos tienen género y número, forman sintagmas nominales y denominan entidades.
+
+    Determinante, sus elementos determinan al sustantivo o al grupo nominal, ubicándose generalmente en posición prenominal.
+
+    Adjetivo, modifican al sustantivo, denotan cualidades, propiedades y relaciones.
+
+    Pronombre, sus elementos pueden reemplazar al sustantivo o sintagma nominal.
+
+    Verbo, denotan acciones, poseen variaciones de persona, número, tiempo, modo y aspecto.
+
+    Adverbio, sus elementos son invariables y tónicos, pueden modificar el significado de varias categorías verbales.
+
+    Preposición, palabras invariantes, sus elementos introducen un término.
+
+    Conjunción, palabras invariables átonas que manifiestan relaciones de coordinación o subordinación entre palabras.
+
+Estas categorías serán necesarias para la identificación de diferentes partes de una oración, así como para realizar anotaciones en un corpus, esta metodología es denominada **etiquetado morfosintáctico**[^1]. Este tipo de análisis asignará información de carácter morfológico a los tokens (palabras, números, símbolos, etc.), generalmente se identifica al token y se le asigna una categoría sintáctica, o información morfosintáctica, como se describió anteriormente.
+
+[^1]: Puede acceder a mayor información relacionado al etiquetado gramatical y morfosintáctico en: \* Geoffrey Leech (1997) "Grammatical Tagging". En Garside, R., Leech, G. & McEnery, A. (Eds.), Corpus Annotation: Linguistic Information from Computer Text Corpora. New York: Addison Wesley Longman. \* Sección 2.2.2.3 Linguistic annotations del libro de Tony McEnery & Andrew Wilson (1996) Corpus linguistics. Edinburgh: Edinburgh University Press. \* Aurora Martín de Santa Olalla Sánchez (1999) "Una propuesta de codificación morfosintáctica para corpus de referencia en lengua española". Estudios de Lingüística Española (ELiEs), Vol. 3, <http://elies.rediris.es/elies3/>.
+
+### Etiquetado morfosintáctico
+
+Mediante este proceso se identifican diversas partes de la oración y se le asigna una etiqueta (tag) a cada categoría gramatical de un texto. Es llamado, **PoS Tagging**, por sus siglas en inglés *Part-Of-Speech Tagging*. Para realizar estas asignaciones inicialmente se procederá con el preprocesamiento de una oración, por lo cual primero se deberá tokenizar a la misma. Recuerden la tokenización es la normalización o segmentación de un texto.
+
+Las partes fundamental a considerar para el etiquetado son:
+
+    Identificación de las palabras o unidades léxicas.
+
+    Definición de tipos de palabras, gramaticalmente según el etiquetado que se requiera.
+
+    Definición de etiquetas que se utilizaran para cada clase de palabras.
+
+    Procedimiento con el cual se realizará el etiquetado.
+
+El PoS tagging tiene un sistema universal de etiquetas, *Universal POS Tag* (**UPOS**) del proyecto de [Universal Dependencies](https://universaldependencies.org/), donde `ADP` indica una preposición; `PROPN` un nombre propio; `PRON` un pronombre, `VERB` un verbo; `DET` un determinante; `NOUN` un sustantivo común; `PUNCT` signo de puntuación[^2].
+
+[^2]: Lista completa de UPoS en <https://universaldependencies.org/u/pos/index.html>.
+
+### Lematización
+
+Por otro lado, también se puede realizar un proceso similar al de identificación de las partes de la oración, por medio de la reducción de las palabras de un corpus, a las que constituyen su propio lexema; es decir a su forma canónica o a la que forma que figura en un diccionario. Por ejemplo, *ser* es la forma canónica de; *soy*, *eres*, *fuiste*, *serás*; mientras que la forma canónica oveja es: *ovejas* y *ovejitas*. Como se puede observar la lematización permite hacer un análisis morfológico de las palabras, al considerar a los diccionarios enlaza cada palabra a su lemma, por lo cual, este proceso se encuentra ligado a la lingüística.
+
+### Stemming
+
+Por otro lado, esta metodología similar a la anterior, consiste en quitar y reemplazar sufijos de la raíz de una palabra, la diferencia con la lematización, es que esta es más compleja pues implica realizar un análisis del vocabulario y su morfología para devolver la forma básica o canónica de la palabra, como se mencionó previamente. El principal objetivo del **stemming** es analizar variaciones de una palabra como una sola[^3].
+
+[^3]: Para más información sobre PoS tagging, lematización, tokenización, se puede consultar: Straka, M. & Straková, J. (2017), «Tokenizing, POS tagging, lemmatizing and parsing UD 2.0 with UDPipe», CoNLL 2017 - SIGNLL Conference on Computational Natural Language Learning, Proceedings of the CoNLL 2017 Shared Task: Multilingual Parsing from Raw Text to Universal Dependencies, vol. 2. <https://aclanthology.org/K17-3009.pdf>
+
+## Colocación, concordancia y co--ocurrencia
+
+Hasta aquí, se ha presentado como separar palabras y en que consistían cada una de sus partes. Sin embargo, las palabras siempre se encuentran acompañadas, puesto que sin el entorno que las rodea, el contexto, no tienen demasiado significado[^4]. Es decir que, el significado de una palabra se basa en el significado de las palabras que la rodean. Dentro de este conjunto, se llama **concordancias** a las listas de palabras que aparecen en un texto con su contexto. La concordancia es útil para poder seleccionar las palabras que serán más afines para los análisis.
+
+[^4]: Para más información sobre la teoría de análisis de colocaciones: Firth, F. R. (1957). "Modes of Meaning", en Papers in Linguistics 1934-1951, London, Oxford University Press, pp. 190-215. Oakes, M. P. (1998). "Concordancing, collocations and dictionaries", en Statistics for Corpus Linguistics.
+
+#### **Colocaciones**
+
+Son un tipo de combinaciones léxicas o frecuente de palabras, y se definen como la ocurrencia de dos o más palabras cercanas en un texto y con cierta tendencia a *ocurrir* cercanas en ciertos contextos. El análisis de colocaciones:
+
+> Evalúa las coocurrencias y su frecuencia en un contexto dado.
+>
+> Considera la cercanía de las colocaciones que pueden variar desde distancia cero (palabras contiguas) hasta una relativamente pequeña (x palabras de distancia una de otra).
+>
+> Determina patrones de ocurrencia.
+>
+> Parte de una evaluación de las concordancias.
+
+Elementos de una colocación:
+
+> Nodo, elemento léxico del que se busca la colocación.
+>
+> Colocativo o correlato léxico, cualquier elemento léxico que coocurre con el nodo en un contexto.
+>
+> Ventana o *span*, contexto donde ocurren los colocativos.
+
+#### Co-ocurrencias
+
+Son palabras que coaparecen a una cierta distancia de otras, es decir que es un término lingüístico que señala la frecuencia de aparición de dos términos uno junto al otro en un orden determinado.
+
+Estas definiciones son de gran utilidad para poder observar con cuanta frecuencia la palabra **X** sigue a la palabra **Y**, o si **A** y **B** coocurren en un texto y qué tipo de redes de palabras forman. Este tipo de análisis serán utilizados para analizar las preferencias o tipos de escritura de una obra, autor o corpus.
+
+![Red de coocurrencia (rango de 3 palabras) para la siguiente oración: "The dawn is the appearance of light - usually golden, pink or purple - before sunrise"](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Word_co-occurrence_network_%2528range_3_words%2529_-_ENG.jpg/800px-Word_co-occurrence_network_%2528range_3_words%2529_-_ENG.jpg){width="400"}
+
+Todas estas combinaciones y conjuntos de palabras serán representados en `n-grams`, o sea, en combinaciones de **n** cantidad de palabras.
+
+#### N-grama
+
+El modelo de **n-grama** es un modelo de probabilidad que permite realizar predicciones estadísticas sobre el próximo elemento de una secuencia. Este modelo está basado en la **cadena de Márkov**, que señala que la probabilidad que ocurra un evento depende *unicamente* del evento inmediatamente anterior.
+
+En las estadísticas de lenguajes, los **n-grams** se utilizan, por ejemplo en resultados de investigación, para presentar previsualizaciones de palabras clave en un documento, así como el contexto que la rodea. Esto es conocido como palabras clave en contexto o *KWIC*, por sus siglas en inglés (Key Word in Context). Los **n-grams** pueden contener cualquier tipo de unidad lingüística, fonemas, sílabas , etc.
