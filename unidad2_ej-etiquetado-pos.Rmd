@@ -366,12 +366,12 @@ El paquete `udpipe` cuenta con una gran variedad de funciones de extracción de 
 
 ## Práctica
 
-* Leer los txt de los discursos utilizados la semana pasada
+* Leer los txt de los discursos utilizados la semana pasada y guardarlos en un dataframe o en un vector
 * Etiquetarlos morfosintácticamente con `udpipe_annotate`
-* Identificar los sustantivos más frecuentes y mostrarlos en un gráfico de barras
-* Buscar las coocurrencias consecutivas de verbo-sustantivo y mostrarlas en un grafo
-* Buscar las coocurrencias no consecutivas de adjetivo-sustantivo y mostrarlas en un grafo
-
+* Elegir una POS y graficar la frecuencia por token o por lema en un gráfico de barras
+* Buscar coocurrencias consecutivas de distintas clases de palabras y mostrarlas en un grafo
+* Buscar coocurrencias no consecutivas de distintas clases de palabras y mostrarlas en un grafo
+* **Opcional**: limpiar el resultado de udpipe filtrando signos de puntuación, conjunciones y números por **upos** y guardarlo en una variable llamada `discursos_limpio`. Investigar la función `keywords_collocation()` en la [documentación de udpipe](https://bnosac.github.io/udpipe/en/index.html) y generar ngrams más extensos (máximo 4grams) a partir de `discursos_limpio`. Guardar el resultado en una variable `discursos_ngrams` y explorar el contenido con `View(discursos_ngrams)`. Filtrar `discursos_ngrams` para obtener sólo los 4grams y reordenar las **keywords** por valor de **pmi**. Mostrar las primeras 20 **keywords** en un gráfico de barras.
 
 ```{r eval=FALSE, include=FALSE}
 ggsave('cooc_sust_sust_dubiscay.png')
