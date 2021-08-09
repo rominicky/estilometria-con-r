@@ -1635,8 +1635,12 @@ summary {
 
 <h1 class="title toc-ignore">Unidad 1 - Ejercicio - Manipulación de datos en R</h1>
 <h4 class="author">Nidia Hernández</h4>
+<h6>nidiahernandez@conicet.gov.ar</h6>
 
 </div>
+
+<hr align="left" style="width:40%">
+
 
 
 <style type="text/css">
@@ -1650,12 +1654,12 @@ body {
 <li>realizar gráficos básicos con <code>ggplot2</code></li>
 <li>guardar los resultados</li>
 </ul>
-<p>Vamos a usar archivos csv que contienen las anotaciones semánticas de <a href="http://hdlab.space/Relacion-de-las-cosas-sucedidas/"><em>Relación de las cosas sucedidas en el Río de la Plata</em></a> de Pero Hernández, <a href="http://hdlab.space/Relacion-de-un-viaje/"><em>Relación de un viaje al Río de la Plata</em></a> de Acarette du Biscay y <a href="http://hdlab.space/La-Argentina-Manuscrita/"><em>La Argentina Manuscrita</em></a> de Ruy Díaz de Guzmán.</p>
+<p>Vamos a usar archivos csv compartidos en el <a href="https://campusvirtual.uces.edu.ar/course/view.php?id=5875#section-5">campus</a> que contienen las anotaciones semánticas de <a href="http://hdlab.space/Relacion-de-las-cosas-sucedidas/"><em>Relación de las cosas sucedidas en el Río de la Plata</em></a> de Pero Hernández, <a href="http://hdlab.space/Relacion-de-un-viaje/"><em>Relación de un viaje al Río de la Plata</em></a> de Acarette du Biscay y <a href="http://hdlab.space/La-Argentina-Manuscrita/"><em>La Argentina Manuscrita</em></a> de Ruy Díaz de Guzmán. Estos textos forman parte de la biblioteca digital de HDCAICYT LAB disponible en <a href="http://hdlab.space/biblioteca-digital/">hdlab.space/biblioteca-digital</a>.</p>
 <div id="paquetes-básicos-de-manipulación-de-datos" class="section level2">
 <h2>Paquetes básicos de manipulación de datos</h2>
 <p>Comenzamos con las líneas habituales:</p>
 <pre class="r"><code>rm(list = ls())
-setwd(&#39;/home/yoki/Caicyt/Estilometria-con-R&#39;)
+setwd(&#39;/home/nombredeusuario/mi-directorio-de-trabajo/&#39;)
 
 library(readr)
 library(dplyr)</code></pre>
@@ -1665,7 +1669,7 @@ library(dplyr)</code></pre>
 <div id="leer-archivos-y-seleccionar-datos" class="section level2">
 <h2>Leer archivos y seleccionar datos</h2>
 <p>Usamos la función <code>read_csv</code> para leer un archivo csv que contiene información sobre entidades reconocidas en <em>Relación de las cosas sucedidas en el Río de la Plata</em> y guardamos el contenido en la variable <code>phernandez</code>. Usamos el comando <code>head(dataframe, cantidaddelineas)</code> para mostrar los valores de las primeras 20 líneas del archivo.</p>
-<pre class="r"><code>phernandez &lt;- read_csv(&#39;PHernandez_RelCosas.csv&#39;)
+<pre class="r"><code>phernandez &lt;- read_csv(&#39;corpus-manipulacion-de-datos/PHernandez_RelCosas.csv&#39;)
 head(phernandez, 20)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -1771,7 +1775,7 @@ personajes_categ %&gt;%
 <div id="unir-dataframes" class="section level2">
 <h2>Unir dataframes</h2>
 <p>Vamos a extender el primer dataset con el que trabajamos, las entidades de la relación de Pero Hernández, con los datos de un segundo texto, <em>Relación de un viaje al Río de la Plata</em> de Acarette du Biscay.</p>
-<pre class="r"><code>dubiscay &lt;- read_csv(&quot;DuBiscay_RelDeUnViaje.csv&quot;)
+<pre class="r"><code>dubiscay &lt;- read_csv(&quot;corpus-manipulacion-de-datos/DuBiscay_RelDeUnViaje.csv&quot;)
 dubiscay</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">

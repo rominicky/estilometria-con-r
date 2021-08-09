@@ -7,9 +7,14 @@ output:
     df_print: paged
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{css, echo=FALSE}
+body {
+  padding-bottom: 52px;
+}
 ```
+
+<h6>nidiahernandez@conicet.gov.ar</h6>
+<hr align="left" style="width:40%">
 
 En esta ejercitación vamos a:
 

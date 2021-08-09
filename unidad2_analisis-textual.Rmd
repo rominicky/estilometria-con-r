@@ -1,14 +1,19 @@
 ---
 title: "Análisis textual estadístico"
-author:
+author: "Nidia Hernández"
 date:
 output: 
   html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{css, echo=FALSE}
+body {
+  padding-bottom: 52px;
+}
 ```
+
+<h6>nidiahernandez@conicet.gov.ar</h6>
+<hr align="left" style="width:40%">
 
 
 El análisis estadístico de textos es anterior a la invención de R e inclusive de las computadoras. Antes de abordar las últimas tendencias en estilometría como la elaboración de topografías textuales, detección de plagio o identificación de autoría es necesario recordar algunas nociones básicas de estadística aplicada a datos textuales.
@@ -31,7 +36,7 @@ Este tipo de repartición desigual de frecuencias en un conjunto de datos tambi�
 
 La curva de Zipf es muchas veces representada usando el logaritmo de las frecuencias y del ránking de los elementos, lo que permite apreciar mejor la parte central de los datos (las palabras de frecuencia media). Los elementos centrales de la curva son los que mejor representan un texto y que permiten caracterizarlo mejor y establecer comparaciones con otros textos, ya que típicamente las palabras de la cima de la curva se corresponden con las _stopwords_ o palabras vacías (i.e., son demasiado generales, aparecen en cualquier texto) y las palabras de la larga cola tienen una sola ocurrencia cada una (i.e., son demasiado particulares, ocurren únicamente en ese texto). 
 
-<img src = "https://upload.wikimedia.org/wikipedia/commons/d/da/Zipf_30wiki_es_labels.png" width="500" heigth="400"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Zipf_30wiki_es_labels.png" width="500" heigth="400"/>
 
 *Fig. 2. Gráficas del ránking de palabras versus la frecuencia para las primeras 10 millones de palabras de Wikipedia en 30 idiomas diferentes (descargas de octubre del 2015) en una escala logarítmica en los dos ejes*
 
@@ -122,5 +127,5 @@ En la Tabla 4 podemos observar que el token 2 es importante en el texto 2 pero r
 
 * Más sobre ponderación de términos para la recuperación de información: Spärck Jones, K. (1973). "Index term weighting". _Information Storage and Retrieval_. 9 (11): 619–633. [doi:10.1016/0020-0271(73)90043-0](https://www.sciencedirect.com/science/article/abs/pii/0020027173900430?via%3Dihub)
 
-Estas son algunas propiedades y medidas básicas sobre la presencia y la distribución de tokens en colecciones textuales, en las próximas semanas iremos desarrollando otras. Para poner en práctica los conceptos desarrollados aquí, les compartiremos una ejercitación de análisis textual básico en R. 
+Estas son algunas propiedades y medidas básicas sobre la presencia y la distribución de tokens en colecciones textuales, en las próximas semanas iremos desarrollando otras. Para poner en práctica los conceptos desarrollados aquí, les compartiremos una [ejercitación de análisis textual básico en R](https://campusvirtual.uces.edu.ar/course/view.php?id=5875#section-5). 
 
