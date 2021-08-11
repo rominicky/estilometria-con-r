@@ -90,14 +90,15 @@ Una vez cargado el modelo para el español, podemos hacer una primera prueba de 
 
 ```{r  message=FALSE, warning=FALSE}
 frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre, y puedo asegurar que no me impulsaba tanto a ello la mera curiosidad de ver países extraños, cuanto la esperanza que abrigaba de adquirir conocimientos y desarrollar mi inteligencia, cosa que en el futuro podría serme provechoso no sólo en mis negocios particulares, sino también haciéndome más útil a mi Rey y a mi patria, el cual declaro fue el principal móvil de mi viaje."
-
+# En Windows, luego es necesario hacer:
+# frase <- iconv("frase", from = "Latin1", to = "UTF-8")
 frase_pos <- udpipe_annotate(modelo_es, frase)
 frase_pos <- as_tibble(frase_pos)
 ```
 
 En la última línea, transformamos el resultado de `udpipe` en tibble, tipo de objeto ya visto en la ejercitación anterior, que nos permite manipular los resultados del etiquetado más fácilmente que en el formato original devuelto por `udpipe`. 
 
-Veamos el resultado de la anotación invocando la variable `frase_pos`. Usá la flecha ➤ para navegar en la tabla y ver el tipo de información que contiene cada columna:
+Veamos el resultado de la anotación invocando la variable `frase_pos`. Usá la flecha ➤ para navegar en la tabla de esta guía (o `View(frase_pos)` en tu consola de RStudio) y ver el tipo de información que contiene cada columna:
 
 ```{r  message=FALSE, warning=FALSE}
 frase_pos
@@ -141,7 +142,7 @@ conteo_pos %>%
 
 Para poder mostrar las categorías en orden decreciente, primero hacemos `reorder(upos, -nro_tokens)` (si no, `ggplot` las ordena alfabéticamente) y luego pasamos los datos a `ggplot`. Dentro de `aes` definimos primero la variable independiente (la que corresponde al eje x) y luego la variable dependiente (la que corresponde al eje y). Luego, usamos `geom_col()` para generar un gráfico de barras y en `fill` definimos el color de las barras. Es posible ver la lista de colores disponibles en R con `grDevices::colors()`. Más información sobre colores en `ggplot`: <https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html>. 
 
-Si quisiéramos usar esta información morfosintáctica para un análisis de estilo (como la correlación uso de adverbios y calidad de escritura presentada al inicio de la guía), podemos con filtrar por **upos** usando `filter()`:
+Si quisiéramos usar esta información morfosintáctica para un análisis de estilo (como la correlación uso de adverbios y calidad de escritura presentada al inicio de la guía), podemos filtrar por **upos** usando `filter()`:
 
 ```{r message=FALSE, warning=FALSE}
 frase_pos %>%
@@ -182,10 +183,12 @@ textplot_dependencyparser(frase_pos,
 
 En la sección anterior experimentamos con `udpipe` para familiarizarnos con las funciones y la estructura de los resultados del análisis morfosintáctico. Ahora vamos a aplicar todo lo visto a un texto más complejo y de longitud mayor, _Relación de un viaje al Río de la Plata_.
 
-Leemos el archivo 'DuBiscay_RelDeUnViaje.txt' (disponible [online](https://raw.githubusercontent.com/hdcaicyt/Estilometria-con-R/gh-pages/corpus/DuBiscay_RelDeUnViaje.txt)). **Atención**: si alojaste el texto en otra ubicación, vas a tener que modificar el path que le pasamos a `read_lines()`. Recordá que también podés pasarle una url a `read_lines()`.
+Leemos el archivo 'DuBiscay_RelDeUnViaje.txt' (disponible [online](https://raw.githubusercontent.com/hdcaicyt/Estilometria-con-R/gh-pages/corpus/DuBiscay_RelDeUnViaje.txt)). **Atención**: si alojaste el texto en otra ubicación, vas a tener que modificar el path que le pasamos a `read_lines()`. Recordá que `read_lines()` también puede recibir una url (pero la lectura puede demorar más tiempo).
 
 ```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
-dubiscay <- read_lines("corpus/DuBiscay_RelDeUnViaje.txt")
+dubiscay <- read_lines("DuBiscay_RelDeUnViaje.txt")
+# A continuación, en Windows:
+# dubiscay <- iconv("dubiscay", from = "Latin1", to = "UTF-8")
 ```
 
 A continuación, realizamos el etiquetado llamando a `udpipe_annotate()`. **Este etiquetado puede llevar un par de minutos**:
@@ -371,7 +374,7 @@ El paquete `udpipe` cuenta con una gran variedad de funciones de extracción de 
 * Elegir una POS y graficar la frecuencia por token o por lema en un gráfico de barras
 * Buscar coocurrencias consecutivas de distintas clases de palabras y mostrarlas en un grafo
 * Buscar coocurrencias no consecutivas de distintas clases de palabras y mostrarlas en un grafo
-* **Opcional**: limpiar el resultado de udpipe filtrando signos de puntuación, conjunciones y números por **upos** y guardarlo en una variable llamada `discursos_limpio`. Investigar la función `keywords_collocation()` en la [documentación de udpipe](https://bnosac.github.io/udpipe/en/index.html) y generar ngrams más extensos (máximo 4grams) a partir de `discursos_limpio`. Guardar el resultado en una variable `discursos_ngrams` y explorar el contenido con `View(discursos_ngrams)`. Filtrar `discursos_ngrams` para obtener sólo los 4grams y reordenar las **keywords** por valor de **pmi**. Mostrar las primeras 20 **keywords** en un gráfico de barras.
+* **Opcional**: limpiar el resultado de udpipe filtrando signos de puntuación, conjunciones y números por **upos** y guardarlo en una variable llamada `discursos_limpio`. Investigar la función `keywords_collocation()` y generar ngrams más extensos (máximo 4grams) a partir de `discursos_limpio`. Guardar el resultado en una variable `discursos_ngrams` y explorar el contenido con `View(discursos_ngrams)`. Filtrar `discursos_ngrams` para obtener sólo los 4grams y reordenar las **keywords** por valor de **pmi**. Mostrar las primeras 20 **keywords** en un gráfico de barras.
 
 ```{r eval=FALSE, include=FALSE}
 ggsave('cooc_sust_sust_dubiscay.png')
