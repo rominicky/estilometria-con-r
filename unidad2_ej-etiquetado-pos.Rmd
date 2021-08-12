@@ -91,7 +91,7 @@ Una vez cargado el modelo para el español, podemos hacer una primera prueba de 
 ```{r  message=FALSE, warning=FALSE}
 frase <- "La inclinación que siempre tuve a viajar, me hizo abandonar siendo muy joven la casa de mi padre, y puedo asegurar que no me impulsaba tanto a ello la mera curiosidad de ver países extraños, cuanto la esperanza que abrigaba de adquirir conocimientos y desarrollar mi inteligencia, cosa que en el futuro podría serme provechoso no sólo en mis negocios particulares, sino también haciéndome más útil a mi Rey y a mi patria, el cual declaro fue el principal móvil de mi viaje."
 # En Windows, luego es necesario hacer:
-# frase <- iconv("frase", from = "Latin1", to = "UTF-8")
+# frase <- iconv(frase, from = "Latin1", to = "UTF-8")
 frase_pos <- udpipe_annotate(modelo_es, frase)
 frase_pos <- as_tibble(frase_pos)
 ```
@@ -188,7 +188,7 @@ Leemos el archivo 'DuBiscay_RelDeUnViaje.txt' (disponible [online](https://raw.g
 ```{r  message=FALSE, warning=FALSE, evaluate=FALSE}
 dubiscay <- read_lines("DuBiscay_RelDeUnViaje.txt")
 # A continuación, en Windows:
-# dubiscay <- iconv("dubiscay", from = "Latin1", to = "UTF-8")
+# dubiscay <- iconv(dubiscay, from = "Latin1", to = "UTF-8")
 ```
 
 A continuación, realizamos el etiquetado llamando a `udpipe_annotate()`. **Este etiquetado puede llevar un par de minutos**:
