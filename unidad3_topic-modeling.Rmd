@@ -1,0 +1,179 @@
+---
+title: "Unidad 3 - Macroanálisis - Topic Modeling"
+author: "Nidia Hernández"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+body {
+  padding-bottom: 52px;
+}
+```
+
+<h6>nidiahernandez@conicet.gov.ar</h6>
+<hr align="left" style="width:40%">
+
+En esta guía vamos a:
+
+* realizar una breve introducción al _topic modeling_
+* poner en práctica herramientas de modelado de tópicos en un corpus de textos histórico-literarios
+
+## Topic modeling
+
+El _topic modeling_ es un método estadístico de organización de grandes corpus en el que un algoritmo recibe datos no etiquetados para agruparlos según patrones comunes subyacentes. Si bien esta técnica fue concebida para la gestión de colecciones textuales, tiene aplicaciones en diversos campos, tales como la genética de poblaciones y el procesamiento de imágenes por IA.
+
+En el ámbito del procesamiento de textos en particular, el _topic modeling_ es utilizado para detectar los tópicos^[Algunas aclaraciones sobre la terminología típica asociada a esta técnica: utilizamos el término _colección_ para denominar al conjunto de textos con el que vamos a trabajar y _documento_ para referirnos a cada uno de los textos. Los resultados a obtener son _tópicos_ o temas.] presentes en una colección textual, los documentos que responden a cada tópico así como las palabras que lo representan. En otras palabras, esta técnica nos permite acceder rápidamente al contenido de un gran dataset de textos y organizar los textos en grupos de acuerdo a su temática. 
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Topic_detection_in_a_document-word_matrix.gif" />
+
+**Figura 1.  Detección de tópicos en una matriz de términos por documento. Cada columna corresponde a un documento y cada fila a una palabra; las celdas muestran la frecuencia de una palabra de un documento (más oscura, mayor frecuencia). Fuente: Christoph Carl Kling, via Wikimedia Commons, CC-BY-SA-4.0**
+
+Para comprender el funcionamiento de este método estadístico, comenzaremos por aplicarlo a un caso donde ya conocemos la respuesta de antemano: buscaremos agrupar temáticamente un corpus de tres textos y veremos si el algoritmo es capaz de distinguir correctamente tres grupos. Utilizaremos los txt correspondientes a [_Relación de las cosas sucedidas en el Río de la Plata_](http://hdlab.space/Relacion-de-las-cosas-sucedidas/) de Pero Hernández, [_Relación de un viaje al Río de la Plata_](http://hdlab.space/Relacion-de-un-viaje/) de Acarette du Biscay y [_La Argentina Manuscrita_](http://hdlab.space/La-Argentina-Manuscrita/) de Ruy Díaz de Guzmán, relatos histórico-literarios sobre la conquista y colonización del Río de la Plata. Estos textos se encuentran disponibles en edición digital y forman parte de la biblioteca digital de HDCAICYT LAB  <http://hdlab.space/biblioteca-digital/>. 
+
+
+## Implementación
+
+### Preparación de los datos de entrada
+
+Existen diversos paquetes y algoritmos para realizar _topic modeling_ en R, tales como [mallet](https://cran.r-project.org/package=mallet), [lda](https://cran.r-project.org/package=lda) y [topicmodels](https://cran.r-project.org/package=topicmodels). En esta práctica vamos a servirnos de este último. 
+
+Para comenzar, vamos a cargar varios paquetes necesarios para la experimentación. Algunos de ellos (`topicmodels`, `tm` y `scales`) no fueron utilizados antes en nuestras prácticas, por lo que vas a tener que instalarlos con `install.packages()`. Si la instalación de `topicmodels` emite un mensaje de error, abrí una terminal y ejecutá `sudo apt install libgsl-dev` en Linux o `brew install gsl` en MacOS.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytext)
+library(tm)
+library(topicmodels)
+library(scales)
+```
+
+A continuación, cargamos el corpus en una tibble de dos columnas, **texto** y **documento**, y asignamos a la primera el contenido textual de cada archivo del corpus y a la segunda el nombre de cada archivo. Luego tokenizamos, limpiamos el corpus (filtrando stopwords, eliminando números y palabras de un solo caracter) y calculamos las ocurrencias de cada palabra en cada documento:
+
+```{r message=FALSE, warning=FALSE}
+path_archivos <- 
+  list.files("corpus-tp", pattern = "\\.txt$", full.names = TRUE) # Modificar de acuerdo al nombre de la carpeta donde se encuentra nuestro corpus
+
+coleccion <- tibble(texto = character(),
+                    documento = character())
+
+for (path in path_archivos) {
+  lineas <- read_lines(path)
+  temporal <- tibble(texto = lineas,
+                     documento = basename(path))
+  coleccion <- bind_rows(coleccion, temporal) 
+}
+
+stopwords_es <-
+  get_stopwords("es") %>% 
+  rename(palabra = word)
+
+coleccion <-
+  coleccion %>%
+  unnest_tokens(palabra, texto) %>% 
+  anti_join(stopwords_es) %>% 
+  filter(!str_detect(palabra, "[0-9]+")) %>% # elimina números
+  filter(nchar(palabra) > 1) %>% # elimina palabras como "ó", "á", "é"
+  count(documento, palabra, sort = TRUE) # cuenta ocurrencias de cada palabra en su documento
+
+coleccion
+```
+
+El paquete `topicmodels` requiere los datos de entrada en un formato particular conocido como `DocumentTermMatrix` (Matrices de Términos por Documento; en la Unidad de Introducción al Análisis Textual, vimos ejemplos de este tipo de matrices en las [tablas de tipos de frecuencias](http://hdlab.space/Estilometria-con-R/unidad2_analisis-textual.html#frecuencia-absoluta-frecuencia-relativa-y-tf.idf)). Podemos transformar nuestro dataframe `coleccion` en un objeto `DocumentTermMatrix` gracias a la función `cast_dtm()`. 
+
+
+```{r message=FALSE, warning=FALSE}
+coleccion_dtm <-
+  coleccion %>% 
+  cast_dtm(documento, palabra, n)
+```
+
+
+### Entrenamiento con LDA
+
+Una vez que transformamos el corpus al formato requerido por `topicmodels`, podemos someter los datos al algoritmo de extracción de tópicos. En esta práctica veremos cómo implementar LDA (siglas de _Latent Dirichlet Allocation_), uno de los métodos más populares de _topic modeling_, desarrollado por David Blei en 2012^[Blei, D. M. (2012). Probabilistic topic models. _Communications of the ACM_, 55(4), 77–84. https://doi.org/10.1145/2133806.2133826]. Obtendremos como resultado modelos de tópicos (_topic models_). La cantidad de tópicos en un modelo varía en función del corpus pero en este ejercicio ya sabemos que queremos encontrar 3 tópicos (uno por cada texto de nuestro corpus) de manera que en la función de entrenamiento fijaremos `k = 3`. En una experiencia real de _topic modeling_ es necesario probar diferentes valores de k y evaluar cuál arroja resultados más coherentes^[Para un ejemplo de evaluación de _topic modeling_ con distintos valores de k, consultar https://github.com/nidiah/Topic-modeling-gestion-datos/blob/main/experiencias_informes.ipynb (en Python)]. 
+
+En primer lugar, creamos el modelo de tres tópicos sobre el corpus bajo análisis:
+
+```{r}
+coleccion_lda <- LDA(coleccion_dtm, k = 3, control = list(seed = 42))
+coleccion_lda
+```
+
+La generación de modelos con LDA involucra muchos procesos aleatorios^[Para una introducción a los fundamentos matemáticos de LDA, consultar https://www.youtube.com/watch?v=T05t-SqKArY], por eso, si queremos poder reproducir y comparar resultados generados por este algoritmo, debemos "plantar una semilla" que permita controlar la variación, para eso establecemos el parámetro `control = list(seed = 42)`.
+
+El resto del análisis involucra explorar e interpretar los tópicos resultantes.
+
+### Palabras en cada tópico
+
+Veamos las primeras diez palabras más representativas de cada uno de los tres tópicos generados:
+
+```{r}
+terms(coleccion_lda, 10) %>% as_tibble
+```
+
+En esta técnica, cada tópico es una colección de palabras con "pesos" asociados. Las palabras que mejor definen al tópico (las asociadas con mayor probabilidad al tópico) aparecen primero en la lista. Nada impide que tópicos diferentes compartan palabras, pero la combinación de muchas palabras y probabilidades diferencia a los tópicos entre sí.
+
+A partir de nuestro conocimiento previo de los textos, observamos que el tópico 2 presenta palabras muy representativas de la _Relación de las cosas sucedidas_ de Pero Hernández (la relación da cuenta del enfrentamiento entre Domingo de Irala y el Gobernador, Álvar Núñez) y el tópico 1 muestra palabras como "capitán" y "pedro", muy caractrísticas de _La Argentina Manuscrita_ de Ruy Díaz (el texto relata la fundación de Asunción realizada por uno de los capitanes de Pedro de Mendoza). Es importante señalar que encontramos palabras repetidas entre tópicos ("río", "indios", "plata"), lo cual es lógico si tenemos en cuenta que los textos seleccionados tocan temas en común ya que todos tratan sobre la colonización de zona del Río de la Plata a fines del siglo XVI - principios del siglo XVII. Aquí se evidencia la flexibilidad de la técnica, que permite encontrar solapamiento entre tópicos, como sucede en las colecciones textuales reales. 
+
+Ahora que ya conocemos los datos de salida de un modelado LDA, veremos cómo usarlos para generar gráficos. El paquete `tidytext` permite extraer las probabilidades por palabra dentrode cada tópico, a las que llama "betas". Exploremos, por ejemplo, las palabras de mayor peso en el tópico 3:
+
+```{r}
+topicos_coleccion <-
+  tidy(coleccion_lda, matrix = "beta") %>%
+  arrange(topic, desc(beta))
+
+topicos_coleccion %>%
+  filter(topic == 2)
+```
+
+Los valores absolutos de probabilidad no importan tanto como sus relaciones. Usualmente, son números muy pequeños que provienen de alguna transformación de la frecuencias de la palabra en el documento. En este caso, no nos importa que `gobernador` tenga un valor de  0.02, sino que es el mayor valor observado para este tópico o que es mayor que el valor de `oficiales`.
+
+Vamos a graficar las primeras diez palabras que definen a cada tópico con sus pesos asignados.
+
+```{r}
+top_terms <- topicos_coleccion %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>% 
+  ungroup() %>%
+  arrange(topic, -beta)
+
+top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(vars(topic), scales = "free") +
+  coord_flip() + 
+  ggtitle("Principales palabras de cada tópico")
+```
+
+Como señalamos más arriba, nuestro conocimiento previo de los textos nos permite inferir rápidamente que el tópico
+verde tiene una fuerte asociación al texto de Pero Hernández. Podemos confirmar esto con el valor de "gamma" que la técnica calcula para cada tópico y documento. En el caso bajo análisis, los tres tópicos encontrados distinguen fuertemente a los tres textos, como podemos ver en los valores de gamma redondeados:
+
+
+```{r}
+coleccion_gamma <- tidy(coleccion_lda, matrix = "gamma")
+
+coleccion_gamma %>%
+  mutate(gamma = factor(round(gamma))) %>%
+  # pivot_wider(id_cols = document, names_from = topic, values_from = gamma) %>%
+  ggplot() +
+  aes(x = topic, y = document, fill = gamma) +
+  geom_tile() +
+  scale_fill_manual(values = c("Grey", "SeaGreen"))
+```
+
+Esta es una pequeña introducción a la técnica realizada con un minicorpus de tres textos donde ya sabíamos la respuesta. El verdadero interés del _topic modeling_ se vuelve evidente al aplicarlo a colecciones más amplias para **descubrir** los tópicos. Te invitamos a experimentar con la práctica que se encuentra a continuación.
+
+----
+
+## Práctica
+
+* Leer los txt de los discursos presidenciales utilizados en las prácticas anteriores.
+* Tokenizarlos, limpiarlos y guardarlos en un dataframe.
+* Transformar el dataframe en una DTM (DocumentTermMatrix).
+* Extraer los tópicos de los discursos presidenciales transformados en DTM con LDA. Probar distintos valores de k hasta encontrar tópicos relevantes. Modificar la limpieza de ser necesario.
+* Graficar las primeras 7 palabras de cada tópico
+
+

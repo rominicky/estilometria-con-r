@@ -25,7 +25,7 @@ Profa. Nidia Hernández y Profa. Romina De León (CONICET).
 
 [Unidad 3. Macroanálisis. Estilometría - Ejercitación](unidad3_macroanalisis_stylo.html)
 
-
+[Unidad 3. Topic Modeling](unidad3_topic-modeling.html)
 
 
 
