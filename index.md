@@ -23,3 +23,10 @@ Profa. Nidia Hernández y Profa. Romina De León (CONICET).
 
 [Unidad 2. Ejercicio. Etiquetado morfosintáctico y coocurrencias](unidad2_ej-etiquetado-pos.html)
 
+[Unidad 3. Macroanálisis. Estilometría](unidad3_macroanalisis_stylo.html)
+
+[Unidad 3. Macroanálisis. Estilometría - Ejercitación](unidad3_macroanalisis_stylo-ejercicio.html)
+
+
+
+

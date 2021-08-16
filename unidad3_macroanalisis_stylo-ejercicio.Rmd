@@ -1,0 +1,163 @@
+---
+title: "Unidad 3: Ejercicio de macroanálisis textual - Estilometría"
+author: "Romina De León"
+output: 
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{css, echo=FALSE, error=TRUE}
+body {
+  padding-bottom: 52px;
+}
+```
+
+Para esta ejercitación volveremos con los datos de la unidad anterior, [Ejercicio de análisis textual](http://hdlab.space/Estilometria-con-R/unidad2_ej_analisis_textual.html). Nos situaremos en la carpeta `disc-dnu` conformada por los textos ya mencionados en dicha unidad.
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, error=TRUE}
+rm(list = ls())
+
+getwd()
+
+setwd(/disc-dnu)
+```
+
+Como se mencionó en la teoría instalaremos el paquete **Stylo** y llamaremos a la librería:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, error=TRUE}
+
+install.packages("stylo") #tardará unos cuantos minutos
+        
+```
+
+```{r eval=TRUE, message=TRUE, error=TRUE}
+library(stylo)
+
+```
+
+
+Una particularidad de `Stylo` es que necesita colectar sus textos de un directorio denominado `corpus`, por ello dentro de nuestra carpeta `/disc-dnu` crearemos esa nueva dirección mediante la función `dir.create` poniendo entre comillas el nombre de la carpeta a crear:
+
+```{r eval=FALSE, message=FALSE, error=TRUE}
+
+setwd("/~/disc-dnu/")
+dir.create("corpus") 
+list.files("/hdcaicyt/R/disc-dnu/corpus") #modifica tu path para acceder correctamente y listar los archivos de la carpeta "corpus"
+
+```
+
+Ahora llamaremos al paquete `Stylo()`, y se nos abrirá una ventana como la siguiente:
+
+![](stylo-interfaz.png)
+
+Allí primero iremos a la ventana **input & language** donde seleccionaremos el tipo de archivo, idioma y *native encoding*; luego modificaremos **features**, podemos elegir "words", "chars" y los "n-grams" (importante considera las explicaciones en la [teoría](http://hdlab.space/Estilometria-con-R/unidad3_macroanalisis_stylo.html) de esta ejercitación), las palabras más frecuentes (**MFW**), mínimo, máximo e incremento; etc. En **statistics** podremos elegir tipo de análisis a realizar, *cluster*, *PCA*, *consensus tree*, *culling* (porcentaje de aparición de MFW en los textos); etc. y el tipo de distancia a utilizar; en **sampling** podremos pedirle que divida el corpus en determinada cantidad de palabras, normal o aleatoria; y finalmente en **output** elegiremos formatos de visualización, tamaño, guardado de imagen, etc.
+
+```{r eval=FALSE, message=FALSE, error=TRUE}
+
+stylo()
+
+```
+
+![](disc-dnu_CA_1000_MFWs_Culled_0__Eder's%20Delta__001.png)
+
+Te propongo que realices algunas variaciones en los parámetros para obtener distintas gráficas, podría ser un árbol de consenso y otra realizando un gráfico de **PCA**.
+
+***Ahora veremos otra manera de cargar y realizar visualizaciones con Stylo, de forma manual y no automatizada como la anterior.***
+
+Para ello primero, mediante la función `load.corpus`, de la misma librería, podremos cargar todos nuestros archivos que se encuentren en el directorio *corpus*, pero aclararemos cuáles queremos que seleccione (debes recordar que Stylo puede analizar archivos de texto plano, \*.txt, XML o HTML), además deberemos indicar el tipo de codificación.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+
+corpus_all <- load.corpus(files = 'all', corpus.dir = 'corpus', encoding = 'UTF-8')
+
+summary(corpus_all)
+
+```
+
+Posteriormente, le pediremos que *tokenice* el corpus a trabajar, es decir, que divida las cadenas de caracteres en palabras, removiendo signos de puntuación, etc., para ello, utilizaremos la función `txt.to.words.ext`, el primer parámetro que indicaremos es el texto a ingresar, mediante *corpus_all* pediremos que seleccione todo los archivos en *corpus*, con *corpus.lang* especificaremos el idioma de los textos, por último tendremos decidiremos si tenemos en cuenta mayúsculas o no, por medio de *preserve.case*.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+tokenized.corpus <- txt.to.words.ext (corpus_all, corpus.lang = "Spanish", preserve.case = FALSE) # Tokeniza los textos
+
+corpus.no.pron <- delete.stop.words(tokenized.corpus, stop.words = stylo.pronouns(corpus.lang = "Spanish")) # Elimina las palabras vacías
+
+corpus.no.pron
+
+```
+
+Con este último comando, le pedimos que elimine mediante `delete.stop.words` las palabras vacías, primero indicamos que dataset debía limpiar y luego que vector de *stopwords* debía considerar.
+
+Ahora realizaremos el calculo de palabras más frecuentes, mediante la función `make.frequency.list`, donde indicaremos los datos a analizar, y limitaremos la cantidad mediante *head*. Con estos datos armaremos una tabla, por medio de `make.table.of.frequencies`, donde indicaremos los datos a tener en cuenta, el vector de referencia, en este caso *frequent.f*, y si debe calcular las frecuencias relativas o no, cuando este argumento está en TRUE, se calculan las frecuencias relativas en lugar de las frecuencias sin procesar. Por lo cual, pediremos que primero calcule las frecuencias absolutas y luego las relativas.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+frequent.f <- make.frequency.list(corpus.no.pron, head = 3000)
+
+freqs <- make.table.of.frequencies(corpus.no.pron, features = frequent.f, relative = FALSE) #frecuencias absolutas
+
+freqs_rel <- make.table.of.frequencies(corpus.no.pron, features = frequent.f) #frecuencias relativas
+
+```
+
+Ahora, reduciremos nuestros datos, mediante `perform.culling`, donde especificaremos los valores de selección y el grado en que eliminaremos palabras que no figuran en todos los textos del corpus; primero indicaremos los datos de entrada y luego el nivel de reducción, siendo el porcentaje que debe considerarse para no eliminar la palabra.
+
+Con los siguientes comandos calcularemos la frecuencia absoluta, y con los posteriores, las relativas.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+culled.freqs <- perform.culling(freqs, culling.level = 50) #reducción por frecuencia absoluta
+
+```
+
+```{r eval=FALSE, error=TRUE, message=FALSE}
+
+culled.freqs_rel <- perform.culling(freqs_rel, culling.level = 80)  #reducción por frecuencia relativa
+
+```
+
+A continuación, llamaremos el paquete `Stylo`, pero no de forma automática, sino indicando los parámetros que nosotros queremos. Primero le indicamos la frecuencia que debe considerar, *frequencies*, y luego le indicamos que no muestre la interfaz gráfica (GUI), sino que realice los análisis por *Default* seteados. Si queremos modificar la cantidad de MFW, deberemos volver a `perform.culling` y modificar el nivel.
+
+```{r eval=TRUE, message=FALSE, error=TRUE}
+
+stylo(frequencies = culled.freqs, gui = FALSE)
+
+```
+
+También podemos cambiar el tipo de análisis que deseamos mediante *analysis.type* (CA; BCT; PCR, etc), agregar título con *custom.graph.title*, indicar mínimo y máximo de MFW *mfw.min =* , *mfw.max =* , indicar si queremos guardarlo como imagen *write.png.file = TRUE*.
+
+```{r eval=TRUE, error=TRUE}
+
+stylo(frequencies = culled.freqs, gui = FALSE, analysis.type = 'PCR', custom.graph.title = "PCA discursos y DNU")
+```
+
+Ahora, les presentaré un extra, para poder realizar gráficos de *nube de palabras*. Para ello, deberás utilizar los datos de [ejercicio de análisis textual](http://hdlab.space/Estilometria-con-R/unidad2_ej_analisis_textual.html), `mensajes_limpio`, cuando lo hayas realizado, cargaras la librería `wordcloud`. Primero, indicaremos que seleccione los datos para realizar la nube, luego mediante *count* se contaran las observaciones, indicando que las clasifique, con *with* podremos realizar la evaluación de la función *wordcloud*, primero le diremos que tome las palabras de determinada frecuencia, *max.words* indicará que elija los términos más con determinada frecuencia, y por último indicaremos la gama de colores que deseamos (pueden acceder al siguiente [enlace](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf) para una paleta de colores completa).
+
+```{r eval=FALSE, error=TRUE}
+library(wordcloud)
+
+mensajes_limpio %>% 
+count(palabra, sort = T) %>%
+with(wordcloud(palabra,
+n,
+max.words = 75,
+color = brewer.pal(8, "Blues")))
+```
+
+![](nube.png)
+
+Hemos llegado al final de este módulo, con este ejercicio y el de [Topic Modeling](http://hdlab.space/Estilometria-con-R/unidad2_ej_analisis_textual.html) que se presenta en esta misma unidad dedicada a **Macroanálisis**.
+
+### Práctica
+
+-   Realizar un análisis de comparación de textos, separando por autores y periodo (*opcional*), mediante las funciones de análisis de cluster en un corpus de [novelas hispanoamericanas](https://github.com/cligs/textbox/tree/master/spanish/novela-hispanoamericana).
+
+    -   Primero deberás descargar los archivos de la [carpeta](https://github.com/cligs/textbox/tree/master/spanish/novela-hispanoamericana/txt_id), anidando una iteración que descargue los archivos y los guarde en la carpeta `corpus`.
+
+-   Realizar nube de palabras desestimando palabras vacías.
