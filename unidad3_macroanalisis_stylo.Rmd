@@ -1,18 +1,21 @@
----
-title: "Unidad 3: Macroanálisis - Introducción a la Estilometría"
+--- 
+title: "Unidad 3: Macroanálisis - Introducción a la Estilometría - Ejercitación"
 author: "Romina De León"
-output: 
+output:
     html_document:
         df_print: paged
 ---
 
 ```{r setup, include=FALSE}
+
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
 ```{css, echo=FALSE}
+
 body {
+
   padding-bottom: 52px;
 
 ```
@@ -41,9 +44,7 @@ Hemos mencionado que la estilometría se considera como el análisis computacion
 
 >     Distant reading: where distance, let me repeat it, is a condition of knowledge: it allows you to focus on units that are much smaller or much larger than the text: devices, themes, tropes–or genres and systems (2000, pp. 57-58).
 
-Mientras que como *close reading* se puede entender la lectura atenta como actividad enfocada en un texto y dentro de él, considerando la individualidad de las palabras, las formas del pensamiento, los recursos retóricos, los patrones de descripción y caracterización, etc., es decir, acercándose al logro artístico del texto. Por ello, Moretti considera:
-
->     But the trouble with close reading (in all of its incarnations, from the new criticism to deconstruction) is that it necessarily depends on an extremely small canon [ ...] And if you want to look beyond the canon (and of course, world literature will do so: it would be absurd if it didn’t!) close reading will not do it (2000, p. 57). 
+Mientras que como *close reading* se puede entender la lectura atenta como actividad enfocada en un texto y dentro de él, considerando la individualidad de las palabras, las formas del pensamiento, los recursos retóricos, los patrones de descripción y caracterización, etc., es decir, acercándose al logro artístico del texto.
 
 Por lo tanto, podemos considerar que la lectura distante o distant reading, es una de las técnicas de análisis que se encuentra vinculada a la visualización de datos, por medio de la representación gráfica, mediante la creación de modelos y la determinación de patrones de análisis; como si se pasara de un plano particular a uno general, alejando el foco del objeto de estudio.
 
@@ -70,36 +71,40 @@ Todas estas cuestiones fueron tenidas en cuenta, para desarrollar el paquete de 
 Los dendrograma, diagramas arbóreos, son resultados de análisis de grupos o *cluster analysis*, técnica estadística que agrupa conjuntos de elementos, observaciones, en dos o más grupos, la semejanza se refleja cuando se encuentran en el mismo grupo (*cluster*). Este tipo de análisis, maximiza las similitudes como las diferencias entre grupos. Varios algoritmos realizan esta metodología, como el análisis jerárquico, que inicia considerando cada caso como un grupo, posteriormente los combina secuencialmente, y va redujendo así, los grupos en cada paso hasta que al final solo queda uno. Para su cálculo se utilizan métodos estadísticos, que consideran datos de frecuencia, n-grams, cálculo de la distancia. La distancia entre frecuencias, sufrieron diversas actualizaciones considerando inicialmente la Euclidiana, que toma el camino más corto entre dos elemento, sin embargo, actualmente la más utilizada en la Delta de Eder. Esta última es una de las más usadas en los problemas de autoría, fue propuesta por John Burrows en 2002 y actualizada por Maciej Eder para el paquete Stylo[^5].
 
 [^5]: Para más información sobre distancia Delta:\
+
     Argamon, S. (2008). Interpreting Burrows's Delta: geometric and probabilistic foundations. "Literary and Linguistic Computing", 23(2): 131-47.\
+
     Burrows, J. (2002). 'Delta': A Measure of Stylistic Difference and a Guide to Likely Authorship. *Literary and Linguistic Computing,* *17*(3): pp. 267-87.\
+
     Eder, M. (2015). Taking stylometry to the limits: benchmark study on 5,281 texts from Patrologia Latina. In: "Digital Humanities 2015: Conference Abstracts". <https://zenodo.org/record/1321296#.XzK5APgzagQ>.\
+
     Evert, S., Proisl, T., Jannidis, F., Reger, I., Pielstrom, S., Schoch, C. and Vitt, T. (2017). Understanding and explaining Delta measures for authorship attribution. *Digital Scholarship in the Humanities*, *32*(suppl. 2): 4-16.\
+
     Calvo Tello, J. (2016, mayo 27). Entendiendo Delta desde las Humanidades. *Caracteres*. <http://revistacaracteres.net/revista/vol5n1mayo2016/entendiendo-delta/>
 
 A continuación se presenta como resultaría el análisis si utilizásemos discursos y DNU (Decreto de Necesidad y Urgencia) de la [ejercitación de análisis textual](http://hdlab.space/Estilometria-con-R/unidad2_ej_analisis_textual.html), seteando las MFW entre 200 y 1000, con la variante de distancia Eder Delta.
 
-![](disc-dnu_CA_1000_MFWs_Culled_0__Eder's%20Delta__001.png)
+![](disc-dnu_CA_1000_MFWs_Culled_0__Eder's Delta__001.png){width="50%"}
 
 En el eje horizontal se representa la distancia, es decir, la relación entre los textos; el eje vertical se acomoda para visualizar mejor los resultados, su orientación es aleatoria, pero la relación es constante. Este dendograma presenta los textos en una misma rama, son los más similares, y el nodo que los une a otro nodo refleja su similitud, siendo los más alejados, los más diferentes. Por lo cual, se puede observar, como han sido correctamente, separado en dos grandes nodos, diferenciando discursos y decretos. Esto se debe, a que las formas de escritura y palabras utilizadas en cada uno son diferentes. Cuestión que debe considerarse es que al modificar tanto la cantidad de MFW y cálculo de distancia, los gráficos tendrán ciertas variaciones; por ejemplo, si se baja la cantidad de palabras, es decir, considerando las gramaticales, MFW a 200, se podría observar que la separación entre las dos grandes ramas será mucho más precisa.
 
 De esta manera, se puede visualizar una de las funciones de `Stylo`, donde separa distintitos tipos de escritura y tiene en cuenta las palabras funcionales. Ahora pensemos que sucedería si utilizamos, por ejemplo sólo discursos, podremos saber si existen distintos tipos de escritura, es decir, ¿si siempre son escritos por la misma persona?
 
-|                                                                      |                                                                       |
-|:--------------------------------------------------------------------:|:---------------------------------------------------------------------:|
-|                             Eder's Delta                             |                             Classic Delta                             |
-| ![](discurso/discurso_CA_500_MFWs_Culled_0__Eder's%20Delta__001.png) | ![](discurso/discurso_CA_500_MFWs_Culled_0__Classic%20Delta__001.png) |
+|                                        Eder's Delta                                        |                                        Classic Delta                                        |
+|:------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------:|
+| ![](discurso/discurso_CA_500_MFWs_Culled_0__Eder's Delta__001.png){width="50%"} | ![](discurso/discurso_CA_500_MFWs_Culled_0__Classic Delta__001.png){width="50%"} |
 
 En ambos gráficos, hemos utilizados MFW entre 100 y 500, con 1 n-grams, variando el cálculo de distancia, utilizando el Delta clásico y el de Eder, recuerden que estos dos modelos son los más afines para estilometría, particularmente para comparar autoría. En ambos gráficos, se pueden observar dos grandes ramificaciones, que se abren en dos, y sabemos que los que están más cerca es porque comparten estilo y palabras más utilizadas, por ende podrían estar escritos por al menos dos personas. Podíamos realizar diversos análisis, por ejemplo sustituyendo el procesamiento de palabras por *n-grams*, pues en español se producen agrupaciones de tres o más "tokens", debido a la configuración de frases, colocaciones, perífrasis verbales, etc.; o modificando la cantidad de MFW. Estas consideraciones no forman parte de este curso, pero si es fundamental comprender que según la separación de las ramas y de cuáles se encuentran en la misma ramificación, más cerca o más lejos indicará similitudes o diferencias.
 
 ### Árbol de consenso / Consensus Tree
 
-Otro tipo de gráfico que nos permite realizar `Stylo` son los árboles de consenso, *Bootstrap Consensus Tree (BCT),* estos se realizan a partir de los *cluster analysis*, toman gran cantidad de estos, considerando mínimo y máximo de MFW, luego se agrupan, por ello se dice que hace consenso, y se presenta el resultado con una representación arbórea. El método BCT estabiliza los resultados al dividir las MFW en bandas de frecuencias, superponiendolas y luego analizandolas independientemente[^6]. Los siguientes dos gráficos, han tenido en cuenta, discursos y dnu en el primero; solo discursos en el segundo.
+Otro tipo de gráfico que nos permite realizar `Stylo` son los árboles de consenso, *Bootstrap Consensus Tree (BCT),* estos se realizan a partir de los *cluster analysis*, toman gran cantidad de estos, considerando mínimo y máximo de MFW, luego se agrupan, por ello se dice que hace consenso, y se presenta el resultado con una representación arbórea. El método BCT estabiliza los resultados al dividir las MFW en bandas de frecuencias, superponiéndolas y luego analizándolas independientemente[^6]. Los siguientes dos gráficos, han tenido en cuenta, discursos y DNU en el primero; solo discursos en el segundo.
 
 [^6]: Para más información sobre los BCT puede consultarse Eder, M., Rybicki, J. y Kestemont, M. (2016). Stylometry with R: a Package for Computational Text Analysis. *R Journal*, *8*(1): 107-121. <https://journal.r-project.org/archive/2016-1/eder-rybicki-kestemont.pdf>.
 
-![](disc-dnu_Consensus_1000-5000_MFWs_Culled_0__Eder's%20Delta_C_0.5__001.png)
-
-![](discurso/discurso_Consensus_100-500_MFWs_Culled_0__Classic%20Delta_C_0.5__001.png)
+|                                                                                                      |                                                                                                              |
+|------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+|![](disc-dnu_Consensus_1000-5000_MFWs_Culled_0__Eder's Delta_C_0.5__001.png){width="50%"}|![](discurso/discurso_Consensus_100-500_MFWs_Culled_0__Classic Delta_C_0.5__001.png){width="50%"}|
 
 Este tipo de análisis es considerado más robusto, pues toma todos los *cluster analysis*, realizados en iteraciones, trabajando primero con el mínimo de MFW, luego realizando incrementos hasta llegar al máximo, y generando nuevos agrupamientos en cada repetición. Por ello, se puede comprender que la relación jerárquica de las diversas ramas representan la distancia entre los textos.
 
@@ -109,7 +114,7 @@ Continuando con otro tipo de análisis de `Stylo`, llegamos a uno de los más ut
 
 [^7]: Para más detalles sobre PCA, puede consultarse Jackson, J. E. (2003). *A User's Guide to Principal Components*. Hoboken, N. J.: Wiley.
 
-![](discurso/discurso_PCA_5000_MFWs_Culled_0__PCA__001.png)
+![](discurso/discurso_PCA_5000_MFWs_Culled_0__PCA__001.png){width="50%"}
 
 Para realizar el gráfico seleccionamos, MFW máxima en 5000, considerando unidades de 5 n-grams, es decir, cadenas de 5 palabras, y PCA (matriz de correlación). Se puede observar que no se presentan repeticiones notables de cadenas, por eso se encuentran cercanos a 0 en ambos ejes, excepto algunos discursos, pero no hay gran variaciones respecto al gráfico de *cluster*.
 
@@ -122,12 +127,148 @@ Otras funciones[^8] utilizadas en en esta librería son:
 [^8]: Para más información sobre la función classify() puede consultar: <https://computationalstylistics.github.io/blog/cross-validation/>, y para rolling.classify() <https://computationalstylistics.github.io/blog/rolling_stylometry/>.
 
 > classify() que permitirá realizar una validación cruzada mediante métodos de clasificación, configurando dos subdirectorios, "primary sets" y "secondary sets".
->
+
 > rolling.classify() que combina la clasificación de aprendizaje automático supervisado con la idea de análisis secuencial, intenta observar dentro de un texto representado como conjunto de fragmentos cortados linealmente, para probar su consistencia estilística. Deben configurarse dos subdirectorios: "reference_set" y "test_set".
 
-Hasta aquí, hemos presentado la parte teórica de esta sección de **Macroanálisis**, a continuación realizaremos la [parte práctica](http://hdlab.space/Estilometria-con-R/unidad3_macroanalisis_stylo-ejercicio.html.
+Hasta aquí, hemos presentado la parte teórica de esta sección de **Macroanálisis**, a continuación realizaremos la parte práctica.
 
-### Bibliografía recomendada:
+## Ejercitación
+
+Para esta ejercitación volveremos con los datos de la unidad anterior, [Ejercicio de análisis textual](http://hdlab.space/Estilometria-con-R/unidad2_ej_analisis_textual.html). Nos situaremos en la carpeta `disc-dnu` conformada por los textos ya mencionados en dicha unidad.
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, error=TRUE}
+
+rm(list = ls())
+
+getwd()
+
+setwd("C:/hdcaicyt/R/disc-dnu")
+
+```
+
+Como se mencionó en la teoría instalaremos el paquete **Stylo** y llamaremos a la librería:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, error=TRUE}
+
+install.packages("stylo") #tardará unos cuantos minutos
+
+
+```
+
+```{r eval=TRUE, message=TRUE, error=TRUE}
+
+library(stylo)
+
+```
+
+Una particularidad de `Stylo` es que necesita colectar sus textos de un directorio denominado `corpus`, por ello dentro de nuestra carpeta `/disc-dnu` crearemos esa nueva dirección mediante la función `dir.create` poniendo entre comillas el nombre de la carpeta a crear:
+
+```{r eval=FALSE, message=FALSE, error=TRUE}
+
+setwd("/~/disc-dnu/")
+
+dir.create("corpus") 
+
+list.files("/hdcaicyt/R/disc-dnu/corpus") #modifica tu path para acceder correctamente y listar los archivos de la carpeta "corpus"
+
+```
+
+Ahora llamaremos al paquete `Stylo()`, y se nos abrirá una ventana como la siguiente:
+
+![](stylo-interfaz.png)
+
+Allí primero iremos a la ventana **input & language** donde seleccionaremos el tipo de archivo, idioma y *native encoding*; luego modificaremos **features**, podemos elegir "words", "chars" y los "n-grams" (importante considera las explicaciones en la teoría de esta ejercitación), las palabras más frecuentes (**MFW**), mínimo, máximo e incremento; etc. En **statistics** podremos elegir tipo de análisis a realizar, *cluster*, *PCA*, *consensus tree*, *culling* (porcentaje de aparición de MFW en los textos); etc. y el tipo de distancia a utilizar; en **sampling** podremos pedirle que divida el corpus en determinada cantidad de palabras, normal o aleatoria; y finalmente en **output** elegiremos formatos de visualización, tamaño, guardado de imagen, etc.
+
+```{r eval=FALSE, message=FALSE, error=TRUE}
+
+stylo()
+
+```
+
+![](disc-dnu_CA_1000_MFWs_Culled_0__Eder's Delta__001.png){width="40%"}
+
+Te propongo que realices algunas variaciones en los parámetros para obtener distintas gráficas, podría ser un árbol de consenso y otra realizando un gráfico de **PCA**.
+
+***Ahora veremos otra manera de cargar y realizar visualizaciones con Stylo, de forma manual y no automatizada como la anterior.***
+
+Para ello primero, mediante la función `load.corpus`, de la misma librería, podremos cargar todos nuestros archivos que se encuentren en el directorio *corpus*, pero aclararemos cuáles queremos que seleccione (debes recordar que Stylo puede analizar archivos de texto plano, \*.txt, XML o HTML), además deberemos indicar el tipo de codificación.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+corpus_all <- load.corpus(files = 'all', corpus.dir = 'corpus', encoding = 'UTF-8')
+
+summary(corpus_all)
+
+
+```
+
+Posteriormente, le pediremos que *tokenice* el corpus a trabajar, es decir, que divida las cadenas de caracteres en palabras, removiendo signos de puntuación, etc., para ello, utilizaremos la función `txt.to.words.ext`, el primer parámetro que indicaremos es el texto a ingresar, mediante *corpus_all* pediremos que seleccione todo los archivos en *corpus*, con *corpus.lang* especificaremos el idioma de los textos, por último tendremos decidiremos si tenemos en cuenta mayúsculas o no, por medio de *preserve.case*.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+
+tokenized.corpus <- txt.to.words.ext (corpus_all, corpus.lang = "Spanish", preserve.case = FALSE) # Tokeniza los textos
+
+
+corpus.no.pron <- delete.stop.words(tokenized.corpus, stop.words = stylo.pronouns(corpus.lang = "Spanish")) # Elimina las palabras vacías
+
+```
+
+Con este último comando, le pedimos que elimine mediante `delete.stop.words` las palabras vacías, primero indicamos que dataset debía limpiar y luego que vector de *stopwords* debía considerar. Puedes acceder al contenido escribiendo: `corpus.no.pron` o `view(corpus.no.pron)`
+
+Ahora realizaremos el calculo de palabras más frecuentes, mediante la función `make.frequency.list`, donde indicaremos los datos a analizar, y limitaremos la cantidad mediante *head*. Con estos datos armaremos una tabla, por medio de `make.table.of.frequencies`, donde indicaremos los datos a tener en cuenta, el vector de referencia, en este caso *frequent.f*, y si debe calcular las frecuencias relativas o no, cuando este argumento está en TRUE, se calculan las frecuencias relativas en lugar de las frecuencias sin procesar. Por lo cual, pediremos que primero calcule las frecuencias absolutas y luego las relativas.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+frequent.f <- make.frequency.list(corpus.no.pron, head = 3000)
+
+freqs <- make.table.of.frequencies(corpus.no.pron, features = frequent.f, relative = FALSE) #frecuencias absolutas
+
+freqs_rel <- make.table.of.frequencies(corpus.no.pron, features = frequent.f) #frecuencias relativas
+
+```
+
+Ahora, reduciremos nuestros datos, mediante `perform.culling`, donde especificaremos los valores de selección y el grado en que eliminaremos palabras que no figuran en todos los textos del corpus; primero indicaremos los datos de entrada y luego el nivel de reducción, siendo el porcentaje que debe considerarse para no eliminar la palabra.
+
+Con los siguientes comandos calcularemos la frecuencia absoluta, y con los posteriores, las relativas.
+
+```{r eval=TRUE, error=TRUE, message=FALSE}
+
+culled.freqs <- perform.culling(freqs, culling.level = 50) #reducción por frecuencia absoluta
+
+```
+
+```{r eval=FALSE, error=TRUE, message=FALSE}
+
+culled.freqs_rel <- perform.culling(freqs_rel, culling.level = 80)  #reducción por frecuencia relativa
+
+```
+
+A continuación, llamaremos el paquete `Stylo`, pero no de forma automática, sino indicando los parámetros que nosotros queremos. Primero le indicamos la frecuencia que debe considerar, *frequencies*, y luego le indicamos que no muestre la interfaz gráfica (GUI), sino que realice los análisis por *Default* seteados. Si queremos modificar la cantidad de MFW, deberemos volver a `perform.culling` y modificar el nivel.
+
+```{r eval=TRUE, message=FALSE, error=TRUE}
+
+stylo(frequencies = culled.freqs, gui = FALSE)
+
+```
+
+También podemos cambiar el tipo de análisis que deseamos mediante *analysis.type* (CA; BCT; PCR, etc), agregar título con *custom.graph.title*, indicar mínimo y máximo de MFW *mfw.min =* , *mfw.max =* , indicar si queremos guardarlo como imagen *write.png.file = TRUE*.
+
+```{r eval=TRUE, error=TRUE}
+
+stylo(frequencies = culled.freqs, gui = FALSE, analysis.type = 'PCR', custom.graph.title = "PCA discursos y DNU")
+
+```
+
+### Práctica
+
+-   Realizar un análisis de comparación de textos, separando por autores y periodo (*opcional*), mediante las funciones de análisis de cluster en un corpus de [novelas hispanoamericanas](https://github.com/cligs/textbox/tree/master/spanish/novela-hispanoamericana).
+
+    -   Primero deberás descargar los archivos de la [carpeta](https://github.com/cligs/textbox/tree/master/spanish/novela-hispanoamericana/txt_id), anidando una iteración que descargue los archivos y los guarde en la carpeta `corpus`.
+
+-   Realizar nube de palabras desestimando palabras vacías.
+
+## Bibliografía recomendada:
 
 Jockers, M. (2013). *Macroanalysis. Digital Methods and Literary History*. Chicago: University of Illinois Press.
 
