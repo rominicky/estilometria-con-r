@@ -137,7 +137,7 @@ topicos_coleccion %>%
   filter(topic == 2)
 ```
 
-Los valores absolutos de probabilidad no importan tanto como sus relaciones. Usualmente, son números muy pequeños que provienen de alguna transformación de la frecuencias de la palabra en el documento. En este caso, no nos importa que `gobernador` tenga un valor de  0.02, sino que es el mayor valor observado para este tópico o que es mayor que el valor de `oficiales`.
+Los valores absolutos de probabilidad no importan tanto como sus relaciones. Usualmente, son números muy pequeños^[Para anular la notación científica, podés agragar `options("scipen" = 100, "digits" = 4)` a tu script.] que provienen de alguna transformación de la frecuencias de la palabra en el documento. En este caso, no nos importa que `gobernador` tenga un valor de  0.02, sino que es el mayor valor observado para este tópico o que es mayor que el valor de `oficiales`.
 
 Vamos a graficar las primeras diez palabras que definen a cada tópico con sus pesos asignados.
 
@@ -177,16 +177,62 @@ coleccion_gamma %>%
 
 Los resultados son, en este caso, categóricos: un texto pertenece a un tópico (color verde) o no pertenece a un tópico (color gris). En experiencias de modelado real, los documentos pueden asociarse a más de un tópico (un texto puede tratar acerca de la fundación de una ciudad **y** del enfrentamiento entre dos personajes). Esta ambigüedad sería representada en el gráfico por un gradiente de color, como en la animación presentada al inicio de la guía.
 
+## Visualización interactiva de tópicos
+
+La complejidad de los resultados del _topic modeling_ habilita visualizaciones más dinámicas que las que realizamos hasta el momento con ggplot. Existe una amplia variedad de visualizaciones interactivas, que pueden combinar desde burbujas de tópicos hasta nubes de palabras, lollypop charts y/o diagramas de flujo, entre otras posiblidades (ver [video](https://vimeo.com/437987253) de [TopicBubbles](https://github.com/sihwapark/topic-bubbles) de Sihwa Park o la [demo online](http://agoldst.github.io/dfr-browser/demo/) de [dfr-browser](http://agoldst.github.io/dfr-browser/) de Andrew Goldstone). 
+
+Aquí veremos cómo generar un una visualización interactiva con [LDAvis](https://github.com/cpsievert/LDAvis) una herramienta creada por Carson Sievert y Kenneth E. Shirley que combina un gráfico de barras volteado con representación de distancias de tópicos en coordenadas cartesianas. Comenzamos por cargar la librería `LDAvis` y sus dependencias:
+
+```{r message=FALSE, warning=FALSE}
+library(tsne)
+library(LDAvis)
+```
+
+Adaptamos nuestro modelo de tópicos y nuestra matriz de documentos a los formatos requeridos por el paquete:
+
+```{r message=FALSE, warning=FALSE}
+terminos_y_topicos <- posterior(coleccion_lda)
+coleccion_dtm <- as.matrix(coleccion_dtm)
+```
+
+Y generamos la visualización con el siguiente código:
+
+```{r message=FALSE, warning=FALSE}
+svd_tsne <- function(x) tsne(svd(x)$u)
+json <- createJSON(
+  phi = terminos_y_topicos$terms, 
+  theta = terminos_y_topicos$topics, 
+  doc.length = rowSums(coleccion_dtm), 
+  vocab = colnames(coleccion_dtm), 
+  term.frequency = colSums(coleccion_dtm),
+  mds.method = svd_tsne,
+  plot.opts = list(xlab="", ylab="")
+)
+serVis(json, out.dir = "LDAvis") # Guarda el resultado en el directorio "LDAvis"
+```
+
+El resultado quedará guardado como un html en el directorio indicado en `out.dir`. 
+
+Deslizá el cursor sobre los círculos y usá los controles de la parte superior para modificar los gráficos:
+
+<iframe src="LDAvis/index.html" width="100%" height="800px" style="border:none;"></iframe>
+
+El gráfico de barras de la derecha indica la frecuencia de una palabra en la colección (en azul) y en cada tópico (en rojo). En las coordenadas cartesianas situadas a la izquierda, se representa la distancia entre los tópicos. En el caso analizado, los tópicos son bien ortogonales pero en el caso de haber similitudes entre los tópicos, los círculos aparecerían superpuestos. El tamaño de los círculos indica, por otra parte, el peso del tópico en la colección; así, el tópico asociado al documento más extenso, _La Argentina Manuscrita_ (tópico 1), es más importante. La relación entre los tópicos y las palabras que los conforman está ilustrada de manera interactiva: al deslizar el cursor sobre el círculo de cada tópico, el gráfico de barras cambia para mostrar la lista de palabras de ese tópico.
+
+
 Esta ha sido una pequeña introducción a la técnica realizada con un minicorpus de tres textos donde ya sabíamos la respuesta. El verdadero interés del _topic modeling_ se vuelve evidente al aplicarlo a colecciones más amplias para **descubrir** los tópicos. Te invitamos a experimentar con la práctica que se encuentra a continuación.
 
 ----
 
 ## Práctica
 
-* Leer los txt de los discursos presidenciales utilizados en las prácticas anteriores.
+* Leer los txt de los discursos presidenciales utilizados en las prácticas anteriores (u otro corpus de tu interés).
 * Tokenizarlos, limpiarlos y guardarlos en un dataframe.
 * Transformar el dataframe en una DTM (DocumentTermMatrix).
 * Extraer los tópicos de los discursos presidenciales transformados en DTM con LDA. Probar distintos valores de k hasta encontrar tópicos relevantes. Modificar la limpieza de ser necesario.
 * Graficar las primeras 7 palabras de cada tópico
+* Compartir y comentar los resultados en el [foro](https://campusvirtual.uces.edu.ar/mod/forum/view.php?id=284127). 
+
+
 
 
