@@ -30,7 +30,7 @@ En el ámbito del procesamiento de textos en particular, el _topic modeling_ es 
 
 *Figura 1.  Detección de tópicos en una matriz de términos por documento. Cada columna corresponde a un documento y cada fila a una palabra; las celdas muestran la frecuencia de una palabra de un documento (más oscura, mayor frecuencia). Fuente: Christoph Carl Kling, via Wikimedia Commons, CC-BY-SA-4.0*
 
-Para comprender el funcionamiento de este método estadístico, comenzaremos por aplicarlo a un caso donde ya conocemos la respuesta de antemano: buscaremos agrupar temáticamente un corpus de tres textos y veremos si el algoritmo es capaz de distinguir correctamente tres grupos. Utilizaremos los txt correspondientes a [_Relación de las cosas sucedidas en el Río de la Plata_](http://hdlab.space/Relacion-de-las-cosas-sucedidas/) de Pero Hernández, [_Relación de un viaje al Río de la Plata_](http://hdlab.space/Relacion-de-un-viaje/) de Acarette du Biscay y [_La Argentina Manuscrita_](http://hdlab.space/La-Argentina-Manuscrita/) de Ruy Díaz de Guzmán, relatos histórico-literarios sobre la conquista y colonización del Río de la Plata. Estos textos se encuentran disponibles en edición digital y forman parte de la biblioteca digital de HDCAICYT LAB  <http://hdlab.space/biblioteca-digital/>. 
+Para comprender el funcionamiento de este método estadístico, comenzaremos por aplicarlo a un caso donde ya conocemos la respuesta de antemano: buscaremos agrupar temáticamente un corpus de tres textos (compartido vía [campus](https://campusvirtual.uces.edu.ar/mod/folder/view.php?id=287715)) y veremos si el algoritmo es capaz de distinguir correctamente tres grupos. Utilizaremos los txt correspondientes a [_Relación de las cosas sucedidas en el Río de la Plata_](http://hdlab.space/Relacion-de-las-cosas-sucedidas/) de Pero Hernández, [_Relación de un viaje al Río de la Plata_](http://hdlab.space/Relacion-de-un-viaje/) de Acarette du Biscay y [_La Argentina Manuscrita_](http://hdlab.space/La-Argentina-Manuscrita/) de Ruy Díaz de Guzmán, relatos histórico-literarios sobre la conquista y colonización del Río de la Plata. Estos textos se encuentran disponibles en edición digital y forman parte de la biblioteca digital de HDCAICYT LAB  <http://hdlab.space/biblioteca-digital/>. 
 
 
 ## Implementación
@@ -230,7 +230,7 @@ Esta ha sido una pequeña introducción a la técnica realizada con un minicorpu
 * Tokenizarlos, limpiarlos y guardarlos en un dataframe.
 * Transformar el dataframe en una DTM (DocumentTermMatrix).
 * Extraer los tópicos de los discursos presidenciales transformados en DTM con LDA. Probar distintos valores de k hasta encontrar tópicos relevantes. Modificar la limpieza de ser necesario.
-* Graficar las primeras 7 palabras de cada tópico
+* Graficar las primeras 7 palabras de cada tópico con ggplot
 * Compartir y comentar los resultados en el [foro](https://campusvirtual.uces.edu.ar/mod/forum/view.php?id=284127). 
 
 
