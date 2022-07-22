@@ -1,5 +1,5 @@
 ---
-title: "Análisis textual estadístico"
+title: "Unidad 2 - Análisis textual estadístico"
 author: "Nidia Hernández"
 date:
 output: 
@@ -12,9 +12,13 @@ body {
 }
 ```
 
-<h6>nidiahernandez@conicet.gov.ar</h6>
+<h6><a href="mailto:nidiahernandez@conicet.gov.ar" class="email">nidiahernandez@conicet.gov.ar</a></h6>
 <hr align="left" style="width:40%">
 
+En esta guía vamos a presentar algunas nociones básicas de estadística textual:
+
+* las primeras leyes de la textometría
+* los modos básicos de representación computacional de textos 
 
 El análisis estadístico de textos es anterior a la invención de R e inclusive de las computadoras. Antes de abordar las últimas tendencias en estilometría como la elaboración de topografías textuales, detección de plagio o identificación de autoría es necesario recordar algunas nociones básicas de estadística aplicada a datos textuales.
 

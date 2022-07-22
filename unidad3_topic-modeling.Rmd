@@ -1,5 +1,5 @@
 ---
-title: "Unidad 3 - Macroanálisis - Topic Modeling"
+title: "Unidad 3 - Topic Modeling"
 author: "Nidia Hernández"
 output:
   html_document:
@@ -17,20 +17,30 @@ body {
 
 En esta guía vamos a:
 
-* realizar una breve introducción al _topic modeling_
+* definir brevemente el _topic modeling_ a través de un estudio de caso
 * poner en práctica herramientas de modelado de tópicos en un corpus de textos histórico-literarios
 
-## Topic modeling
+## Introducción
 
 El _topic modeling_ es un método estadístico de organización de grandes corpus en el que un algoritmo recibe datos no etiquetados para agruparlos según patrones comunes subyacentes. Si bien esta técnica fue concebida para la gestión de colecciones textuales, tiene aplicaciones en diversos campos, tales como la genética de poblaciones y el procesamiento de imágenes por IA.
 
 En el ámbito del procesamiento de textos en particular, el _topic modeling_ es utilizado para detectar los tópicos^[Algunas aclaraciones sobre la terminología típica asociada a esta técnica: utilizamos el término _colección_ para denominar al conjunto de textos con el que vamos a trabajar y _documento_ para referirnos a cada uno de los textos. Los resultados a obtener son _tópicos_ o temas.] presentes en una colección textual, los documentos que responden a cada tópico así como las palabras que lo representan. En otras palabras, esta técnica nos permite acceder rápidamente al contenido de un gran dataset de textos y organizar los textos en grupos de acuerdo a su temática. 
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Topic_detection_in_a_document-word_matrix.gif" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Topic_detection_in_a_document-word_matrix.gif" alt="matriz término-documento animada"/>
 
 *Figura 1.  Detección de tópicos en una matriz de términos por documento. Cada columna corresponde a un documento y cada fila a una palabra; las celdas muestran la frecuencia de una palabra de un documento (más oscura, mayor frecuencia). Fuente: Christoph Carl Kling, via Wikimedia Commons, CC-BY-SA-4.0*
 
-Para comprender el funcionamiento de este método estadístico, comenzaremos por aplicarlo a un caso donde ya conocemos la respuesta de antemano: buscaremos agrupar temáticamente un corpus de tres textos (compartido vía [campus](https://campusvirtual.uces.edu.ar/mod/folder/view.php?id=287715)) y veremos si el algoritmo es capaz de distinguir correctamente tres grupos. Utilizaremos los txt correspondientes a [_Relación de las cosas sucedidas en el Río de la Plata_](http://hdlab.space/Relacion-de-las-cosas-sucedidas/) de Pero Hernández, [_Relación de un viaje al Río de la Plata_](http://hdlab.space/Relacion-de-un-viaje/) de Acarette du Biscay y [_La Argentina Manuscrita_](http://hdlab.space/La-Argentina-Manuscrita/) de Ruy Díaz de Guzmán, relatos histórico-literarios sobre la conquista y colonización del Río de la Plata. Estos textos se encuentran disponibles en edición digital y forman parte de la biblioteca digital de HDCAICYT LAB  <http://hdlab.space/biblioteca-digital/>. 
+Un buen ejemplo de _topic modeling_ aplicado a las humanidades es el trabajo del proyecto [WhatEvery1Says](https://we1s.ucsb.edu/), que se sirve de esta técnica de macroanálisis para estudiar la representación de las disciplinas de humanidades en el discurso público de Estados Unidos a lo largo de 20 años. Gracias al _topic modeling_, este proyecto ha podido explorar 21 colecciones textuales integradas por 83 000 artículos periodísticos, 21 000 artículos de diarios universitarios, 800 000 tweets y 124 000 posts de Reddit y agrupar los textos por temáticas como "la crisis de las humanidades", "el valor de las humanidades", "las humanidades y las ciencias en los medios", "el financiamiento de las humanidades", entre otros.
+
+<iframe src="http://harbor.english.ucsb.edu:10002/collections/20190620_2238_us-humanities-all-no-reddit/topic-bubbles/topics25/" name="visualización topic bubbles interactiva" loading="eager" width="100%" height="600" style="border: 1px solid #ccc; border-radius: 4px; display: block; padding: 9.5px; margin: 0 0 10px;"></iframe>
+
+*Figura 2. Detección de tópicos del proyecto [WhatEvery1Says](https://we1s.ucsb.edu/) para la colección de artículos de [medios de los EEUU entre 1989-2019](http://harbor.english.ucsb.edu:10002/collections/20190620_2238_us-humanities-all-no-reddit/). Hacer click sobre los tópicos para abrir una nube de palabras interactiva.*
+
+La visualización interactiva de arriba representa 25 tópicos detectados en una colección de más de 83 mil artículos periodísticos de grandes medios de Estados Unidos (New York Times, Washington Post, Los Angeles Times, Chicago Tribune, entre otros). Los círculos más grandes representan tópicos con mayor peso. En las nubes de palabras asociadas, podemos ver las principales palabras que componen cada tópico y, si clickeamos en el círculo turquesa de abajo a la derecha, podremos acceder a un gráfico de los principales periódicos en los que se publicaron los artículos analizados así como los títulos de los artículos más representativos del tópico.
+
+Si clickeamos en el tópico 17, por ejemplo, podremos ver palabras relacionadas con eventos universitarios (estudiantes, campus, conferencia, evento, discusión, charla, etc.) y, si consultamos las fuentes de los artículos, encontraremos periódicos universitarios (The Stanford Daily, Campus Carrier y publicaciones de otras universidades). Al acceder a los principales documentos de este tópico, econtraremos, efectivamente, títulos como "College of DuPage Hosts 'What is Gender?' Panel Discussion Nov. 8", "Race: A Campus Dialogue" o "Festival of Books and Arts at UTPA". Entre los demás tópicos, podremos encontrar temas  relacionados de manera más directa (escritura académica, tópico 4) o más indirecta (política internacional, tópico 16).
+
+Para comprender mejor el funcionamiento de este método estadístico de lectura distante, comenzaremos por aplicarlo a un caso donde ya conocemos la respuesta de antemano: buscaremos agrupar temáticamente un corpus de tres textos^[Aplicamos _topic modeling_ en un corpus reducido únicamente a fines pedagógicos. El interés real de esta técnica radica en la exploración de colecciones de un número elevado de textos.] (compartido vía [campus](https://campusvirtual.uces.edu.ar/mod/folder/view.php?id=333651)) y veremos si el algoritmo de _topic modeling_ es capaz de distinguir correctamente tres grupos. Utilizaremos los txt correspondientes a [_Relación de las cosas sucedidas en el Río de la Plata_](http://hdlab.space/Relacion-de-las-cosas-sucedidas/) de Pero Hernández, [_Relación de un viaje al Río de la Plata_](http://hdlab.space/Relacion-de-un-viaje/) de Acarette du Biscay y [_La Argentina Manuscrita_](http://hdlab.space/La-Argentina-Manuscrita/) de Ruy Díaz de Guzmán, relatos histórico-literarios sobre la conquista y colonización del Río de la Plata. Estos textos se encuentran disponibles en edición digital y forman parte de la biblioteca digital de HDCAICYT LAB  <http://hdlab.space/biblioteca-digital/>. 
 
 
 ## Implementación
@@ -99,7 +109,7 @@ Ahora que los datos están en el formato adecuado, podemos pasar a la etapa de a
 
 ### Entrenamiento con LDA
 
-Una vez que transformamos el corpus al formato requerido por `topicmodels`, podemos someter los datos al algoritmo de extracción de tópicos. En esta práctica veremos cómo implementar LDA (siglas de _Latent Dirichlet Allocation_), uno de los métodos más populares de _topic modeling_, desarrollado por David Blei en 2012^[Blei, D. M. (2012). Probabilistic topic models. _Communications of the ACM_, 55(4), 77–84. https://doi.org/10.1145/2133806.2133826]. Obtendremos como resultado modelos de tópicos (_topic models_). La cantidad de tópicos en un modelo varía en función del corpus pero en este ejercicio ya sabemos que queremos encontrar 3 tópicos (uno por cada texto de nuestro corpus) de manera que en la función de entrenamiento fijaremos `k = 3`. En una experiencia real de _topic modeling_ es necesario probar diferentes valores de k y evaluar cuál arroja resultados más coherentes^[Para un ejemplo de evaluación de _topic modeling_ con distintos valores de k, consultar https://github.com/nidiah/Topic-modeling-gestion-datos/blob/main/experiencias_informes.ipynb (en Python)]. 
+Una vez que transformamos el corpus al formato requerido por `topicmodels`, podemos someter los datos al algoritmo de extracción de tópicos. En esta práctica veremos cómo implementar LDA (siglas de _Latent Dirichlet Allocation_), uno de los métodos más populares de _topic modeling_, desarrollado por David Blei en 2012^[Blei, D. M. (2012). Probabilistic topic models. _Communications of the ACM_, 55(4), 77–84. https://doi.org/10.1145/2133806.2133826]. Obtendremos como resultado modelos de tópicos (_topic models_). La cantidad de tópicos en un modelo varía en función del corpus, sin embargo, en este ejercicio ya sabemos que queremos encontrar 3 tópicos (uno por cada texto de nuestro corpus), de manera que en la función de entrenamiento fijaremos `k = 3`. En una experiencia real de _topic modeling_ es necesario probar diferentes valores de k y evaluar cuál arroja resultados más coherentes^[Para un ejemplo de evaluación de _topic modeling_ con distintos valores de k, consultar https://github.com/nidiah/Topic-modeling-gestion-datos/blob/main/experiencias_informes.ipynb (en Python)]. 
 
 En primer lugar, creamos el modelo de tres tópicos sobre el corpus bajo análisis (este paso será breve, pero en un corpus más grande y/o con un valor más elevado de k, el entrenamiento puede tomar bastante tiempo):
 
@@ -108,7 +118,7 @@ coleccion_lda <- LDA(coleccion_dtm, k = 3, control = list(seed = 42))
 coleccion_lda
 ```
 
-La generación de modelos con LDA involucra muchos procesos aleatorios^[Para una introducción a los fundamentos matemáticos de LDA, consultar https://www.youtube.com/watch?v=T05t-SqKArY], por eso, si queremos poder reproducir y comparar resultados generados por este algoritmo, debemos "plantar una semilla" que permita controlar la variación, para eso establecemos el parámetro `control = list(seed = 42)`.
+La generación de modelos con LDA involucra muchos procesos aleatorios^[Para una introducción a los fundamentos matemáticos de LDA, consultar https://www.youtube.com/watch?v=T05t-SqKArY], por eso, si queremos poder reproducir y comparar resultados generados por este algoritmo, debemos "plantar una semilla" que permita controlar la variación; para eso establecemos el parámetro `control = list(seed = 42)`.
 
 El resto del análisis involucra explorar e interpretar los tópicos resultantes.
 
@@ -137,7 +147,7 @@ topicos_coleccion %>%
   filter(topic == 2)
 ```
 
-Los valores absolutos de probabilidad no importan tanto como sus relaciones. Usualmente, son números muy pequeños^[Para anular la notación científica, podés agragar `options("scipen" = 100, "digits" = 4)` a tu script.] que provienen de alguna transformación de la frecuencias de la palabra en el documento. En este caso, no nos importa que `gobernador` tenga un valor de  0.02, sino que es el mayor valor observado para este tópico o que es mayor que el valor de `oficiales`.
+Los valores absolutos de probabilidad no importan tanto como sus relaciones. Usualmente, son números muy pequeños^[Para anular la notación científica, podés agregar `options("scipen" = 100, "digits" = 4)` a tu script.] que provienen de alguna transformación de la frecuencias de la palabra en el documento. En este caso, no nos importa que `gobernador` tenga un valor de  0.02, sino que es el mayor valor observado para este tópico o que es mayor que el valor de `oficiales`.
 
 Vamos a graficar las primeras diez palabras que definen a cada tópico con sus pesos asignados.
 
@@ -220,7 +230,15 @@ Deslizá el cursor sobre los círculos y usá los controles de la parte superior
 El gráfico de barras de la derecha indica la frecuencia de una palabra en la colección (en azul) y en cada tópico (en rojo). En las coordenadas cartesianas situadas a la izquierda, se representa la distancia entre los tópicos. En el caso analizado, los tópicos son bien ortogonales pero en el caso de haber similitudes entre los tópicos, los círculos aparecerían superpuestos. El tamaño de los círculos indica, por otra parte, el peso del tópico en la colección; así, el tópico asociado al documento más extenso, _La Argentina Manuscrita_ (tópico 1), es más importante. La relación entre los tópicos y las palabras que los conforman está ilustrada de manera interactiva: al deslizar el cursor sobre el círculo de cada tópico, el gráfico de barras cambia para mostrar la lista de palabras de ese tópico.
 
 
-Esta ha sido una pequeña introducción a la técnica realizada con un minicorpus de tres textos donde ya sabíamos la respuesta. El verdadero interés del _topic modeling_ se vuelve evidente al aplicarlo a colecciones más amplias para **descubrir** los tópicos. Te invitamos a experimentar con la práctica que se encuentra a continuación.
+Esta ha sido una pequeña introducción a la técnica realizada con un minicorpus de tres textos donde ya sabíamos la respuesta. El verdadero interés del _topic modeling_ se vuelve evidente al aplicarlo a colecciones más amplias para **descubrir** los tópicos. Te invitamos a experimentar con la práctica que se encuentra al final de la guía.
+
+## Bibliografía
+
+* Maier, D., Waldherr, A., Miltner, P., Wiedemann, G., Niekler, A., Keinert, A., Pfetsch, B., Heyer, G., Reber, U., Häussler, T., Schmid-Petri, H., & Adam, S. (2018). Applying LDA Topic Modeling in Communication Research: Toward a Valid and Reliable Methodology. Communication Methods and Measures, 12(2–3), 93–118. https://doi.org/10.1080/19312458.2018.1430754
+* Mohr, J. W., & Bogdanov, P. (2013). Introduction—Topic models: What they are and why they matter. Poetics, 41(6), 545–569. https://doi.org/10.1016/j.poetic.2013.10.001
+* Silge, J., & Robinson, D. (2017). Topic modeling. En _Text mining with R: A tidy approach_. O'Reilly Media. Disponible en línea: https://www.tidytextmining.com/topicmodeling.html
+* Underwood, T. (2012) Topic modeling made just simple enough. The Stone and the Shell. (2012, abril 7). https://tedunderwood.com/2012/04/07/topic-modeling-made-just-simple-enough/
+
 
 ----
 
@@ -231,7 +249,7 @@ Esta ha sido una pequeña introducción a la técnica realizada con un minicorpu
 * Transformar el dataframe en una DTM (DocumentTermMatrix).
 * Extraer los tópicos de los discursos presidenciales transformados en DTM con LDA. Probar distintos valores de k hasta encontrar tópicos relevantes. Modificar la limpieza de ser necesario.
 * Graficar las primeras 7 palabras de cada tópico con ggplot
-* Compartir y comentar los resultados en el [foro](https://campusvirtual.uces.edu.ar/mod/forum/view.php?id=284127). 
+* Compartir y comentar los resultados en el [foro](https://campusvirtual.uces.edu.ar/mod/forum/view.php?id=333652). 
 
 
 

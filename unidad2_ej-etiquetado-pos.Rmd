@@ -13,7 +13,7 @@ body {
 }
 ```
 
-<h6>nidiahernandez@conicet.gov.ar</h6>
+<h6><a href="mailto:nidiahernandez@conicet.gov.ar" class="email">nidiahernandez@conicet.gov.ar</a></h6>
 <hr align="left" style="width:40%">
 
 En esta ejercitación vamos a:

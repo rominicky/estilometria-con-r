@@ -15,15 +15,11 @@ Profa. Nidia Hernández y Profa. Romina De León (CONICET).
 
 [Unidad 1. Ejercicio. Manipulación de datos en R Studio](unidad1_ej-manipulacion-datos.html)
 
-[Unidad 2. Análisis textual](unidad2_analisis-textual.html)
+[Unidad 2. Análisis textual estadístico](unidad2_analisis-textual.html)
 
-[Unidad 2. Ejercicio. Análisis textual](unidad2_ej_analisis_textual.html)
+[Unidad 2. Ejercicio. Análisis textual estadístico](unidad2_ej_analisis_textual.html)
 
-[Unidad 2. Etiquetado morfosintáctico y coocurrencias](unidad2-etiquetado-pos.html)
-
-[Unidad 2. Ejercicio. Etiquetado morfosintáctico y coocurrencias](unidad2_ej-etiquetado-pos.html)
-
-[Unidad 3. Macroanálisis. Estilometría - Ejercitación](unidad3_macroanalisis_stylo.html)
+[Unidad 3. Estilometría con stylo](unidad3_macroanalisis_stylo.html)
 
 [Unidad 3. Topic Modeling](unidad3_topic-modeling.html)
 

@@ -5682,20 +5682,32 @@ summary {
 
 <h1 class="title toc-ignore">Unidad 1 - Ejercicio - Comenzar con R</h1>
 <h4 class="author">Nidia Hernández</h4>
-<h6>nidiahernandez@conicet.gov.ar</h6>
+<h6><a href="mailto:nidiahernandez@conicet.gov.ar" class="email">nidiahernandez@conicet.gov.ar</a></h6>
 </div>
 
 <hr align="left" style="width:40%">
 
+<style type="text/css">
+body {
+  padding-bottom: 52px;
+}
+</style>
+
+<p>Esta breve ejercitación tiene por objetivo:</p>
+<ul>
+<li>aprender comandos básicos de R</li>
+<li>probar si la instalación funciona correctamente</li>
+<li>familiarizarse con el entorno de RStudio</li>
+</ul>
 
 <div id="boilerplate-de-r" class="section level2">
 <h2>Boilerplate de R</h2>
-<p>Al comenzar a trabajar en RStudio, es aconsejable limpiar el entorno para asegurarse de que no haya variables o paquetes cargados de sesiones anteriores. Para esto es una buena costumbre iniciar los scripts con el siguiente comando:</p>
+<p>Al comenzar a trabajar en RStudio, es aconsejable limpiar el entorno para asegurarse de que no haya variables o paquetes cargados de sesiones anteriores. Para esto, es una buena costumbre iniciar los scripts con el siguiente comando:</p>
 <pre class="r"><code>rm(list = ls())</code></pre>
 </div>
 <div id="preparar-el-entorno-de-trabajo" class="section level2">
 <h2>Preparar el entorno de trabajo</h2>
-<p>Luego, es necesario establecer el directorio de trabajo con <code>setwd()</code>. Con este comando, le indicamos a R la ubicación en nuestra computadora a la que debe ir a buscar los archivos que queremos abrir o adonde debe guardar los archivos que queramos salvar.</p>
+<p>Luego, es necesario establecer el directorio de trabajo con <code>setwd()</code>. Con este comando, le indicamos a R la ubicación en nuestra computadora a la que debe ir a buscar los archivos que queremos abrir y dónde debe guardar los archivos que queramos salvar.</p>
 <pre class="r"><code>setwd(&#39;/home/nombredeusuario/mi-directorio-de-trabajo&#39;)</code></pre>
 <p>El texto dentro de <code>setwd()</code> va a variar según el sistema operativo, el nombre de usuario y el nombre del directorio elegido para trabajar.</p>
 <p>Para instalar paquetes en R, usamos el comando <code>install.packages()</code>:</p>
@@ -5719,7 +5731,7 @@ m &lt;- addTiles(m)</code></pre>
 <script type="application/json" data-for="htmlwidget-1a84e9edfe055d06e749">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[-33.59,-59.81,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"Vuelta de Obligado",null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[-33.59,-33.59],"lng":[-59.81,-59.81]}},"evals":[],"jsHooks":[]}</script>
 </div>
 
-<p>Hacé click en el marcador para ver el texto ingresado y usá los botones <code>+</code> y <code>-</code> para agrandar o reducir el tamaño del mapa. También podés arrastrer el cursor para desplazarte en el mapa.</p>
+<p>Hacé click en el marcador para ver el texto ingresado y usá los botones <code>+</code> y <code>-</code> para agrandar o reducir el tamaño del mapa. También podés arrastrar el cursor para desplazarte en el mapa.</p>
 <p><mark>Probá modificar las coordenadas y el texto del marcador clickeable y subí una captura de pantalla al foro con tus resultados.</mark></p>
 <hr>
 </div>
