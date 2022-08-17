@@ -96,7 +96,7 @@ La preparación mínima requerida para esta experiencia de _topic modeling_ cons
 coleccion
 ```
 
-El paquete `topicmodels` requiere los datos de entrada en un formato particular conocido como `DocumentTermMatrix` (Matrices de Términos por Documento; en la Unidad de Introducción al Análisis Textual, vimos ejemplos de este tipo de matrices en las [tablas de tipos de frecuencias](http://hdlab.space/Estilometria-con-R/unidad2_analisis-textual.html#frecuencia-absoluta-frecuencia-relativa-y-tf.idf)). Podemos transformar nuestro dataframe `coleccion` en un objeto `DocumentTermMatrix` gracias a la función `cast_dtm()`. 
+El paquete `topicmodels` requiere los datos de entrada en un formato particular conocido como `DocumentTermMatrix` (Matrices de Términos por Documento; en la Unidad de [Introducción al Análisis Textual](hdlab.space/Estilometria-con-R/unidad2_analisis-textual.html), vimos ejemplos de este tipo de matrices en las [tablas de tipos de frecuencias](http://hdlab.space/Estilometria-con-R/unidad2_analisis-textual.html#frecuencia-absoluta-frecuencia-relativa-y-tf.idf)). Podemos transformar nuestro dataframe `coleccion` en un objeto `DocumentTermMatrix` gracias a la función `cast_dtm()`. 
 
 
 ```{r message=FALSE, warning=FALSE}
@@ -249,7 +249,7 @@ Esta ha sido una pequeña introducción a la técnica realizada con un minicorpu
 * Transformar el dataframe en una DTM (DocumentTermMatrix).
 * Extraer los tópicos de los discursos presidenciales transformados en DTM con LDA. Probar distintos valores de k hasta encontrar tópicos relevantes. Modificar la limpieza de ser necesario.
 * Graficar las primeras 7 palabras de cada tópico con ggplot
-* Compartir y comentar los resultados en el [foro](https://campusvirtual.uces.edu.ar/mod/forum/view.php?id=333652). 
+* Compartir y comentar los resultados en el [foro](https://campusvirtual.uces.edu.ar/mod/forum/view.php?id=333750). 
 
 
 
