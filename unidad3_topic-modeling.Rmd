@@ -76,7 +76,7 @@ for (path in path_archivos) {
 }
 
 stopwords_es <-
-  get_stopwords("es") %>% 
+  get_stopwords("spa") %>% 
   rename(palabra = word)
 
 coleccion <-
