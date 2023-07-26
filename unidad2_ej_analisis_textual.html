@@ -178,8 +178,13 @@ body {
 }
 </style>
 <div id="comenzando-con-análisis-textual-en-r-studio" class="section level2">
-<h2>Comenzando con análisis textual en R Studio</h2>
-<p>Durante esta ejercitación utilizarás lo visto en las unidades previas. El corpus que he dejado en la carpeta del campus, está compuesto por discursos del presidente A. Fernández y Decretos de Necesidad de Urgencia (DNU) dictados por el Poder Ejecutivo de la Argentina. Estos se presentaron a la población del país desde el inicio del Distanciamiento Social, Preventivo y Obligatorio (DIASPO) el 13 de marzo, hasta el 30 de junio de 2020<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<h1>Comenzando con análisis textual en R Studio</h1>
+<h4>Romina De León</h4>
+
+<h5>rdeleon@conicet.gov.ar</h5>
+
+<p>Durante esta ejercitación utilizarás lo visto en las unidades previas.</p>
+<p>El corpus que he dejado en la carpeta del campus, está compuesto por discursos del presidente A. Fernández y Decretos de Necesidad de Urgencia (DNU) dictados por el Poder Ejecutivo de la Argentina. Estos se presentaron a la población del país desde el inicio del Distanciamiento Social, Preventivo y Obligatorio (DIASPO) el 13 de marzo, hasta el 30 de junio de 2020<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <p>El corpus fue denominado según el siguiente orden: <code>mes-día-dnu o disc</code> en formato de texto plano (<code>txt</code>). En la carpeta zippeada encontrarás, <code>disc-dnu</code>, los archivos listado y una segunda carpeta que se llama <code>discurso</code> que es donde me ubicaré para realizar este ejercicio.</p>
 <p>Ello significa que solo se utilizarán los primeros cuatro archivos, <code>0313disc.txt</code>;<code>0316dnu.txt</code>; <code>0318dnu.txt</code> y <code>0320disc.txt</code>. Esto fue pensado así, para poder comenzar con pequeñas visualizaciones de los archivos, donde se podrás observar comparaciones de días, para luego pasar a generalizar con los 47 textos del corpus.</p>
 <pre class="r"><code>rm(list = ls())

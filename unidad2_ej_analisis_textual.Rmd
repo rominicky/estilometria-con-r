@@ -4,8 +4,10 @@ author: "Romina De León"
 output: 
   html_document:
     df_print: paged
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
-
 
 ```{css, echo=FALSE}
 body {
@@ -13,9 +15,14 @@ body {
 }
 ```
 
-## Comenzando con análisis textual en R Studio
+# Comenzando con análisis textual en R Studio
+
+#### **Romina De León**
+
+[rdeleon\@conicet.gov.ar](rdeleon@conicet.gov.ar)
 
 Durante esta ejercitación utilizarás lo visto en las unidades previas.
+
 El corpus que he dejado en la carpeta del campus, está compuesto por
 discursos del presidente A. Fernández y Decretos de Necesidad de
 Urgencia (DNU) dictados por el Poder Ejecutivo de la Argentina. Estos se
