@@ -366,7 +366,7 @@ trabajo:</p>
 <pre class="r"><code>rm(list = ls()) #limpiamos el entorno
 
 getwd() #obtenemos la dirección donde estoy ubicada</code></pre>
-<pre><code>## [1] &quot;C:/Users/RominaSoledadDeLeon/OneDrive - Económicas - UBA/docencia-ro-hdlab/clase-r-propuestas-presidentes-2023/corpus_ej2&quot;</code></pre>
+<pre><code>## [1] &quot;C:/~/corpus_ej2&quot;</code></pre>
 <pre class="r"><code>pathwd &lt;- getwd() #adjudico a esta variable la dirección que quiero guardar, esto puede modificarse poniendo entre &quot; &quot; la dirección necesaria
 
 setwd(pathwd) #seteo mi lugar de trabajo</code></pre>
@@ -596,7 +596,7 @@ mediante la función <strong>bind_rows</strong>.</p>
 <pre class="r"><code>#Iteración 
 
 for (i in 1:length(archivos)){
-  discurso &lt;- read_lines(paste(pathwd, #recuerden que uso pathwd porque es donde me situé y están mis archivos
+  discurso &lt;- read_lines(paste(pathwd, #recuerden que uso pathwd porque es donde me situé y están mis archivos, sino debes incluir tu dirección
                                archivos[i],
                                sep = &quot;/&quot;))
   temporal &lt;- tibble(textos_archivo = textos_archivo[i],
